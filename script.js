@@ -584,4 +584,40 @@
     });
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // INTRO VIDEO LOGIC
+  // ═══════════════════════════════════════════════════════════
+  const introOverlay = document.getElementById('intro-overlay');
+  const introVideo = document.getElementById('intro-video');
+  const skipIntroBtn = document.getElementById('skip-intro-btn');
+
+  if (introOverlay && introVideo && skipIntroBtn) {
+    // Disable scrolling while intro plays
+    document.body.style.overflow = 'hidden';
+
+    const hideIntro = () => {
+      introOverlay.classList.add('hidden');
+      document.body.style.overflow = ''; // Restore scrolling
+      introVideo.pause(); // Stop video if skipping
+      
+      // Remove element after transition finishes
+      setTimeout(() => {
+        if(introOverlay.parentNode) {
+            introOverlay.parentNode.removeChild(introOverlay);
+        }
+      }, 800);
+    };
+
+    // Auto-play the video
+    introVideo.play().catch(e => {
+        console.log("Auto-play prevented by browser.", e);
+    });
+
+    // Hide when video ends naturally
+    introVideo.addEventListener('ended', hideIntro);
+    
+    // Hide when user clicks skip
+    skipIntroBtn.addEventListener('click', hideIntro);
+  }
+
 })();
