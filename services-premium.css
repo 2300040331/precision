@@ -549,3 +549,110 @@ body.page-service-detail {
   .alt-icon { display: none; }
   .trust-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* NEW INTRO SECTION (KPMG-style) */
+.svc-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: flex-start;
+}
+.svc-intro__heading h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--svc-navy);
+}
+.svc-intro__text p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--svc-gray);
+  margin-bottom: 1.5rem;
+}
+
+/* NEW CAPABILITIES SECTION (KPMG-style) */
+.svc-capabilities .section-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  margin-bottom: 3rem;
+  text-align: left;
+}
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+.cap-card {
+  background: var(--svc-white);
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.cap-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+.cap-image {
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
+}
+.cap-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.cap-card:hover .cap-image img {
+  transform: scale(1.05);
+}
+.cap-content {
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cap-content h3 {
+  font-size: 1.25rem;
+  color: var(--svc-navy);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+.cap-content h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--svc-gold);
+}
+.cap-content p {
+  font-size: 1rem;
+  color: var(--svc-gray);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+.cap-link {
+  font-weight: 600;
+  color: var(--svc-navy);
+  text-decoration: none;
+  font-size: 1rem;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+.cap-link:hover {
+  color: var(--svc-gold);
+}
+
+@media (max-width: 768px) {
+  .svc-intro__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

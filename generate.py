@@ -22,7 +22,7 @@ head_nav = """<!DOCTYPE html>
     <!-- ═══════════════════════════════════════════════════════════ -->
     <header class="navbar" id="navbar">
         <div class="container navbar__inner">
-            <a href="index.html" class="navbar__logo" aria-label="Precision & Co Home">
+            <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
                 <div class="brand-logo">
                     <div class="brand-logo__icon">
                         <span class="brand-logo__p">P</span>
@@ -42,14 +42,14 @@ head_nav = """<!DOCTYPE html>
 
             <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
                 <ul class="navbar__menu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
                     <li><a href="services.html" class="nav-link nav-link--active">What We Do</a></li>
                     <li><a href="industries.html" class="nav-link">Industries</a></li>
-                    <li><a href="index.html#contact" class="nav-link">Contact Us</a></li>
+                    <li><a href="home.html#contact" class="nav-link">Contact Us</a></li>
                 </ul>
             </nav>
 
-            <a href="index.html#contact" class="btn btn-outline btn-outline--light navbar__cta">
+            <a href="home.html#contact" class="btn btn-outline btn-outline--light navbar__cta">
                 Book a Consultation
                 <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </a>

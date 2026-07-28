@@ -1,19 +1,19 @@
 import glob
 
-# 1. Get footer from index.html
-with open('index.html', 'r') as f:
+# 1. Get footer from home.html
+with open('home.html', 'r') as f:
     index_html = f.read()
 
 start_idx = index_html.find('<footer class="footer"')
 if start_idx == -1:
-    print("Could not find footer in index.html")
+    print("Could not find footer in home.html")
     exit(1)
 end_idx = index_html.find('</footer>', start_idx) + len('</footer>')
 
 footer_content = index_html[start_idx:end_idx]
 
 # 2. Update HTML files
-files_to_update = [f for f in glob.glob('*.html') if f != 'index.html']
+files_to_update = [f for f in glob.glob('*.html') if f != 'home.html']
 
 for filename in files_to_update:
     try:

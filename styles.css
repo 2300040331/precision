@@ -1129,7 +1129,7 @@ h4 { font-family: var(--ff-body); font-size: var(--fs-h4); font-weight: 600; }
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 3rem);
   box-shadow: var(--shadow-2xl);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr;
   gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: center;
   border: 1px solid rgba(10,22,40,0.04);
@@ -3775,3 +3775,308 @@ body:not(.loaded) .hero__visual {
   background: #222;
   border-color: rgba(255, 255, 255, 0.6);
 }
+
+
+/* =========================================
+   OUR EXPERTS
+   ========================================= */
+.experts-section {
+    background-color: var(--off-white);
+    padding: var(--spacing-3xl) 0;
+}
+
+.experts-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.experts-subtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--charcoal-light);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: inline-block;
+    background: var(--white);
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.experts-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--navy-900);
+}
+
+.experts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 3rem 2rem;
+}
+
+@media (min-width: 768px) {
+    .experts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .experts-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.expert-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.expert-card__img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1.1;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.expert-card__img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.expert-card:hover .expert-card__img-wrapper img {
+    transform: scale(1.05);
+}
+
+.expert-card__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.expert-card__name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: 0.5rem;
+}
+
+.expert-card__role {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal);
+    background-color: #fceceb; /* matching the subtle highlight from screenshot slightly */
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* ROYAL CTA SECTION                                           */
+/* ═══════════════════════════════════════════════════════════ */
+.royal-cta {
+    position: relative;
+    padding: 120px 20px;
+    background: linear-gradient(135deg, var(--navy-900) 0%, #0a1f32 100%);
+    overflow: hidden;
+    text-align: center;
+    border-top: 1px solid rgba(201, 154, 58, 0.3);
+    border-bottom: 1px solid rgba(201, 154, 58, 0.3);
+}
+
+.royal-cta__pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(201, 154, 58, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.royal-cta__container {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.royal-cta__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #ffffff;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+.royal-cta__text {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.royal-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background-color: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 18px 40px;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.royal-cta__btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: var(--gold);
+    transition: all 0.4s ease;
+    z-index: -1;
+}
+
+.royal-cta__btn:hover {
+    color: var(--navy-900);
+}
+
+.royal-cta__btn:hover::before {
+    left: 0;
+}
+
+.royal-cta__btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.royal-cta__btn:hover svg {
+    transform: translateX(5px);
+}
+
+
+/* Enhanced Expert Cards - Golden Box Style */
+.founder-card {
+    background: #0a1628;
+    border: 1px solid rgba(197, 168, 128, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.founder-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: linear-gradient(45deg, transparent, rgba(197, 168, 128, 0.8), transparent) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.founder-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(197, 168, 128, 0.15);
+}
+
+.founder-card:hover::before {
+    opacity: 1;
+}
+
+.fcard-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid rgba(197, 168, 128, 0.5);
+}
+
+.fcard-img-wrapper img {
+    transition: transform 0.6s ease, filter 0.6s ease;
+    display: block;
+    width: 100%;
+}
+
+.founder-card:hover .fcard-img-wrapper img {
+    transform: scale(1.08);
+}
+
+.fcard-info {
+    padding: 1.75rem 1.5rem;
+    background: #0a1628;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+}
+
+.fcard-name {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading), serif;
+    transition: color 0.3s ease;
+}
+
+.founder-card:hover .fcard-name {
+    color: #c5a880;
+}
+
+.fcard-role {
+    color: #c5a880;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.fcard-qual {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+}
+
+/* Entry Animation for Grid */
+.founders-grid-container {
+    perspective: 1000px;
+}
+.founder-card {
+    animation: fadeUpIn 0.8s ease backwards;
+}
+@keyframes fadeUpIn {
+    0% { opacity: 0; transform: translateY(30px) rotateX(-10deg); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+.founders-grid > div:nth-child(1) { animation-delay: 0.1s; }
+.founders-grid > div:nth-child(2) { animation-delay: 0.2s; }
+.founders-grid > div:nth-child(3) { animation-delay: 0.3s; }
+.founders-grid > div:nth-child(4) { animation-delay: 0.4s; }
+.founders-grid > div:nth-child(5) { animation-delay: 0.5s; }
+.founders-grid > div:nth-child(6) { animation-delay: 0.6s; }
+

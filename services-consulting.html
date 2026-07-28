@@ -22,7 +22,7 @@
 <body class="page-service-detail">
     <header class="navbar" id="navbar">
         <div class="container navbar__inner">
-            <a href="#" class="navbar__logo" aria-label="Precision & Co Home">
+            <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
                 <div class="brand-logo">
                     <div class="brand-logo__icon">
                         <span class="brand-logo__p">P</span>
@@ -42,9 +42,9 @@
 
             <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
                 <ul class="navbar__menu">
-                    <li><a href="#" class="nav-link nav-link--active">Home</a></li>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
                     <li class="nav-dropdown">
-                        <a href="services.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             What We Do
                             <svg class="nav-link__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                         </a>
@@ -55,49 +55,50 @@
                                         <div class="mega-menu__category">Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
                                         <div class="mega-menu__pane">
                                             <a href="services-audit.html" class="mega-menu__item">Audit & Assurance</a>
-                                            <a href="services-tax.html" class="mega-menu__item">Tax Advisory</a>
-                                            <a href="services-consulting.html" class="mega-menu__item">Business Consulting</a>
-                                            <a href="services-risk.html" class="mega-menu__item">Risk & Compliance</a>
+                                            <div class="tax-group">
+                                                <a href="services-tax.html" class="mega-menu__item" style="padding-bottom: 0;">Taxation</a>
+                                                <div class="tax-submenu">
+                                                    <a href="services-tax.html" class="mega-menu__item" style="padding-left: 1rem; font-size: 0.8rem; padding-top: 4px; padding-bottom: 4px;">Direct Tax</a>
+                                                    <a href="services-tax.html" class="mega-menu__item" style="padding-left: 1rem; font-size: 0.8rem; padding-top: 0;">GST & Indirect Tax</a>
+                                                </div>
+                                            </div>
+                                            <a href="services-consulting.html" class="mega-menu__item">Business Advisory</a>
                                             <a href="services-vcfo.html" class="mega-menu__item">Virtual CFO</a>
+                                            <a href="services-accounting.html" class="mega-menu__item">Accounting & Bookkeeping</a>
+                                            <a href="services-company-law.html" class="mega-menu__item">Company Law & ROC</a>
+                                            <a href="services-startup.html" class="mega-menu__item">Startup Advisory</a>
+                                            <a href="services-regulatory.html" class="mega-menu__item">Regulatory Compliance</a>
+                                            <a href="services-transaction.html" class="mega-menu__item">Transaction Advisory</a>
+                                            <a href="services-risk.html" class="mega-menu__item">Risk Advisory</a>
+                                            <a href="services-valuation.html" class="mega-menu__item">Valuation</a>
+                                            <a href="services-wealth.html" class="mega-menu__item">Wealth Advisory</a>
                                         </div>
                                     </div>
                                     <div class="mega-menu__group">
-                                        <div class="mega-menu__category">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
+                                        <div class="mega-menu__category" onclick="window.location.href='industries.html';" style="cursor:pointer;">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
                                         <div class="mega-menu__pane">
-                                            <a href="industries.html" class="mega-menu__item">Financial Services</a>
-                                            <a href="industries.html" class="mega-menu__item">Healthcare</a>
-                                            <a href="industries.html" class="mega-menu__item">Technology & IT</a>
-                                            <a href="industries.html" class="mega-menu__item">Real Estate</a>
                                             <a href="industries.html" class="mega-menu__item">Manufacturing</a>
-                                            <a href="industries.html" class="mega-menu__item">Retail</a>
+                                            <a href="industries.html" class="mega-menu__item">Technology</a>
+                                            <a href="industries.html" class="mega-menu__item">Healthcare</a>
+                                            <a href="industries.html" class="mega-menu__item">Banking & Finance</a>
+                                            <a href="industries.html" class="mega-menu__item">Real Estate</a>
+                                            <a href="industries.html" class="mega-menu__item">Retail & E-Commerce</a>
+                                            <a href="industries.html" class="mega-menu__item">Education</a>
+                                            <a href="industries.html" class="mega-menu__item">Hospitality</a>
+                                            <a href="industries.html" class="mega-menu__item">Energy</a>
+                                            <a href="industries.html" class="mega-menu__item">Logistics</a>
+                                            <a href="industries.html" class="mega-menu__item">Government</a>
+                                            <a href="industries.html" class="mega-menu__item">Startups</a>
+                                            <a href="industries.html" class="mega-menu__item">Infrastructure</a>
+                                            <a href="industries.html" class="mega-menu__item">NGOs</a>
+                                            <a href="industries.html" class="mega-menu__item">Global Business</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-dropdown">
-                        <a href="#about" class="nav-link">
-                            Who We Are
-                            <svg class="nav-link__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                        </a>
-                        <div class="mega-menu">
-                            <div class="mega-menu__inner">
-                                <div class="mega-menu__sidebar">
-                                    <div class="mega-menu__group">
-                                        <div class="mega-menu__category">Purpose &amp; Values <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
-                                        <div class="mega-menu__pane">
-                                            <a href="#" class="mega-menu__item">What we believe in</a>
-                                            <a href="#" class="mega-menu__item">Future vision</a>
-                                        </div>
-                                    </div>
-                                    <div class="mega-menu__group">
-                                        <a href="#partners" class="mega-menu__category" style="text-decoration: none;">Meet our partners</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    <li><a href="experts.html" class="nav-link">Our experts</a></li>
                     <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
                     <li><a href="#contact" class="nav-link">Contact Us</a></li>
                 </ul>
@@ -117,39 +118,93 @@
     </header>
 
     <main>
+        
         <!-- 1 HERO SECTION -->
-        <section class="svc-hero">
-            <div class="svc-hero__bg"></div>
-            <div class="container svc-hero__container">
-                <h1 class="svc-hero__title gsap-reveal">Business Consulting</h1>
-                <h3 class="svc-hero__subtitle gsap-reveal">Accelerating your path to market leadership.</h3>
-                <p class="svc-hero__desc gsap-reveal">Growth strategy, financial planning, and operational improvement frameworks.</p>
-                <div class="svc-hero__ctas gsap-reveal">
-                    <a href="#contact" class="btn btn-primary">Book Consultation</a>
-                    <a href="#overview" class="btn btn-outline">Learn More</a>
+        <section class="svc-hero" style="background-color: var(--svc-off-white);">
+            <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; padding-top: 40px; padding-bottom: 40px;">
+                <div class="svc-hero__content gsap-fade-right">
+                    <h1 class="svc-hero__title" style="margin-bottom: 1rem; color: var(--svc-navy);">Business Consulting</h1>
+                    <h3 class="svc-hero__subtitle" style="margin-bottom: 1.5rem; color: var(--svc-gold);">Accelerating your path to market leadership.</h3>
+                    <p class="svc-hero__desc" style="margin-bottom: 2rem; color: var(--svc-gray); font-size: 1.125rem;">Growth strategy, financial planning, and operational improvement frameworks.</p>
+                    <div class="svc-hero__ctas">
+                        <a href="contact.html" class="btn btn-primary">Book Consultation</a>
+                        
+                    </div>
                 </div>
-                <div class="svc-hero__stats gsap-reveal">
-                    <div class="stat-card"><h2>$2B+</h2><p>Assets Audited</p></div>
-                    <div class="stat-card"><h2>99.9%</h2><p>Accuracy</p></div>
+                <div class="svc-hero__image gsap-fade-left">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop" alt="Business Consulting" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
                 </div>
             </div>
         </section>
 
-        <!-- 2 SERVICE OVERVIEW -->
-        <section id="overview" class="svc-overview section-padding">
-            <div class="container svc-overview__grid">
-                <div class="svc-overview__content gsap-fade-up">
-                    <h2 class="section-title">The Foundation of Trust</h2>
-                    <p>Our Business Consulting services are designed to provide unparalleled insights and regulatory assurance. We go beyond the numbers to uncover the true narrative of your business.</p>
-                    <blockquote class="premium-quote">
-                        "Precision Henna transformed our approach to Business Consulting, delivering clarity and confidence."
-                    </blockquote>
+        
+        <!-- NEW SERVICE INTRO -->
+        <section class="svc-intro section-padding">
+            <div class="container svc-intro__grid">
+                <div class="svc-intro__heading gsap-fade-up">
+                    <h2>An effective Business Consulting strategy provides a distinct competitive advantage</h2>
                 </div>
-                <div class="svc-overview__illustration gsap-fade-left">
-                    <div class="abstract-shape"></div>
+                <div class="svc-intro__text gsap-fade-up">
+                    <p>Enhancing shareholder value is a fundamental concept which drives every management effort in the modern business environment. Progressive organizations have realized that strategy should be viewed as a dynamic catalyst rather than a passive plan.</p>
+                    <p>We have developed a total consulting capability which encompasses the entire spectrum of business transformation. Our approach is multi-jurisdictional, delivering impactful national and international advice.</p>
                 </div>
             </div>
         </section>
+        
+        <!-- NEW CAPABILITIES SECTION -->
+        <section class="svc-capabilities section-padding light-bg">
+            <div class="container">
+                <h2 class="section-title gsap-fade-up">Our Capabilities</h2>
+                <div class="capabilities-grid">
+
+                    <div class="cap-card gsap-stagger">
+                        <div class="cap-image">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop" alt="Strategy & Operations">
+                        </div>
+                        <div class="cap-content">
+                            <h3>Strategy & Operations</h3>
+                            <p>Our consultants provide actionable insights with in-depth industry knowledge and practical experience.</p>
+                            
+                        </div>
+                    </div>
+
+                    <div class="cap-card gsap-stagger">
+                        <div class="cap-image">
+                            <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=800&auto=format&fit=crop" alt="Financial Advisory">
+                        </div>
+                        <div class="cap-content">
+                            <h3>Financial Advisory</h3>
+                            <p>In today's interconnected economy, leaders are grappling with the complexities of capital allocation and M&A.</p>
+                            
+                        </div>
+                    </div>
+
+                    <div class="cap-card gsap-stagger">
+                        <div class="cap-image">
+                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop" alt="Technology Consulting">
+                        </div>
+                        <div class="cap-content">
+                            <h3>Technology Consulting</h3>
+                            <p>Digital transformation is the primary driver of growth for businesses around the world.</p>
+                            
+                        </div>
+                    </div>
+
+                    <div class="cap-card gsap-stagger">
+                        <div class="cap-image">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop" alt="Human Capital">
+                        </div>
+                        <div class="cap-content">
+                            <h3>Human Capital</h3>
+                            <p>Understanding how to effectively manage and incentivize talent is crucial to long-term success.</p>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
 
         <!-- 3 WHY THIS SERVICE MATTERS -->
         <section class="svc-matters section-padding dark-bg">
@@ -198,181 +253,27 @@
                 </div>
             </div>
         </section>
+</main>
 
-        <!-- 6 SCOPE OF SERVICES -->
-        <section class="svc-scope section-padding">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Scope of Services</h2>
-                <div class="scope-grid">
-                    <div class="scope-item gsap-stagger"><h4>Core Business Consulting</h4><p>Foundational analysis and reporting.</p></div>
-                    <div class="scope-item gsap-stagger"><h4>Advanced Advisory</h4><p>Strategic insights and forecasting.</p></div>
-                    <div class="scope-item gsap-stagger"><h4>Regulatory Checks</h4><p>Ensuring compliance across jurisdictions.</p></div>
-                    <div class="scope-item gsap-stagger"><h4>Process Optimization</h4><p>Streamlining internal workflows.</p></div>
-                </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ROYAL CTA                                                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="royal-cta">
+        <div class="royal-cta__pattern"></div>
+        <div class="container royal-cta__container">
+            <div class="royal-cta__content">
+                <h2 class="royal-cta__title">Ready to Elevate Your Business?</h2>
+                <p class="royal-cta__text">Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.</p>
+                <a href="contact.html" class="royal-cta__btn">
+                    <span>Book a Consultation</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                </a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 7 INDUSTRIES WE SERVE -->
-        <section class="svc-industries section-padding dark-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Industries We Serve</h2>
-                <div class="industry-showcase">
-                    <div class="ind-card gsap-stagger"><div class="ind-overlay"><h4>Technology</h4></div></div>
-                    <div class="ind-card gsap-stagger"><div class="ind-overlay"><h4>Healthcare</h4></div></div>
-                    <div class="ind-card gsap-stagger"><div class="ind-overlay"><h4>Finance</h4></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8 BUSINESS CHALLENGES -->
-        <section class="svc-challenges section-padding">
-            <div class="container split-screen">
-                <div class="challenges-list gsap-fade-right">
-                    <h2 class="section-title">Common Challenges</h2>
-                    <ul>
-                        <li>Poor Internal Controls</li>
-                        <li>Compliance Risks</li>
-                        <li>Financial Leakages</li>
-                        <li>Manual Processes</li>
-                    </ul>
-                </div>
-                <div class="challenges-infographic gsap-fade-left">
-                    <div class="animated-circle"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 9 OUR SOLUTIONS -->
-        <section class="svc-solutions section-padding light-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Our Solutions</h2>
-                <div class="comparison-cards">
-                    <div class="comp-card gsap-fade-up"><h5>Challenge</h5><p>Data Silos</p></div>
-                    <div class="comp-arrow gsap-fade-up">➔</div>
-                    <div class="comp-card gsap-fade-up"><h5>Solution</h5><p>Integrated Dashboards</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 10 KEY DELIVERABLES -->
-        <section class="svc-deliverables section-padding">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Key Deliverables</h2>
-                <div class="dashboard-layout glass-panel gsap-fade-up">
-                    <div class="dash-sidebar">Menu</div>
-                    <div class="dash-main">
-                        <div class="deliv-card">Audit Report <span>↓</span></div>
-                        <div class="deliv-card">Risk Assessment <span>↓</span></div>
-                        <div class="deliv-card">Executive Summary <span>↓</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 11 BENEFITS -->
-        <section class="svc-benefits section-padding dark-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Strategic Benefits</h2>
-                <div class="benefits-grid">
-                    <div class="benefit-card gsap-stagger"><h2>98%</h2><p>Enhanced Compliance</p></div>
-                    <div class="benefit-card gsap-stagger"><h2>2x</h2><p>Operational Efficiency</p></div>
-                    <div class="benefit-card gsap-stagger"><h2>Top</h2><p>Investor Confidence</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 12 WHY PRECISION HENNA -->
-        <section class="svc-trust section-padding">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Why Precision Henna</h2>
-                <div class="trust-grid">
-                    <div class="trust-item gsap-stagger"><h4>Global Expertise</h4><p>World-class advisory team.</p></div>
-                    <div class="trust-item gsap-stagger"><h4>Tech-Driven</h4><p>Modern analytical tools.</p></div>
-                    <div class="trust-item gsap-stagger"><h4>Ethical Practices</h4><p>Uncompromising integrity.</p></div>
-                    <div class="trust-item gsap-stagger"><h4>End-to-End</h4><p>Comprehensive support.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 13 INDUSTRY APPLICATIONS -->
-        <section class="svc-applications section-padding light-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Industry Applications</h2>
-                <div class="app-row gsap-fade-up">
-                    <div class="app-img"></div>
-                    <div class="app-content"><h3>Manufacturing</h3><p>Optimizing supply chain finances and cost structures.</p></div>
-                </div>
-                <div class="app-row reverse gsap-fade-up">
-                    <div class="app-img"></div>
-                    <div class="app-content"><h3>Startups</h3><p>Scalable financial modeling and runway analysis.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 14 PROCESS TIMELINE -->
-        <section class="svc-process section-padding">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Process Timeline</h2>
-                <div class="horizontal-roadmap gsap-fade-up">
-                    <div class="road-step">Planning</div>
-                    <div class="road-step">Execution</div>
-                    <div class="road-step">Reporting</div>
-                    <div class="road-step">Review</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 15 FAQ -->
-        <section class="svc-faq section-padding light-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Frequently Asked Questions</h2>
-                <div class="premium-accordion gsap-fade-up">
-                    <div class="acc-item"><div class="acc-head">How long does an engagement take? <span>+</span></div></div>
-                    <div class="acc-item"><div class="acc-head">What is required from our team? <span>+</span></div></div>
-                    <div class="acc-item"><div class="acc-head">Do you support international compliance? <span>+</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 16 RELATED SERVICES -->
-        <section class="svc-related section-padding">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Related Services</h2>
-                <div class="related-carousel gsap-fade-up">
-                    <div class="rel-card"><h4>Tax Advisory</h4></div>
-                    <div class="rel-card"><h4>Virtual CFO</h4></div>
-                    <div class="rel-card"><h4>Risk & Compliance</h4></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 17 CLIENT TESTIMONIALS -->
-        <section class="svc-testimonials section-padding dark-bg">
-            <div class="container">
-                <h2 class="section-title text-center gsap-fade-up">Client Success</h2>
-                <div class="testi-slider gsap-fade-up">
-                    <div class="testi-card glass-panel">
-                        <p>"Exceptional insights and professionalism. Precision Henna elevated our financial governance."</p>
-                        <h5>- CEO, Tech Innovators</h5>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 18 FINAL CTA -->
-        <section class="svc-cta">
-            <div class="container text-center gsap-fade-up">
-                <h2>Ready to Strengthen Your Business?</h2>
-                <p>Partner with us for industry-leading Business Consulting services.</p>
-                <div class="cta-buttons">
-                    <a href="#contact" class="btn btn-primary">Book Consultation</a>
-                    <a href="#contact" class="btn btn-outline btn-outline--light">Contact Our Experts</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer" id="footer">
+<footer class="footer" id="footer">
         <div class="footer__top-accent"></div>
         <div class="container footer__inner">
             <div class="footer__brand">

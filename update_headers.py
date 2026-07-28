@@ -1,13 +1,13 @@
 import re
 
-# 1. Get header from index.html
-with open('index.html', 'r') as f:
+# 1. Get header from home.html
+with open('home.html', 'r') as f:
     index_html = f.read()
 
 start_idx = index_html.find('<header class="navbar" id="navbar">')
 end_idx = index_html.find('</header>') + len('</header>')
 if start_idx == -1 or end_idx == -1:
-    print("Could not find header in index.html")
+    print("Could not find header in home.html")
     exit(1)
 
 header_content = index_html[start_idx:end_idx]

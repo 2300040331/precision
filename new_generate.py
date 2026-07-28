@@ -26,7 +26,7 @@ def get_head_nav(title):
 <body class="page-service-detail">
     <header class="navbar" id="navbar">
         <div class="container navbar__inner">
-            <a href="index.html" class="navbar__logo" aria-label="Precision & Co Home">
+            <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
                 <div class="brand-logo">
                     <div class="brand-logo__icon">
                         <span class="brand-logo__p">P</span>
@@ -46,7 +46,7 @@ def get_head_nav(title):
 
             <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
                 <ul class="navbar__menu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
                     <li class="nav-dropdown">
                         <a href="#" class="nav-link">
                             What We Do

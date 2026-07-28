@@ -592,32 +592,42 @@
   const skipIntroBtn = document.getElementById('skip-intro-btn');
 
   if (introOverlay && introVideo && skipIntroBtn) {
-    // Disable scrolling while intro plays
-    document.body.style.overflow = 'hidden';
-
-    const hideIntro = () => {
-      introOverlay.classList.add('hidden');
-      document.body.style.overflow = ''; // Restore scrolling
-      introVideo.pause(); // Stop video if skipping
+    if (sessionStorage.getItem('introPlayed')) {
+      // Intro already played in this session, hide it immediately
+      introOverlay.style.display = 'none';
+      if(introOverlay.parentNode) {
+          introOverlay.parentNode.removeChild(introOverlay);
+      }
+    } else {
+      sessionStorage.setItem('introPlayed', 'true');
       
-      // Remove element after transition finishes
-      setTimeout(() => {
-        if(introOverlay.parentNode) {
-            introOverlay.parentNode.removeChild(introOverlay);
-        }
-      }, 800);
-    };
+      // Disable scrolling while intro plays
+      document.body.style.overflow = 'hidden';
 
-    // Auto-play the video
-    introVideo.play().catch(e => {
-        console.log("Auto-play prevented by browser.", e);
-    });
+      const hideIntro = () => {
+        introOverlay.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore scrolling
+        introVideo.pause(); // Stop video if skipping
+        
+        // Remove element after transition finishes
+        setTimeout(() => {
+          if(introOverlay.parentNode) {
+              introOverlay.parentNode.removeChild(introOverlay);
+          }
+        }, 800);
+      };
 
-    // Hide when video ends naturally
-    introVideo.addEventListener('ended', hideIntro);
-    
-    // Hide when user clicks skip
-    skipIntroBtn.addEventListener('click', hideIntro);
+      // Auto-play the video
+      introVideo.play().catch(e => {
+          console.log("Auto-play prevented by browser.", e);
+      });
+
+      // Hide when video ends naturally
+      introVideo.addEventListener('ended', hideIntro);
+      
+      // Hide when user clicks skip
+      skipIntroBtn.addEventListener('click', hideIntro);
+    }
   }
 
 })();

@@ -24,7 +24,7 @@
     <!-- HEADER / NAVBAR -->
     <header class="navbar" id="navbar">
         <div class="container navbar__inner">
-            <a href="index.html" class="navbar__logo" aria-label="Precision & Co Home">
+            <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
                 <div class="brand-logo">
                     <div class="brand-logo__icon">
                         <span class="brand-logo__p">P</span>
@@ -44,7 +44,7 @@
 
             <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
                 <ul class="navbar__menu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
                     <li class="nav-dropdown">
                         <a href="#" class="nav-link">
                             What We Do
@@ -66,18 +66,18 @@
                                             </div>
                                             <a href="services-consulting.html" class="mega-menu__item">Business Advisory</a>
                                             <a href="services-vcfo.html" class="mega-menu__item">Virtual CFO</a>
-                                            <a href="#" class="mega-menu__item">Accounting & Bookkeeping</a>
-                                            <a href="#" class="mega-menu__item">Company Law & ROC</a>
-                                            <a href="#" class="mega-menu__item">Startup Advisory</a>
-                                            <a href="#" class="mega-menu__item">Regulatory Compliance</a>
-                                            <a href="#" class="mega-menu__item">Transaction Advisory</a>
+                                            <a href="services-accounting.html" class="mega-menu__item">Accounting & Bookkeeping</a>
+                                            <a href="services-company-law.html" class="mega-menu__item">Company Law & ROC</a>
+                                            <a href="services-startup.html" class="mega-menu__item">Startup Advisory</a>
+                                            <a href="services-regulatory.html" class="mega-menu__item">Regulatory Compliance</a>
+                                            <a href="services-transaction.html" class="mega-menu__item">Transaction Advisory</a>
                                             <a href="services-risk.html" class="mega-menu__item">Risk Advisory</a>
-                                            <a href="#" class="mega-menu__item">Valuation</a>
-                                            <a href="#" class="mega-menu__item">Wealth Advisory</a>
+                                            <a href="services-valuation.html" class="mega-menu__item">Valuation</a>
+                                            <a href="services-wealth.html" class="mega-menu__item">Wealth Advisory</a>
                                         </div>
                                     </div>
                                     <div class="mega-menu__group">
-                                        <div class="mega-menu__category">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
+                                        <div class="mega-menu__category" onclick="window.location.href='industries.html';" style="cursor:pointer;">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
                                         <div class="mega-menu__pane">
                                             <a href="industries.html" class="mega-menu__item">Manufacturing</a>
                                             <a href="industries.html" class="mega-menu__item">Technology</a>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                     </li>
-                    <li><a href="#founders" class="nav-link">Meet our founders</a></li>
+                    <li><a href="experts.html" class="nav-link">Our experts</a></li>
                     <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
                     <li><a href="#contact" class="nav-link">Contact Us</a></li>
                 </ul>
@@ -417,14 +417,32 @@
                 <h2 class="wcu-cta-title">Let's Build a Stronger Financial Future Together.</h2>
                 <p>Discover the Precision Henna difference.</p>
                 <div class="cta-actions">
-                    <a href="#contact" class="btn btn-primary">Book Consultation</a>
+                    <a href="contact.html" class="btn btn-primary">Book Consultation</a>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer" id="footer">
+    
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ROYAL CTA                                                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="royal-cta">
+        <div class="royal-cta__pattern"></div>
+        <div class="container royal-cta__container">
+            <div class="royal-cta__content">
+                <h2 class="royal-cta__title">Ready to Elevate Your Business?</h2>
+                <p class="royal-cta__text">Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.</p>
+                <a href="contact.html" class="royal-cta__btn">
+                    <span>Book a Consultation</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+<footer class="footer" id="footer">
         <div class="footer__top-accent"></div>
         <div class="container footer__inner">
             <div class="footer__brand">

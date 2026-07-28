@@ -1,0 +1,848 @@
+# Generated python script
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Precision & Co — Chartered Accountants delivering strategic financial solutions with accuracy, integrity, and insight. Audit, Tax, Advisory & Compliance services.">
+    <meta name="keywords" content="chartered accountants, audit, tax advisory, compliance, financial consulting, Precision & Co">
+    <title>Industries We Serve | Precision & Co</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="industries.css">
+</head>
+<body class="page-industries">
+    <header class="navbar" id="navbar">
+        <div class="container navbar__inner">
+            <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
+                <div class="brand-logo">
+                    <div class="brand-logo__icon">
+                        <span class="brand-logo__p">P</span>
+                        <span class="brand-logo__c">C</span>
+                        <svg class="brand-logo__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H10M17 7V14"/></svg>
+                    </div>
+                    <div class="brand-logo__text-group">
+                        <span class="brand-logo__name">PRECISION <span class="gold-text">&amp;</span> CO</span>
+                        <span class="brand-logo__divider">
+                            <span class="line"></span>
+                            <span class="text">CHARTERED ACCOUNTANTS</span>
+                            <span class="line"></span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
+                <ul class="navbar__menu">
+                    <li><a href="home.html" class="nav-link">Home</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#" class="nav-link">
+                            What We Do
+                            <svg class="nav-link__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                        </a>
+                        <div class="mega-menu">
+                            <div class="mega-menu__inner">
+                                <div class="mega-menu__sidebar">
+                                    <div class="mega-menu__group">
+                                        <div class="mega-menu__category">Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
+                                        <div class="mega-menu__pane">
+                                            <a href="services-audit.html" class="mega-menu__item">Audit & Assurance</a>
+                                            <div class="tax-group">
+                                                <a href="services-tax.html" class="mega-menu__item" style="padding-bottom: 0;">Taxation</a>
+                                                <div class="tax-submenu">
+                                                    <a href="services-tax.html" class="mega-menu__item" style="padding-left: 1rem; font-size: 0.8rem; padding-top: 4px; padding-bottom: 4px;">Direct Tax</a>
+                                                    <a href="services-tax.html" class="mega-menu__item" style="padding-left: 1rem; font-size: 0.8rem; padding-top: 0;">GST & Indirect Tax</a>
+                                                </div>
+                                            </div>
+                                            <a href="services-consulting.html" class="mega-menu__item">Business Advisory</a>
+                                            <a href="services-vcfo.html" class="mega-menu__item">Virtual CFO</a>
+                                            <a href="#" class="mega-menu__item">Accounting & Bookkeeping</a>
+                                            <a href="#" class="mega-menu__item">Company Law & ROC</a>
+                                            <a href="#" class="mega-menu__item">Startup Advisory</a>
+                                            <a href="#" class="mega-menu__item">Regulatory Compliance</a>
+                                            <a href="#" class="mega-menu__item">Transaction Advisory</a>
+                                            <a href="services-risk.html" class="mega-menu__item">Risk Advisory</a>
+                                            <a href="#" class="mega-menu__item">Valuation</a>
+                                            <a href="#" class="mega-menu__item">Wealth Advisory</a>
+                                        </div>
+                                    </div>
+                                    <div class="mega-menu__group">
+                                        <div class="mega-menu__category">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
+                                        <div class="mega-menu__pane">
+                                            <a href="industry-manufacturing.html" class="mega-menu__item">Manufacturing</a>
+                                            <a href="industry-technology.html" class="mega-menu__item">Technology</a>
+                                            <a href="industry-healthcare.html" class="mega-menu__item">Healthcare</a>
+                                            <a href="industry-banking-finance.html" class="mega-menu__item">Banking & Finance</a>
+                                            <a href="industry-real-estate.html" class="mega-menu__item">Real Estate</a>
+                                            <a href="industry-retail.html" class="mega-menu__item">Retail & E-Commerce</a>
+                                            <a href="industry-education.html" class="mega-menu__item">Education</a>
+                                            <a href="industry-hospitality.html" class="mega-menu__item">Hospitality</a>
+                                            <a href="industry-energy.html" class="mega-menu__item">Energy</a>
+                                            <a href="industry-logistics.html" class="mega-menu__item">Logistics</a>
+                                            <a href="industry-government.html" class="mega-menu__item">Government</a>
+                                            <a href="industry-startups.html" class="mega-menu__item">Startups</a>
+                                            <a href="industry-infrastructure.html" class="mega-menu__item">Infrastructure</a>
+                                            <a href="industry-ngos.html" class="mega-menu__item">NGOs</a>
+                                            <a href="industry-import-export.html" class="mega-menu__item">Global Business</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="experts.html" class="nav-link">Our experts</a></li>
+                    <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
+                    <li><a href="#contact" class="nav-link">Contact Us</a></li>
+                </ul>
+            </nav>
+
+            <a href="#contact" class="btn btn-outline btn-outline--light navbar__cta">
+                Book a Consultation
+                <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </a>
+
+            <button class="navbar__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="ind-main">
+        <!-- HERO & INTRO WRAPPER -->
+        <div class="ind-hero-wrapper">
+            <div class="ind-hero-bg"></div>
+            <div class="ind-hero-overlay"></div>
+            
+            <!-- HERO SECTION -->
+            <section class="ind-hero">
+                <div class="ind-hero-content container">
+                    <div class="ind-breadcrumbs gs-reveal">
+                        <span>Home</span> <span class="sep">/</span> <span class="current">Industries</span>
+                    </div>
+                    <h1 class="ind-hero-title gs-reveal">Industries We Serve</h1>
+                    <div class="ind-hero-divider gs-reveal-divider"></div>
+                    <p class="ind-hero-subtitle gs-reveal">Every industry has unique challenges, regulatory requirements and growth opportunities. We combine deep sector knowledge with financial expertise to help businesses make confident decisions and achieve sustainable success.</p>
+                </div>
+            </section>
+
+            <!-- INTRODUCTION SPLIT -->
+            <section class="ind-intro">
+                <div class="container ind-intro-inner">
+                    <div class="ind-intro-left gs-reveal-left">
+                        <h2>We Understand Businesses Before We Understand Numbers.</h2>
+                    </div>
+                    <div class="ind-intro-divider gs-reveal-grow"></div>
+                    <div class="ind-intro-right gs-reveal-right">
+                        <p>True financial guidance goes beyond the balance sheet. Our specialized industry verticals allow us to anticipate market shifts, navigate complex regulatory landscapes, and engineer tailored financial structures that provide our clients with a distinct competitive advantage.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- MAIN LAYOUT WITH SIDEBAR -->
+        <section class="ind-content-area">
+            <div class="ind-container">
+                
+                <!-- STICKY SIDEBAR -->
+                <aside class="ind-sidebar">
+                    <div class="ind-sidebar-inner">
+                        <h3>Industries</h3>
+                        <ul class="ind-nav">
+                            <li><a href="industry-manufacturing.html" class="ind-nav-link">Manufacturing</a></li>
+<li><a href="industry-technology.html" class="ind-nav-link">Technology</a></li>
+<li><a href="industry-healthcare.html" class="ind-nav-link">Healthcare</a></li>
+<li><a href="industry-real-estate.html" class="ind-nav-link">Real Estate</a></li>
+<li><a href="industry-retail.html" class="ind-nav-link">Retail & E-Commerce</a></li>
+<li><a href="industry-education.html" class="ind-nav-link">Education</a></li>
+<li><a href="industry-hospitality.html" class="ind-nav-link">Hospitality</a></li>
+<li><a href="industry-energy.html" class="ind-nav-link">Energy</a></li>
+<li><a href="industry-logistics.html" class="ind-nav-link">Logistics</a></li>
+<li><a href="industry-infrastructure.html" class="ind-nav-link">Infrastructure</a></li>
+<li><a href="industry-government.html" class="ind-nav-link">Government</a></li>
+<li><a href="industry-ngos.html" class="ind-nav-link">NGOs</a></li>
+<li><a href="industry-startups.html" class="ind-nav-link">Startups</a></li>
+<li><a href="industry-professional-services.html" class="ind-nav-link">Professional Services</a></li>
+<li><a href="industry-import-export.html" class="ind-nav-link">Import Export</a></li>
+
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- INDUSTRY SHOWCASE -->
+                <div class="ind-sections-wrapper">
+                    
+        <section class="ind-section" id="manufacturing">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop" alt="Manufacturing">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/></svg>
+            </div>
+            <h2 class="ind-title">Manufacturing</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Optimizing supply chains, managing capital expenditures, and driving operational efficiency in a complex global market.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Supply chain volatility, capital-intensive expansion, raw material cost fluctuations.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>We provide robust cost-accounting models, lean operational advisory, and tax-efficient restructuring.</p>
+                </div>
+            </div>
+            
+            <a href="industry-manufacturing.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="technology">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+            </div>
+            <h2 class="ind-title">Technology</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Navigating rapid innovation cycles, IP valuation, and cross-border tech regulations for sustainable scaling.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Revenue recognition (SaaS), R&D tax credits, intellectual property structuring.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Strategic valuation, global transfer pricing, and M&A due diligence.</p>
+                </div>
+            </div>
+            
+            <a href="industry-technology.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop" alt="Technology">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="healthcare">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop" alt="Healthcare">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h2 class="ind-title">Healthcare</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Ensuring compliance, managing institutional revenue cycles, and optimizing healthcare infrastructure investments.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Regulatory compliance, billing complexites, scaling facilities.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Healthcare audits, revenue cycle advisory, and compliance frameworks.</p>
+                </div>
+            </div>
+            
+            <a href="industry-healthcare.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="real-estate">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"/></svg>
+            </div>
+            <h2 class="ind-title">Real Estate</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Structuring complex real estate transactions, optimizing REITs, and managing large-scale project financing.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Project financing, capital gains management, market cyclicality.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Real estate valuations, tax-efficient project structuring, and REIT compliance.</p>
+                </div>
+            </div>
+            
+            <a href="industry-real-estate.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop" alt="Real Estate">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="retail">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop" alt="Retail & E-Commerce">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
+            </div>
+            <h2 class="ind-title">Retail & E-Commerce</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Driving retail growth through inventory optimization, multi-state tax compliance, and omni-channel strategy.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Inventory valuation, multi-jurisdiction sales tax, margin compression.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Inventory accounting, state & local tax advisory, profitability analysis.</p>
+                </div>
+            </div>
+            
+            <a href="industry-retail.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="education">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+            </div>
+            <h2 class="ind-title">Education</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Ensuring fiscal sustainability and regulatory compliance for educational institutions and ed-tech innovators.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Endowment management, grant compliance, digital transformation costs.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Not-for-profit audits, grant advisory, financial sustainability planning.</p>
+                </div>
+            </div>
+            
+            <a href="industry-education.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop" alt="Education">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="hospitality">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1542314831-c6a420828f79?q=80&w=1200&auto=format&fit=crop" alt="Hospitality">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h2 class="ind-title">Hospitality</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Navigating seasonal revenue cycles, asset management, and franchise compliance in the luxury hospitality sector.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Seasonal cash flow, property valuations, franchise fee auditing.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Cash flow forecasting, operational audits, franchise agreement compliance.</p>
+                </div>
+            </div>
+            
+            <a href="industry-hospitality.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="energy">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h2 class="ind-title">Energy</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Supporting the transition to renewables with project finance, tax incentives, and complex asset accounting.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Capital intensive projects, regulatory shifts, green tax credits.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Energy tax credit advisory, project finance modeling, asset impairment testing.</p>
+                </div>
+            </div>
+            
+            <a href="industry-energy.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1200&auto=format&fit=crop" alt="Energy">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="logistics">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?q=80&w=1200&auto=format&fit=crop" alt="Logistics">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h2 class="ind-title">Logistics</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Optimizing fleet operations, cross-border tariffs, and supply chain logistics for global trade.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Fuel cost volatility, cross-border tariffs, fleet depreciation.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Transfer pricing, tariff advisory, capital asset management.</p>
+                </div>
+            </div>
+            
+            <a href="industry-logistics.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="infrastructure">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 22h20M12 2v20"/></svg>
+            </div>
+            <h2 class="ind-title">Infrastructure</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Advising on public-private partnerships (PPP), long-term project financing, and contract compliance.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Long-term contract accounting, PPP complexities, cost overruns.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Percentage-of-completion accounting, PPP structuring, cost audits.</p>
+                </div>
+            </div>
+            
+            <a href="industry-infrastructure.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1545459720-aac8509eb02c?q=80&w=1200&auto=format&fit=crop" alt="Infrastructure">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="government">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?q=80&w=1200&auto=format&fit=crop" alt="Government">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10h16v10H4z"/></svg>
+            </div>
+            <h2 class="ind-title">Government</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Delivering transparency, accountability, and fiscal prudence for public sector entities.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Budgetary constraints, strict compliance standards, public transparency.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Public sector audits, budget advisory, compliance reporting.</p>
+                </div>
+            </div>
+            
+            <a href="industry-government.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="ngos">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h2 class="ind-title">NGOs</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Ensuring donor funds are managed with maximum impact, transparency, and strict adherence to grant guidelines.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Fund accounting, donor reporting, international grant compliance.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>NFP audits, fund structuring, FCRA and global grant advisory.</p>
+                </div>
+            </div>
+            
+            <a href="industry-ngos.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop" alt="NGOs">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="startups">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Startups">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h2 class="ind-title">Startups</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Guiding high-growth startups from seed funding through series rounds, scaling, and eventual IPO or exit.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Cash burn management, equity structuring, Series A/B audits.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Virtual CFO, ESOP structuring, investor due diligence.</p>
+                </div>
+            </div>
+            
+            <a href="industry-startups.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="professional-services">
+            <div class="ind-floating-block ind-layout-content-left">
+                
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <h2 class="ind-title">Professional Services</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Managing partnership equity, partner compensation models, and professional liability structures.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Partner equity management, cash flow timing, profit distributions.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Partnership tax returns, equity structuring, cash flow advisory.</p>
+                </div>
+            </div>
+            
+            <a href="industry-professional-services.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop" alt="Professional Services">
+            </div>
+        </div>
+    
+            </div>
+        </section>
+    
+        <section class="ind-section" id="import-export">
+            <div class="ind-floating-block ind-layout-img-left">
+                
+        <div class="ind-col ind-col-img gs-reveal-img">
+            <div class="ind-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1493962853295-0fd70327578a?q=80&w=1200&auto=format&fit=crop" alt="Import Export">
+            </div>
+        </div>
+    
+        <div class="ind-col ind-col-text gs-reveal-text">
+            <div class="ind-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h2 class="ind-title">Import Export</h2>
+            <div class="ind-divider"></div>
+            <p class="ind-overview">Navigating complex international trade laws, customs duties, and multi-currency financial exposures.</p>
+            
+            <div class="ind-details">
+                <div class="ind-detail-block">
+                    <h4>Common Challenges</h4>
+                    <p>Currency volatility, customs duties, international trade laws.</p>
+                </div>
+                <div class="ind-detail-block">
+                    <h4>How Precision & Co. Helps</h4>
+                    <p>Forex risk advisory, customs compliance, cross-border taxation.</p>
+                </div>
+            </div>
+            
+            <a href="industry-import-export.html" class="ind-cta">Explore Solutions <span class="arrow">→</span></a>
+        </div>
+    
+            </div>
+        </section>
+    
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- HOW WE HELP (EXPERTISE) -->
+        <section class="ind-expertise">
+            <div class="container">
+                <h2 class="ind-expertise-title gs-reveal">Our Industry Expertise</h2>
+                <div class="ind-expertise-grid">
+                    <div class="ind-expert-card gs-reveal">Audit</div>
+                    <div class="ind-expert-card gs-reveal">Tax</div>
+                    <div class="ind-expert-card gs-reveal">GST</div>
+                    <div class="ind-expert-card gs-reveal">Business Advisory</div>
+                    <div class="ind-expert-card gs-reveal">Virtual CFO</div>
+                    <div class="ind-expert-card gs-reveal">Accounting</div>
+                    <div class="ind-expert-card gs-reveal">Compliance</div>
+                    <div class="ind-expert-card gs-reveal">Risk Advisory</div>
+                    <div class="ind-expert-card gs-reveal">Valuation</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- EDITORIAL QUOTE -->
+        <section class="ind-quote-section">
+            <div class="container ind-quote-inner gs-reveal">
+                <div class="ind-quote-mark">“</div>
+                <h2 class="ind-quote-text">Every industry speaks a different financial language.<br>We understand each one.</h2>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="ind-final-cta">
+            <canvas id="ind-particles"></canvas>
+            <div class="ind-final-content gs-reveal">
+                <h2>Looking for Industry-Specific Financial Expertise?</h2>
+                <a href="#contact" class="ind-btn-gold">Book a Consultation</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="footer">
+        <div class="footer__top-accent"></div>
+        <div class="container footer__inner">
+            <div class="footer__brand">
+                <div class="footer__logo">
+                    <div class="brand-logo">
+                        <div class="brand-logo__icon">
+                            <span class="brand-logo__p">P</span>
+                            <span class="brand-logo__c">C</span>
+                            <svg class="brand-logo__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H10M17 7V14"/></svg>
+                        </div>
+                        <div class="brand-logo__text-group">
+                            <span class="brand-logo__name">PRECISION <span class="gold-text">&amp;</span> CO</span>
+                            <span class="brand-logo__divider">
+                                <span class="line"></span>
+                                <span class="text">CHARTERED ACCOUNTANTS</span>
+                                <span class="line"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <p class="footer__description">
+                    Delivering strategic financial solutions with accuracy, integrity, and insight. 
+                    Your trusted partner in navigating the complexities of modern business finance.
+                </p>
+                <div class="footer__social">
+                    <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="#" class="footer__social-link" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="#" class="footer__social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    </a>
+                    <a href="#" class="footer__social-link" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer__links-group">
+                <h4 class="footer__heading">Services</h4>
+                <ul class="footer__links">
+                    <li><a href="#" class="footer__link">Audit & Assurance</a></li>
+                    <li><a href="#" class="footer__link">Tax Advisory</a></li>
+                    <li><a href="#" class="footer__link">Business Consulting</a></li>
+                    <li><a href="#" class="footer__link">Risk & Compliance</a></li>
+                    <li><a href="#" class="footer__link">GST Services</a></li>
+                    <li><a href="#" class="footer__link">Virtual CFO</a></li>
+                </ul>
+            </div>
+
+            <div class="footer__links-group">
+                <h4 class="footer__heading">Company</h4>
+                <ul class="footer__links">
+                    <li><a href="#" class="footer__link">About Us</a></li>
+                    <li><a href="#" class="footer__link">Our Team</a></li>
+                    <li><a href="#" class="footer__link">Careers</a></li>
+                    <li><a href="#" class="footer__link">Insights</a></li>
+                    <li><a href="#" class="footer__link">Case Studies</a></li>
+                    <li><a href="#" class="footer__link">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer__contact">
+                <h4 class="footer__heading">Get in Touch</h4>
+                <div class="footer__contact-items">
+                    <div class="footer__contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <div>
+                            <p>14th Floor, Prestige Tower,</p>
+                            <p>MG Road, Bengaluru 560001</p>
+                        </div>
+                    </div>
+                    <div class="footer__contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <div>
+                            <p>+91 98765 43210</p>
+                            <p>+91 80 4567 8900</p>
+                        </div>
+                    </div>
+                    <div class="footer__contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <div>
+                            <p>info@precisionandco.com</p>
+                            <p>careers@precisionandco.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <div class="container footer__bottom-inner">
+                <p class="footer__copyright">
+                    © 2026 Precision & Co. All rights reserved. | Chartered Accountants
+                </p>
+                <div class="footer__legal">
+                    <a href="#" class="footer__legal-link">Privacy Policy</a>
+                    <a href="#" class="footer__legal-link">Terms of Service</a>
+                    <a href="#" class="footer__legal-link">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+    <script src="industries.js"></script>
+</body>
+</html>
+"""
+with open("/Users/dineshpabbathi/Desktop/precision/industries.html", "w") as out: out.write(html_content)
