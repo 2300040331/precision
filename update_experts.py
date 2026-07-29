@@ -123,7 +123,7 @@ for e in experts_data:
                     
                     <div class="fmodal-footer">
                         <p><strong>Email:</strong> contact@precisionandco.com | <a href="#">LinkedIn</a></p>
-                        <a href="#contact" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
+                        <a href="contact.html" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
                     </div>
                 </div>
                 

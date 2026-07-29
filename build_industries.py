@@ -98,11 +98,11 @@ html_content = """<!DOCTYPE html>
                     </li>
                     <li><a href="experts.html" class="nav-link">Our experts</a></li>
                     <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
-                    <li><a href="#contact" class="nav-link">Contact Us</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact Us</a></li>
                 </ul>
             </nav>
 
-            <a href="#contact" class="btn btn-outline btn-outline--light navbar__cta">
+            <a href="contact.html" class="btn btn-outline btn-outline--light navbar__cta">
                 Book a Consultation
                 <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </a>
@@ -725,7 +725,7 @@ html_content = """<!DOCTYPE html>
             <canvas id="ind-particles"></canvas>
             <div class="ind-final-content gs-reveal">
                 <h2>Looking for Industry-Specific Financial Expertise?</h2>
-                <a href="#contact" class="ind-btn-gold">Book a Consultation</a>
+                <a href="contact.html" class="ind-btn-gold">Book a Consultation</a>
             </div>
         </section>
     </main>

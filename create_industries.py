@@ -186,7 +186,7 @@ html_content = f"""<!DOCTYPE html>
             <canvas id="ind-particles"></canvas>
             <div class="ind-final-content gs-reveal">
                 <h2>Looking for Industry-Specific Financial Expertise?</h2>
-                <a href="#contact" class="ind-btn-gold">Book a Consultation</a>
+                <a href="contact.html" class="ind-btn-gold">Book a Consultation</a>
             </div>
         </section>
     </main>

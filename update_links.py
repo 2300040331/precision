@@ -14,11 +14,11 @@ for file in html_files:
     content = content.replace('href="home.html#contact" class="royal-cta__btn"', 'href="contact.html" class="royal-cta__btn"')
     
     # 2. Update top navbar Book a Consultation button
-    content = content.replace('href="#contact" class="navbar__cta btn btn-primary"', 'href="contact.html" class="navbar__cta btn btn-primary"')
+    content = content.replace('href="contact.html" class="navbar__cta btn btn-primary"', 'href="contact.html" class="navbar__cta btn btn-primary"')
     content = content.replace('href="home.html#contact" class="navbar__cta btn btn-primary"', 'href="contact.html" class="navbar__cta btn btn-primary"')
     
     # 3. Update hero section Book Consultation buttons in services pages
-    content = content.replace('href="#contact" class="btn btn-primary">Book Consultation', 'href="contact.html" class="btn btn-primary">Book Consultation')
+    content = content.replace('href="contact.html" class="btn btn-primary">Book Consultation', 'href="contact.html" class="btn btn-primary">Book Consultation')
     
     # 4. Remove Learn More button next to Book Consultation
     # It might have a style attribute: class="btn btn-outline" style="margin-left: 1rem;"

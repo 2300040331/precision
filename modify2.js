@@ -101,7 +101,7 @@ for (const [filename, data] of Object.entries(servicesData)) {
                     <h3 class="svc-hero__subtitle" style="margin-bottom: 1.5rem; color: var(--svc-gold);">${subtitle}</h3>
                     <p class="svc-hero__desc" style="margin-bottom: 2rem; color: var(--svc-gray); font-size: 1.125rem;">${desc}</p>
                     <div class="svc-hero__ctas">
-                        <a href="#contact" class="btn btn-primary">Book Consultation</a>
+                        <a href="contact.html" class="btn btn-primary">Book Consultation</a>
                         <a href="#overview" class="btn btn-outline" style="margin-left: 1rem;">Learn More</a>
                     </div>
                 </div>

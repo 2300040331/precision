@@ -104,11 +104,11 @@ def get_head_nav(title):
                     </li>
                     <li><a href="#founders" class="nav-link">Meet our founders</a></li>
                     <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
-                    <li><a href="#contact" class="nav-link">Contact Us</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact Us</a></li>
                 </ul>
             </nav>
 
-            <a href="#contact" class="btn btn-outline btn-outline--light navbar__cta">
+            <a href="contact.html" class="btn btn-outline btn-outline--light navbar__cta">
                 Book a Consultation
                 <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
             </a>
@@ -146,7 +146,7 @@ def generate_18_sections(service_name, subtitle, desc):
                 <h3 class="svc-hero__subtitle gsap-reveal">{subtitle}</h3>
                 <p class="svc-hero__desc gsap-reveal">{desc}</p>
                 <div class="svc-hero__ctas gsap-reveal">
-                    <a href="#contact" class="btn btn-primary">Book Consultation</a>
+                    <a href="contact.html" class="btn btn-primary">Book Consultation</a>
                     <a href="#overview" class="btn btn-outline">Learn More</a>
                 </div>
                 <div class="svc-hero__stats gsap-reveal">
@@ -386,8 +386,8 @@ def generate_18_sections(service_name, subtitle, desc):
                 <h2>Ready to Strengthen Your Business?</h2>
                 <p>Partner with us for industry-leading {service_name} services.</p>
                 <div class="cta-buttons">
-                    <a href="#contact" class="btn btn-primary">Book Consultation</a>
-                    <a href="#contact" class="btn btn-outline btn-outline--light">Contact Our Experts</a>
+                    <a href="contact.html" class="btn btn-primary">Book Consultation</a>
+                    <a href="contact.html" class="btn btn-outline btn-outline--light">Contact Our Experts</a>
                 </div>
             </div>
         </section>

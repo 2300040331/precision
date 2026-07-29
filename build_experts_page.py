@@ -107,7 +107,7 @@ html_content = f"""<!DOCTYPE html>
                     <div class="fmodal-footer">
                         <p><strong>Languages:</strong> English, French</p>
                         <p><strong>Email:</strong> robert.j@precisionandco.com | <a href="#">LinkedIn</a></p>
-                        <a href="#contact" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
+                        <a href="contact.html" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
                     </div>
                 </div>
                 
@@ -153,7 +153,7 @@ html_content = f"""<!DOCTYPE html>
                     <div class="fmodal-footer">
                         <p><strong>Languages:</strong> English, Spanish</p>
                         <p><strong>Email:</strong> sarah.m@precisionandco.com | <a href="#">LinkedIn</a></p>
-                        <a href="#contact" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
+                        <a href="contact.html" class="btn btn-primary fmodal-cta">Schedule Consultation</a>
                     </div>
                 </div>
                 
