@@ -554,7 +554,7 @@ h4 { font-family: var(--ff-body); font-size: var(--fs-h4); font-weight: 600; }
 
 /* Logo */
 .brand-logo-img {
-  height: 100px; /* Increased size of the image logo further */
+  height: 56px; /* Adjusted size for cropped logo */
   width: auto;
   object-fit: contain;
   display: block;
