@@ -27,21 +27,7 @@ def get_head_nav(title):
     <header class="navbar" id="navbar">
         <div class="container navbar__inner">
             <a href="home.html" class="navbar__logo" aria-label="Precision & Co Home">
-                <div class="brand-logo">
-                    <div class="brand-logo__icon">
-                        <span class="brand-logo__p">P</span>
-                        <span class="brand-logo__c">C</span>
-                        <svg class="brand-logo__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H10M17 7V14"/></svg>
-                    </div>
-                    <div class="brand-logo__text-group">
-                        <span class="brand-logo__name">PRECISION <span class="gold-text">&amp;</span> CO</span>
-                        <span class="brand-logo__divider">
-                            <span class="line"></span>
-                            <span class="text">CHARTERED ACCOUNTANTS</span>
-                            <span class="line"></span>
-                        </span>
-                    </div>
-                </div>
+                <img src="assets/images/logo.png" alt="Precision & Co Logo" class="brand-logo-img">
             </a>
 
             <nav class="navbar__nav" id="main-nav" aria-label="Main navigation">
@@ -68,41 +54,41 @@ def get_head_nav(title):
                                             </div>
                                             <a href="services-consulting.html" class="mega-menu__item">Business Advisory</a>
                                             <a href="services-vcfo.html" class="mega-menu__item">Virtual CFO</a>
-                                            <a href="#" class="mega-menu__item">Accounting & Bookkeeping</a>
-                                            <a href="#" class="mega-menu__item">Company Law & ROC</a>
-                                            <a href="#" class="mega-menu__item">Startup Advisory</a>
-                                            <a href="#" class="mega-menu__item">Regulatory Compliance</a>
-                                            <a href="#" class="mega-menu__item">Transaction Advisory</a>
+                                            <a href="services-accounting.html" class="mega-menu__item">Accounting & Bookkeeping</a>
+                                            <a href="services-company-law.html" class="mega-menu__item">Company Law & ROC</a>
+                                            <a href="services-startup.html" class="mega-menu__item">Startup Advisory</a>
+                                            <a href="services-regulatory.html" class="mega-menu__item">Regulatory Compliance</a>
+                                            <a href="services-transaction.html" class="mega-menu__item">Transaction Advisory</a>
                                             <a href="services-risk.html" class="mega-menu__item">Risk Advisory</a>
-                                            <a href="#" class="mega-menu__item">Valuation</a>
-                                            <a href="#" class="mega-menu__item">Wealth Advisory</a>
+                                            <a href="services-valuation.html" class="mega-menu__item">Valuation</a>
+                                            <a href="services-wealth.html" class="mega-menu__item">Wealth Advisory</a>
                                         </div>
                                     </div>
                                     <div class="mega-menu__group">
-                                        <div class="mega-menu__category">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
+                                        <div class="mega-menu__category" onclick="window.location.href='industries.html';" style="cursor:pointer;">Industries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mega-menu__chevron"><path d="m9 18 6-6-6-6"/></svg></div>
                                         <div class="mega-menu__pane">
-                                            <a href="industries.html" class="mega-menu__item">Manufacturing</a>
-                                            <a href="industries.html" class="mega-menu__item">Technology</a>
-                                            <a href="industries.html" class="mega-menu__item">Healthcare</a>
-                                            <a href="industries.html" class="mega-menu__item">Banking & Finance</a>
-                                            <a href="industries.html" class="mega-menu__item">Real Estate</a>
-                                            <a href="industries.html" class="mega-menu__item">Retail & E-Commerce</a>
-                                            <a href="industries.html" class="mega-menu__item">Education</a>
-                                            <a href="industries.html" class="mega-menu__item">Hospitality</a>
-                                            <a href="industries.html" class="mega-menu__item">Energy</a>
-                                            <a href="industries.html" class="mega-menu__item">Logistics</a>
-                                            <a href="industries.html" class="mega-menu__item">Government</a>
-                                            <a href="industries.html" class="mega-menu__item">Startups</a>
-                                            <a href="industries.html" class="mega-menu__item">Infrastructure</a>
-                                            <a href="industries.html" class="mega-menu__item">NGOs</a>
-                                            <a href="industries.html" class="mega-menu__item">Global Business</a>
+                                            <a href="industry-manufacturing.html" class="mega-menu__item">Manufacturing</a>
+                                            <a href="industry-technology.html" class="mega-menu__item">Technology</a>
+                                            <a href="industry-healthcare.html" class="mega-menu__item">Healthcare</a>
+                                            <a href="industry-banking-finance.html" class="mega-menu__item">Banking & Finance</a>
+                                            <a href="industry-real-estate.html" class="mega-menu__item">Real Estate</a>
+                                            <a href="industry-retail.html" class="mega-menu__item">Retail & E-Commerce</a>
+                                            <a href="industry-education.html" class="mega-menu__item">Education</a>
+                                            <a href="industry-hospitality.html" class="mega-menu__item">Hospitality</a>
+                                            <a href="industry-energy.html" class="mega-menu__item">Energy</a>
+                                            <a href="industry-logistics.html" class="mega-menu__item">Logistics</a>
+                                            <a href="industry-government.html" class="mega-menu__item">Government</a>
+                                            <a href="industry-startups.html" class="mega-menu__item">Startups</a>
+                                            <a href="industry-infrastructure.html" class="mega-menu__item">Infrastructure</a>
+                                            <a href="industry-ngos.html" class="mega-menu__item">NGOs</a>
+                                            <a href="industry-import-export.html" class="mega-menu__item">Global Business</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li><a href="#founders" class="nav-link">Meet our founders</a></li>
+                    <li><a href="experts.html" class="nav-link">Our experts</a></li>
                     <li><a href="why-choose-us.html" class="nav-link">Why Choose Us</a></li>
                     <li><a href="contact.html" class="nav-link">Contact Us</a></li>
                 </ul>
