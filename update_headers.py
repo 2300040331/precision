@@ -1,4 +1,5 @@
 import re
+import glob
 
 # 1. Get header from home.html
 with open('home.html', 'r') as f:
@@ -13,7 +14,7 @@ if start_idx == -1 or end_idx == -1:
 header_content = index_html[start_idx:end_idx]
 
 # 2. Update HTML files
-files_to_update = ['services.html', 'why-choose-us.html', 'industries.html']
+files_to_update = [f for f in glob.glob('*.html') if f != 'home.html']
 
 for filename in files_to_update:
     try:
