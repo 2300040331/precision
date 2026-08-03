@@ -3,11 +3,14 @@ import { list } from '@vercel/blob';
 // Default static content fallback matching main website fields
 const defaultContentStore = {
   home: {
-    title: 'Precision in Numbers. Excellence in Business.',
+    title: 'Precision in<br>Numbers.<br>Excellence in<br><span class="gold-text">Business.</span>',
     subtitle: 'ACCURATE. TRUSTED. IMPACTFUL.',
-    description: 'We deliver comprehensive financial, tax, and strategic advisory services that drive business growth.',
-    ctaPrimaryText: 'Schedule Consultation',
-    ctaPrimaryLink: '#consultation',
+    description: 'We deliver strategic financial solutions with accuracy, integrity and insight to help your business grow with confidence.',
+    ctaPrimaryText: 'Our Services',
+    ctaPrimaryLink: 'services.html',
+    ctaSecondaryText: 'Book a Consultation',
+    ctaSecondaryLink: 'contact.html',
+    heroImage: 'assets/images/hero-bg.jpg',
   },
   contact: {
     primaryPhone: '+91 98765 43210',
@@ -15,7 +18,7 @@ const defaultContentStore = {
     email: 'info@precisionandco.com',
     taxEmail: 'advisory@precisionandco.com',
     headquarters: 'Precision House, Level 4, Financial District, Gachibowli, Hyderabad, Telangana 500032',
-    workingHours: 'Monday - Saturday: 9:00 AM - 6:30 PM IST',
+    workingHours: 'Monday - Friday: 9:00 AM - 6:00 PM IST',
   },
 };
 
