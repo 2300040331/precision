@@ -161,14 +161,14 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                 {onResetPageSections && (
                   <button
                     onClick={() => {
-                      if (confirm('Restore all 10 default sections for this page?')) {
+                      if (confirm('Restore all 7 default sections for Home Page?')) {
                         onResetPageSections(currentPage.id);
                       }
                     }}
                     className="flex items-center px-2 py-1 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 rounded-lg text-[11px] font-semibold border border-amber-500/30"
-                    title="Restore all default sections"
+                    title="Restore default sections"
                   >
-                    <RotateCcw className="w-3 h-3 mr-1" /> Restore 10
+                    <RotateCcw className="w-3 h-3 mr-1" /> Restore 7 Home Sections
                   </button>
                 )}
                 <button
