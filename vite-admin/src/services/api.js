@@ -389,12 +389,15 @@ class ApiService {
 
   async syncRemoteStore() {
     try {
-      const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
-      if (res.ok) {
-        const remote = await res.json();
-        if (remote && remote.pages) {
-          localStorage.setItem('precision_cms_full_store', JSON.stringify(remote));
-          return remote;
+      const local = localStorage.getItem('precision_cms_full_store');
+      if (!local) {
+        const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
+        if (res.ok) {
+          const remote = await res.json();
+          if (remote && remote.pages) {
+            localStorage.setItem('precision_cms_full_store', JSON.stringify(remote));
+            return remote;
+          }
         }
       }
     } catch (e) {}
@@ -438,7 +441,7 @@ class ApiService {
     if (defaultPage && Array.isArray(store.pages)) {
       store.pages = store.pages.map(p => {
         if (p.id === pageId) {
-          return { ...p, sections: [...defaultPage.sections] };
+          return { ...p, sections: JSON.parse(JSON.stringify(defaultPage.sections)) };
         }
         return p;
       });

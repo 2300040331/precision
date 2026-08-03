@@ -413,8 +413,10 @@ export default function App() {
 
   // Render Authenticated CMS Layout
   const handleResetPageSections = async (pageId) => {
-    await api.resetPageSections(pageId);
-    await loadAllData();
+    const updatedStore = await api.resetPageSections(pageId);
+    if (updatedStore && updatedStore.pages) {
+      setPages([...updatedStore.pages]);
+    }
   };
 
   return (
