@@ -8,5 +8,10 @@
   },
   "devDependencies": {
     "chokidar-cli": "^3.0.0"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.6.1",
+    "@vercel/kv": "^3.0.0",
+    "dotenv": "^17.4.2"
   }
 }

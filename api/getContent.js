@@ -1,0 +1,54 @@
+import { list } from '@vercel/blob';
+
+// Default static content fallback matching main website fields
+const defaultContentStore = {
+  home: {
+    title: 'Precision in Numbers. Excellence in Business.',
+    subtitle: 'ACCURATE. TRUSTED. IMPACTFUL.',
+    description: 'We deliver comprehensive financial, tax, and strategic advisory services that drive business growth.',
+    ctaPrimaryText: 'Schedule Consultation',
+    ctaPrimaryLink: '#consultation',
+  },
+  contact: {
+    primaryPhone: '+91 98765 43210',
+    secondaryPhone: '+91 40 2300 4033',
+    email: 'info@precisionandco.com',
+    taxEmail: 'advisory@precisionandco.com',
+    headquarters: 'Precision House, Level 4, Financial District, Gachibowli, Hyderabad, Telangana 500032',
+    workingHours: 'Monday - Saturday: 9:00 AM - 6:30 PM IST',
+  },
+};
+
+export default async function handler(request, response) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
+  const { page } = request.query || {};
+
+  try {
+    const { blobs } = await list({ prefix: 'content.json' });
+
+    if (blobs && blobs.length > 0) {
+      const latestBlob = blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))[0];
+      const res = await fetch(latestBlob.url);
+      const data = await res.json();
+      if (page && data[page]) {
+        return response.status(200).json(data[page]);
+      }
+      return response.status(200).json(data);
+    }
+  } catch (error) {
+    // If Blob fails, return defaultContentStore
+  }
+
+  if (page && defaultContentStore[page]) {
+    return response.status(200).json(defaultContentStore[page]);
+  }
+
+  return response.status(200).json(defaultContentStore);
+}

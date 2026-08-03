@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            Int        @id @default(autoincrement())
+  name          String
+  email         String     @unique
+  password      String
+  role          String     @default("ADMIN") // SUPER_ADMIN, ADMIN, EDITOR, MARKETING, READ_ONLY
+  twoFactor     Boolean    @default(false)
+  lastLogin     DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  auditLogs     AuditLog[]
+}
+
+model Page {
+  id          String    @id // e.g. 'home', 'about', 'services', 'industries', 'experts', 'why-choose-us', 'contact', 'footer', 'navbar'
+  title       String
+  slug        String    @unique
+  metaTitle   String?
+  metaDesc    String?
+  keywords    String?
+  sections    Section[]
+  isPublished Boolean   @default(true)
+  updatedAt   DateTime  @updatedAt
+}
+
+model Section {
+  id        String   @id @default(uuid())
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      String   // e.g. 'hero', 'about_preview', 'stats', 'services_grid', 'testimonials', 'cta', 'custom'
+  name      String
+  order     Int      @default(0)
+  visible   Boolean  @default(true)
+  content   String   // JSON string storing arbitrary key-values for heroTitle, subtitle, buttons, images, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  icon        String   @default("Briefcase")
+  summary     String
+  description String?
+  image       String?
+  features    String   // JSON string array
+  faqs        String   // JSON string array of {question, answer}
+  ctaText     String?  @default("Get Started")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  metaTitle   String?
+  metaDesc    String?
+  keywords    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Industry {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  icon        String   @default("Building2")
+  summary     String
+  image       String?
+  stats       String   // JSON string array of {label, value}
+  benefits    String   // JSON string array
+  faqs        String   // JSON string array
+  category    String   @default("General")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  metaTitle   String?
+  metaDesc    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaItem {
+  id          Int      @id @default(autoincrement())
+  filename    String
+  originalName String
+  url         String
+  mimeType    String
+  size        Int
+  dimensions  String?
+  altText     String?
+  folder      String   @default("general")
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Consultation {
+  id            Int      @id @default(autoincrement())
+  fullName      String
+  email         String
+  phone         String
+  company       String?
+  serviceSelected String?
+  industry      String?
+  budget        String?
+  preferredDate String?
+  preferredTime String?
+  message       String?
+  status        String   @default("NEW") // NEW, IN_REVIEW, ACCEPTED, RESCHEDULED, COMPLETED, CANCELLED
+  assignedStaff String?
+  notes         String?
+  ipAddress     String?
+  location      String?
+  sourcePage    String?  @default("/")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String   @default("UNREAD") // UNREAD, READ, REPLIED, SPAM, TRASH
+  replyNote String?
+  createdAt DateTime @default(now())
+}
+
+model VisitorLog {
+  id        Int      @id @default(autoincrement())
+  ip        String
+  path      String
+  referrer  String?
+  userAgent String?
+  device    String?  @default("Desktop")
+  browser   String?  @default("Chrome")
+  country   String?  @default("India")
+  city      String?  @default("Hyderabad")
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  id             String   @id @default("global")
+  siteName       String   @default("Precision & Co.")
+  tagline        String   @default("Precision in Numbers. Excellence in Business.")
+  contactEmail   String   @default("info@precisionandco.com")
+  contactPhone   String   @default("+91 98765 43210")
+  address        String   @default("123 Financial District, Gachibowli, Hyderabad, India")
+  googleMapsEmbed String?
+  workingHours   String   @default("Mon - Fri: 9:00 AM - 6:00 PM")
+  logoLight      String?
+  logoDark       String?
+  favicon        String?
+  socialLinkedin String?  @default("https://linkedin.com")
+  socialTwitter  String?  @default("https://twitter.com")
+  socialFacebook String?  @default("https://facebook.com")
+  gaTrackingId   String?
+  customHeaderScript String?
+  customFooterScript String?
+  robotsTxt      String   @default("User-agent: *\nAllow: /")
+  updatedAt      DateTime @updatedAt
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName  String?
+  action    String   // e.g. "UPDATE_PAGE", "CREATE_SERVICE", "DELETE_MEDIA"
+  details   String
+  ipAddress String?
+  createdAt DateTime @default(now())
+}

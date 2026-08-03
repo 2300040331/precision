@@ -1,5 +1,8 @@
-node_modules/
-.DS_Store
-.vercel/
-package-lock.json
 .vercel
+node_modules
+server/node_modules
+vite-admin/node_modules
+vite-admin/dist
+.DS_Store
+*.DS_Store
+.env.local
