@@ -412,6 +412,11 @@ export default function App() {
   }
 
   // Render Authenticated CMS Layout
+  const handleResetPageSections = async (pageId) => {
+    await api.resetPageSections(pageId);
+    await loadAllData();
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex">
       {/* Sidebar */}
@@ -454,6 +459,7 @@ export default function App() {
               onDeleteSection={handleDeleteSection}
               onReorderSections={handleReorderSections}
               onPublishPage={handlePublishPage}
+              onResetPageSections={handleResetPageSections}
             />
           )}
 

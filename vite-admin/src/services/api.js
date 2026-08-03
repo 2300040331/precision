@@ -387,7 +387,28 @@ class ApiService {
     try {
       const stored = localStorage.getItem('precision_cms_full_store');
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (parsed && Array.isArray(parsed.pages)) {
+          const home = parsed.pages.find(p => p.id === 'home');
+          if (home && Array.isArray(home.sections)) {
+            const defaultHome = fullWebsiteStore.pages.find(p => p.id === 'home');
+            if (defaultHome && Array.isArray(defaultHome.sections)) {
+              const existingIds = new Set(home.sections.map(s => s.id));
+              let added = false;
+              defaultHome.sections.forEach(sec => {
+                if (!existingIds.has(sec.id)) {
+                  home.sections.push(sec);
+                  added = true;
+                }
+              });
+              if (added) {
+                home.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+                localStorage.setItem('precision_cms_full_store', JSON.stringify(parsed));
+              }
+            }
+          }
+          return parsed;
+        }
       }
     } catch (e) {}
     return fullWebsiteStore;
@@ -436,6 +457,21 @@ class ApiService {
         body: JSON.stringify({ fullStore: store, flat }),
       }).catch(() => {});
     } catch (e) {}
+  }
+
+  async resetPageSections(pageId) {
+    const store = this.getStore();
+    const defaultPage = fullWebsiteStore.pages.find(p => p.id === pageId);
+    if (defaultPage && Array.isArray(store.pages)) {
+      store.pages = store.pages.map(p => {
+        if (p.id === pageId) {
+          return { ...p, sections: [...defaultPage.sections] };
+        }
+        return p;
+      });
+      this.saveStore(store);
+    }
+    return store;
   }
 
   setToken(token) {

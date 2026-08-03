@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import LiveDeviceFrame from '../components/LiveDeviceFrame';
 
-export default function PageBuilderView({ pages, onSaveSection, onAddSection, onDeleteSection, onReorderSections, onPublishPage }) {
+export default function PageBuilderView({ pages, onSaveSection, onAddSection, onDeleteSection, onReorderSections, onPublishPage, onResetPageSections }) {
   const [selectedPageId, setSelectedPageId] = useState('home');
   const [activeTab, setActiveTab] = useState('editor'); // 'editor' | 'preview'
   const [editingSection, setEditingSection] = useState(null);
@@ -164,17 +164,32 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Section List (Left Column - 4 cols) */}
           <div className="lg:col-span-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3 gap-2">
               <span className="text-xs font-bold text-white uppercase tracking-wider">Page Sections ({currentPage.sections?.length || 0})</span>
-              <button
-                onClick={() => {
-                  const name = prompt('Enter new section title:');
-                  if (name) onAddSection(currentPage.id, { name, type: 'custom', content: { title: name } });
-                }}
-                className="flex items-center px-2.5 py-1 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 rounded-lg text-xs font-semibold border border-indigo-500/30"
-              >
-                <Plus className="w-3.5 h-3.5 mr-1" /> Add Section
-              </button>
+              <div className="flex items-center space-x-1.5">
+                {onResetPageSections && (
+                  <button
+                    onClick={() => {
+                      if (confirm('Restore all 10 default sections for this page?')) {
+                        onResetPageSections(currentPage.id);
+                      }
+                    }}
+                    className="flex items-center px-2 py-1 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 rounded-lg text-[11px] font-semibold border border-amber-500/30"
+                    title="Restore all default sections"
+                  >
+                    <RotateCcw className="w-3 h-3 mr-1" /> Restore 10
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    const name = prompt('Enter new section title:');
+                    if (name) onAddSection(currentPage.id, { name, type: 'custom', content: { title: name } });
+                  }}
+                  className="flex items-center px-2.5 py-1 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 rounded-lg text-xs font-semibold border border-indigo-500/30"
+                >
+                  <Plus className="w-3.5 h-3.5 mr-1" /> Add
+                </button>
+              </div>
             </div>
 
             <div className="space-y-2">
