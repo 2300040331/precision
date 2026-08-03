@@ -5,11 +5,11 @@
   const getApiBase = () => {
     if (typeof window !== 'undefined' && window.location && window.location.hostname) {
       if (window.location.hostname.includes('vercel.app')) {
-        return 'https://admin-six-psi-48.vercel.app/api';
+        return '/api';
       }
       return `http://${window.location.hostname}:5001/api`;
     }
-    return 'https://admin-six-psi-48.vercel.app/api';
+    return '/api';
   };
 
   const API_BASE = getApiBase();
