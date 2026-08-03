@@ -620,9 +620,12 @@ class ApiService {
     const store = this.getStore();
     store.pages = (store.pages || []).map(p => ({
       ...p,
-      sections: (p.sections || []).filter(sec => sec.id !== id),
+      sections: (p.sections || []).filter(sec => String(sec.id) !== String(id)),
     }));
     this.saveStore(store);
+    try {
+      await fetch(`${API_BASE}/content/sections/${id}`, { method: 'DELETE' });
+    } catch (e) {}
     return { success: true };
   }
 

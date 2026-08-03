@@ -225,8 +225,14 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                         <ArrowDown className="w-3.5 h-3.5" />
                       </button>
                       <button
-                        onClick={() => onDeleteSection(sec.id)}
-                        className="p-1 text-slate-400 hover:text-red-400"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (editingSection?.id === sec.id) {
+                            setEditingSection(null);
+                          }
+                          onDeleteSection(sec.id);
+                        }}
+                        className="p-1 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-all"
                         title="Delete Section"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
