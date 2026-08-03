@@ -73,12 +73,10 @@ export const fullWebsiteStore = {
           visible: true,
           order: 3,
           content: JSON.stringify({
-            heading: 'Architects of Financial Clarity and Corporate Governance',
-            subheading: 'ABOUT PRECISION & CO.',
-            text1: 'Founded by senior Chartered Accountants and industry leaders, Precision & Co. has emerged as a premier multidisciplinary advisory firm providing financial governance, taxation strategy, M&A advisory, and risk management.',
-            text2: 'Our team combines deep domain expertise with modern financial technology to provide actionable insights for founders, boards, and institutional investors.',
-            vision: 'To be the most trusted financial governance partner for growth-stage enterprises in Asia.',
-            mission: 'Uncompromising integrity, rigorous technical standards, and tailored financial solutions for sustainable enterprise growth.',
+            subheading: 'ABOUT PRECISION & CO',
+            heading: 'Your Partner in Financial Success',
+            text1: 'At Precision & Co, we combine deep industry knowledge with a client-centric approach to deliver audit, tax, advisory, and compliance solutions that help businesses thrive in a rapidly evolving world.',
+            text2: "Founded with a vision to redefine chartered accountancy, we've grown from a boutique practice to a trusted partner for over 250 businesses across 50+ industries. Our team of seasoned professionals brings together decades of collective experience, cutting-edge technology, and an unwavering commitment to excellence.",
           }),
         },
         {
@@ -88,9 +86,9 @@ export const fullWebsiteStore = {
           visible: true,
           order: 4,
           content: JSON.stringify({
-            heading: 'Comprehensive Financial & Governance Services',
-            subheading: 'OUR CORE PRACTICE',
-            description: 'From statutory audits to cross-border tax advisory, we provide end-to-end financial leadership.',
+            subheading: 'WHAT WE DO',
+            heading: 'Comprehensive Financial Solutions',
+            description: 'From audit assurance to strategic advisory, we offer end-to-end financial services tailored to your business needs.',
           }),
         },
         {
@@ -100,9 +98,9 @@ export const fullWebsiteStore = {
           visible: true,
           order: 5,
           content: JSON.stringify({
-            heading: 'Specialized Expertise Across Key Sectors',
             subheading: 'INDUSTRIES WE SERVE',
-            description: 'Tailored compliance and financial management for manufacturing, technology, healthcare, and global trade.',
+            heading: 'Deep Expertise Across Sectors',
+            description: 'Our specialists understand the unique challenges and regulatory requirements of each industry.',
           }),
         },
         {
@@ -125,10 +123,11 @@ export const fullWebsiteStore = {
           visible: true,
           order: 7,
           content: JSON.stringify({
-            copyright: '© 2026 Precision & Co. Chartered Accountants. All rights reserved.',
-            tagline: 'Delivering strategic financial solutions with accuracy, integrity, and insight.',
-            linkedin: 'https://linkedin.com/company/precisionandco',
-            twitter: 'https://twitter.com/precisionandco',
+            description: 'Delivering strategic financial solutions with accuracy, integrity, and insight. Your trusted partner in navigating the complexities of modern business finance.',
+            address: '14th Floor, Prestige Tower, MG Road, Bengaluru 560001',
+            phone: '+91 98765 43210',
+            email: 'info@precisionandco.com',
+            copyright: '© 2026 Precision & Co. All rights reserved. | Chartered Accountants',
           }),
         },
       ],

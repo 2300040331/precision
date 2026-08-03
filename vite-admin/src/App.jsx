@@ -48,29 +48,9 @@ export default function App() {
     { id: 1, title: 'Welcome to Enterprise CMS', message: 'Connected to live database.', time: 'Just now', read: false },
   ]);
 
-  // Migration & Auth Check on load
+  // Auth Check on load
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      if (hostname.includes('precision-lotusandlion.vercel.app')) {
-        const fullStore = localStorage.getItem('precision_cms_full_store');
-        const token = localStorage.getItem('precision_admin_token');
-        if (fullStore) {
-          try {
-            fetch('/api/updateContent', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ fullStore: JSON.parse(fullStore), flat: JSON.parse(localStorage.getItem('precision_cms_content') || '{}') }),
-            }).finally(() => {
-              window.location.href = `https://precision-henna.vercel.app/admin${token ? '?token=' + encodeURIComponent(token) : ''}`;
-            });
-            return;
-          } catch (e) {}
-        }
-        window.location.href = 'https://precision-henna.vercel.app/admin';
-        return;
-      }
-
       const params = new URLSearchParams(window.location.search);
       const urlToken = params.get('token');
       if (urlToken) {
