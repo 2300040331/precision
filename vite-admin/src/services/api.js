@@ -389,17 +389,17 @@ class ApiService {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && Array.isArray(parsed.pages)) {
-          const home = parsed.pages.find(p => p.id === 'home');
-          if (home && Array.isArray(home.sections)) {
-            const defaultHome = fullWebsiteStore.pages.find(p => p.id === 'home');
-            if (defaultHome && Array.isArray(defaultHome.sections)) {
-              // Ensure all 10 default home sections exist and have updated baseline content
-              const existingMap = new Map(home.sections.map(s => [s.id, s]));
-              defaultHome.sections.forEach(defaultSec => {
+          // Ensure all main website pages exist in parsed.pages
+          fullWebsiteStore.pages.forEach(defaultPage => {
+            let p = parsed.pages.find(item => item.id === defaultPage.id);
+            if (!p) {
+              parsed.pages.push(defaultPage);
+            } else if (Array.isArray(defaultPage.sections)) {
+              const existingMap = new Map((p.sections || []).map(s => [s.id, s]));
+              defaultPage.sections.forEach(defaultSec => {
                 if (!existingMap.has(defaultSec.id)) {
-                  home.sections.push(defaultSec);
+                  p.sections.push(defaultSec);
                 } else {
-                  // Update hero section if it contains stale fallback text
                   const existingSec = existingMap.get(defaultSec.id);
                   if (existingSec.id === 'sec-hero') {
                     try {
@@ -417,12 +417,20 @@ class ApiService {
                       }
                     } catch (e) {}
                   }
+                  if (existingSec.id === 'sec-experts') {
+                    try {
+                      const content = typeof existingSec.content === 'string' ? JSON.parse(existingSec.content) : existingSec.content;
+                      if (content.leader1Name === 'Rajesh Sharma, FCA') {
+                        existingSec.content = defaultSec.content;
+                      }
+                    } catch (e) {}
+                  }
                 }
               });
-              home.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
-              localStorage.setItem('precision_cms_full_store', JSON.stringify(parsed));
+              p.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
             }
-          }
+          });
+          localStorage.setItem('precision_cms_full_store', JSON.stringify(parsed));
           return parsed;
         }
       }
