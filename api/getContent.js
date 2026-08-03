@@ -37,8 +37,18 @@ export default async function handler(request, response) {
       const latestBlob = blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))[0];
       const res = await fetch(latestBlob.url);
       const data = await res.json();
+
+      if (page === 'fullStore' && data.fullStore) {
+        return response.status(200).json(data.fullStore);
+      }
       if (page && data[page]) {
         return response.status(200).json(data[page]);
+      }
+      if (data.flat) {
+        if (page && data.flat[page]) {
+          return response.status(200).json(data.flat[page]);
+        }
+        return response.status(200).json(data.flat);
       }
       return response.status(200).json(data);
     }

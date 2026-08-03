@@ -4,11 +4,11 @@
 const getApiBase = () => {
   if (typeof window !== 'undefined' && window.location && window.location.hostname) {
     if (window.location.hostname.includes('vercel.app')) {
-      return 'https://admin-six-psi-48.vercel.app/api';
+      return '/api';
     }
     return `http://${window.location.hostname}:5001/api`;
   }
-  return 'https://admin-six-psi-48.vercel.app/api';
+  return '/api';
 };
 
 const API_BASE = getApiBase();
@@ -393,6 +393,20 @@ class ApiService {
     return fullWebsiteStore;
   }
 
+  async syncRemoteStore() {
+    try {
+      const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
+      if (res.ok) {
+        const remote = await res.json();
+        if (remote && remote.pages) {
+          localStorage.setItem('precision_cms_full_store', JSON.stringify(remote));
+          return remote;
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
   saveStore(store) {
     try {
       localStorage.setItem('precision_cms_full_store', JSON.stringify(store));
@@ -415,11 +429,11 @@ class ApiService {
       }
       localStorage.setItem('precision_cms_content', JSON.stringify(flat));
 
-      // Asynchronously push to Vercel API backend
+      // Asynchronously push fullStore and flat to Vercel API backend
       fetch(`${API_BASE}/updateContent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(flat),
+        body: JSON.stringify({ fullStore: store, flat }),
       }).catch(() => {});
     } catch (e) {}
   }
