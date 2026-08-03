@@ -409,6 +409,14 @@ class ApiService {
                       }
                     } catch (e) {}
                   }
+                  if (existingSec.id === 'sec-stats') {
+                    try {
+                      const content = typeof existingSec.content === 'string' ? JSON.parse(existingSec.content) : existingSec.content;
+                      if (content.stat1Value || content.stat1Label || content.Stat1Value || content.Stat1Label || !content.stat1Title) {
+                        existingSec.content = defaultSec.content;
+                      }
+                    } catch (e) {}
+                  }
                 }
               });
               home.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
