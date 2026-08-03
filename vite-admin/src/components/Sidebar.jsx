@@ -165,7 +165,7 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
             }`}
           >
             <Layers className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'builder' || activeTab.startsWith('page-') ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
-            {!collapsed && <span className="flex-1 text-left truncate">Page Builder</span>}
+            {!collapsed && <span className="flex-1 text-left truncate">Home Page Builder</span>}
           </button>
 
           <button

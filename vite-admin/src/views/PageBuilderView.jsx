@@ -97,33 +97,24 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Top Header & Page Selector */}
+      {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400">
+          <div className="p-2.5 bg-[#c8a45e]/10 rounded-xl border border-[#c8a45e]/20 text-[#c8a45e]">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Drag & Drop Visual Page Builder</h1>
-            <p className="text-slate-400 text-xs">Select any website page, customize sections, and publish instantly.</p>
+            <h1 className="text-xl font-bold text-white tracking-tight">Home Page Visual Builder</h1>
+            <p className="text-slate-400 text-xs">Customize and manage all sections of the live Home Page (<code className="text-[#c8a45e] font-mono">home.html</code>).</p>
           </div>
         </div>
 
-        {/* Page Selector Tabs */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          {pages.map(page => (
-            <button
-              key={page.id}
-              onClick={() => setSelectedPageId(page.id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
-                selectedPageId === page.id
-                  ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30'
-                  : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
-              }`}
-            >
-              {page.title}
-            </button>
-          ))}
+        {/* Home Page Active Badge */}
+        <div className="flex items-center space-x-2">
+          <span className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#c8a45e]/20 text-[#c8a45e] border border-[#c8a45e]/30 flex items-center">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
+            Home Page (<code className="font-mono">home.html</code>)
+          </span>
         </div>
       </div>
 
