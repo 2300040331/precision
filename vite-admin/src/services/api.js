@@ -343,39 +343,30 @@ class ApiService {
             if (!p) {
               parsed.pages.push(defaultPage);
             } else if (Array.isArray(defaultPage.sections)) {
-              const existingMap = new Map((p.sections || []).map(s => [s.id, s]));
-              defaultPage.sections.forEach(defaultSec => {
-                if (!existingMap.has(defaultSec.id)) {
-                  p.sections.push(defaultSec);
-                } else {
+              if (defaultPage.id === 'home') {
+                // Strictly enforce ONLY the 7 default Home Page sections matching home.html 1-to-1
+                const existingMap = new Map((p.sections || []).map(s => [s.id, s]));
+                p.sections = defaultPage.sections.map((defaultSec, idx) => {
                   const existingSec = existingMap.get(defaultSec.id);
-                  if (existingSec.id === 'sec-hero') {
-                    try {
-                      const content = typeof existingSec.content === 'string' ? JSON.parse(existingSec.content) : existingSec.content;
-                      if (content.ctaPrimaryText === 'Schedule Consultation' || content.description.includes('maximize shareholder value')) {
-                        existingSec.content = defaultSec.content;
-                      }
-                    } catch (e) {}
+                  if (existingSec) {
+                    return {
+                      ...defaultSec,
+                      visible: existingSec.visible !== undefined ? existingSec.visible : defaultSec.visible,
+                      order: idx + 1,
+                      content: existingSec.content || defaultSec.content,
+                    };
                   }
-                  if (existingSec.id === 'sec-stats') {
-                    try {
-                      const content = typeof existingSec.content === 'string' ? JSON.parse(existingSec.content) : existingSec.content;
-                      if (content.stat1Value || content.stat1Label || content.Stat1Value || content.Stat1Label || !content.stat1Title) {
-                        existingSec.content = defaultSec.content;
-                      }
-                    } catch (e) {}
+                  return { ...defaultSec, order: idx + 1 };
+                });
+              } else {
+                const existingMap = new Map((p.sections || []).map(s => [s.id, s]));
+                defaultPage.sections.forEach(defaultSec => {
+                  if (!existingMap.has(defaultSec.id)) {
+                    p.sections.push(defaultSec);
                   }
-                  if (existingSec.id === 'sec-experts') {
-                    try {
-                      const content = typeof existingSec.content === 'string' ? JSON.parse(existingSec.content) : existingSec.content;
-                      if (content.leader1Name === 'Rajesh Sharma, FCA') {
-                        existingSec.content = defaultSec.content;
-                      }
-                    } catch (e) {}
-                  }
-                }
-              });
-              p.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+                });
+                p.sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+              }
             }
           });
           localStorage.setItem('precision_cms_full_store', JSON.stringify(parsed));

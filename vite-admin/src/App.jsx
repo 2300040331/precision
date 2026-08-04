@@ -441,7 +441,6 @@ export default function App() {
               onDeleteSection={handleDeleteSection}
               onReorderSections={handleReorderSections}
               onPublishPage={handlePublishPage}
-              onResetPageSections={handleResetPageSections}
             />
           )}
 
