@@ -27,17 +27,48 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  const prepareSectionContent = (sec) => {
+    let parsed = {};
+    try {
+      parsed = JSON.parse(sec.content || '{}');
+    } catch (e) {
+      parsed = {};
+    }
+    if (sec.type === 'hero' || sec.id === 'sec-hero') {
+      const defaultHero = {
+        title: 'Precision in<br>Numbers.<br>Excellence in<br><span class="gold-text">Business.</span>',
+        subtitle: 'ABOUT PRECISION & CO.',
+        description: 'A trusted advisory firm providing financial governance, taxation strategy, M&A advisory, and risk management.',
+        ctaPrimaryText: 'Our Services',
+        ctaPrimaryLink: 'services.html',
+        ctaSecondaryText: 'Book a Consultation',
+        ctaSecondaryLink: 'contact.html',
+        heroImage: 'assets/images/hero-bg.jpg',
+      };
+      return { ...defaultHero, ...parsed };
+    }
+    if (sec.type === 'about_preview' || sec.id === 'sec-about') {
+      const defaultAbout = {
+        subheading: 'ABOUT PRECISION & CO',
+        heading: 'Your Partner in<br>Financial <span class="gold-text">Success</span>',
+        text1: 'At Precision & Co, we combine deep industry knowledge with a client-centric approach to deliver audit, tax, advisory, and compliance solutions that help businesses thrive in a rapidly evolving world.',
+        text2: "Founded with a vision to redefine chartered accountancy, we've grown from a boutique practice to a trusted partner for over 250 businesses across 50+ industries. Our team of seasoned professionals brings together decades of collective experience, cutting-edge technology, and an unwavering commitment to excellence.",
+        buttonText: 'Know More About Us',
+        buttonLink: 'why-choose-us.html',
+        aboutImage: 'assets/images/new-team.jpg',
+      };
+      return { ...defaultAbout, ...parsed };
+    }
+    return parsed;
+  };
+
   const currentPage = pages.find(p => p.id === selectedPageId) || pages[0] || { id: 'home', title: 'Home Page', sections: [] };
 
   useEffect(() => {
     if (currentPage && currentPage.sections && currentPage.sections.length > 0) {
       const first = currentPage.sections[0];
       setEditingSection(first);
-      try {
-        setSectionData(JSON.parse(first.content || '{}'));
-      } catch (e) {
-        setSectionData({});
-      }
+      setSectionData(prepareSectionContent(first));
     } else {
       setEditingSection(null);
       setSectionData({});
@@ -46,15 +77,19 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
 
   const handleSelectSection = (sec) => {
     setEditingSection(sec);
-    try {
-      setSectionData(JSON.parse(sec.content || '{}'));
-    } catch (e) {
-      setSectionData({});
-    }
+    setSectionData(prepareSectionContent(sec));
   };
 
   const handleFieldChange = (key, value) => {
     setSectionData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleDeleteField = (keyToDelete) => {
+    setSectionData(prev => {
+      const next = { ...prev };
+      delete next[keyToDelete];
+      return next;
+    });
   };
 
   const handleSave = async () => {
@@ -265,10 +300,19 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                     <p className="text-slate-500 text-xs italic">No editable fields in this section.</p>
                   ) : (
                     Object.entries(sectionData).map(([key, val]) => (
-                      <div key={key} className="space-y-1.5">
+                      <div key={key} className="space-y-1.5 p-3 rounded-xl bg-slate-950/40 border border-slate-800/60">
                         <label className="text-xs font-semibold text-slate-300 capitalize tracking-wide flex items-center justify-between">
-                          <span>{key.replace(/([A-Z])/g, ' $1')}</span>
-                          <span className="text-[10px] text-slate-500 font-mono">{key}</span>
+                          <div className="flex items-center space-x-2">
+                            <span>{key.replace(/([A-Z])/g, ' $1')}</span>
+                            <span className="text-[10px] text-indigo-400/80 font-mono bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">{key}</span>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteField(key)}
+                            className="p-1 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all"
+                            title={`Delete parameter '${key}'`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </label>
                         {key.toLowerCase().includes('image') || key.toLowerCase().includes('img') || key.toLowerCase().includes('bg') || key.toLowerCase().includes('logo') || key.toLowerCase().includes('photo') ? (
                           <div className="space-y-2">
@@ -288,7 +332,7 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                               />
                             </div>
                           </div>
-                        ) : key.toLowerCase().includes('text') || key.toLowerCase().includes('desc') || key.toLowerCase().includes('mission') || key.toLowerCase().includes('vision') || key.toLowerCase().includes('content') || key.toLowerCase().includes('address') || key.toLowerCase().includes('quote') ? (
+                        ) : key.toLowerCase().includes('title') || key.toLowerCase().includes('text') || key.toLowerCase().includes('desc') || key.toLowerCase().includes('subtitle') || key.toLowerCase().includes('content') || key.toLowerCase().includes('address') || key.toLowerCase().includes('quote') ? (
                           <textarea
                             rows={3}
                             value={val}

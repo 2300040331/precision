@@ -74,9 +74,12 @@ export const fullWebsiteStore = {
           order: 3,
           content: JSON.stringify({
             subheading: 'ABOUT PRECISION & CO',
-            heading: 'Your Partner in Financial Success',
+            heading: 'Your Partner in<br>Financial <span class="gold-text">Success</span>',
             text1: 'At Precision & Co, we combine deep industry knowledge with a client-centric approach to deliver audit, tax, advisory, and compliance solutions that help businesses thrive in a rapidly evolving world.',
             text2: "Founded with a vision to redefine chartered accountancy, we've grown from a boutique practice to a trusted partner for over 250 businesses across 50+ industries. Our team of seasoned professionals brings together decades of collective experience, cutting-edge technology, and an unwavering commitment to excellence.",
+            buttonText: 'Know More About Us',
+            buttonLink: 'why-choose-us.html',
+            aboutImage: 'assets/images/new-team.jpg',
           }),
         },
         {
