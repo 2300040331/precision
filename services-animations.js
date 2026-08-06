@@ -17,6 +17,7 @@
         touchMultiplier: 2,
         infinite: false,
     });
+    window.lenis = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 

@@ -2494,7 +2494,9 @@ body:not(.loaded) .hero__visual {
 
   .navbar__nav {
     position: fixed;
-    top: 0; left: 0; right: 0; height: 100vh;
+    top: 0; left: 0; right: 0; bottom: 0;
+    height: 100vh;
+    height: 100dvh;
     background: rgba(10,22,40,0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -2502,18 +2504,23 @@ body:not(.loaded) .hero__visual {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    overflow-y: auto;
-    padding-top: 120px;
-    padding-bottom: 40px;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain;
+    padding-top: 100px;
+    padding-bottom: 60px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: var(--z-navbar);
+    touch-action: pan-y !important;
+    pointer-events: none;
   }
 
   .navbar__nav--open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   .navbar__menu {
@@ -4199,8 +4206,7 @@ html, body {
 
 body.menu-open {
   overflow: hidden !important;
-  position: fixed;
-  width: 100%;
+  touch-action: none;
 }
 
 img, video, iframe, svg, canvas {

@@ -61,6 +61,14 @@
       mainNav.classList.toggle('navbar__nav--open');
       this.setAttribute('aria-expanded', isOpen);
       document.body.classList.toggle('menu-open', isOpen);
+
+      if (window.lenis) {
+        if (isOpen) {
+          window.lenis.stop();
+        } else {
+          window.lenis.start();
+        }
+      }
     });
 
     // Close menu on link click
@@ -70,6 +78,9 @@
         mainNav.classList.remove('navbar__nav--open');
         hamburger.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('menu-open');
+        if (window.lenis) {
+          window.lenis.start();
+        }
       });
     });
   }
