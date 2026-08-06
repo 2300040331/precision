@@ -2609,11 +2609,28 @@ body:not(.loaded) .hero__visual {
   }
 
   .about__inner {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about__content {
+    grid-column: auto;
+    grid-row: auto;
+    order: 1;
   }
 
   .about__image-col {
-    grid-column: 1;
+    grid-column: auto;
+    grid-row: auto;
+    order: 2;
+    width: 100%;
+  }
+
+  .about__features {
+    grid-column: auto;
+    grid-row: auto;
+    order: 3;
   }
 
   .services__grid {
@@ -4291,6 +4308,31 @@ a, button, input, select, textarea, .nav-link, .btn, .navbar__hamburger {
   .matrix-grid, .bento-layout, .hover-reveal-grid, .service-cards-grid, .feature-grid, .empower-grid {
     grid-template-columns: 1fr !important;
     gap: 1.25rem !important;
+  }
+
+  .about__inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+
+  .about__content {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    order: 1 !important;
+  }
+
+  .about__image-col {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    order: 2 !important;
+    width: 100% !important;
+  }
+
+  .about__features {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    order: 3 !important;
   }
 
   .industry-bento-card.featured, .bento-large, .bento-wide, .bento-small {
