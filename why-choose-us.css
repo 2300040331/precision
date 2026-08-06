@@ -186,4 +186,39 @@ body.page-why-choose-us {
   .empower-grid, .tech-dashboard { grid-template-columns: 1fr; flex-direction: column; }
   .tech-sidebar { width: 100%; display: flex; overflow-x: auto; padding: 1rem; }
   .tech-item { white-space: nowrap; }
+  .wcu-hero {
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+  .wcu-hero__ctas, .cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .wcu-hero__ctas .btn, .cta-actions .btn {
+    width: 100%;
+  }
+  .philosophy-cards {
+    flex-direction: column;
+  }
+  .story-card {
+    padding: 2rem 1.25rem;
+  }
 }
+
+@media (max-width: 480px) {
+  .wcu-counters {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .counter-item .count {
+    font-size: 2.75rem;
+  }
+  .wcu-hero__title {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+  .wcu-hero__desc {
+    font-size: 1rem;
+  }
+}
+

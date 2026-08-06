@@ -655,4 +655,59 @@ body.page-service-detail {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+  .svc-hero {
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+  .svc-hero__ctas {
+    flex-direction: column;
+    width: 100%;
+  }
+  .svc-hero__stats {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .dashboard-layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .dash-sidebar {
+    width: 100%;
+    padding: 1.5rem;
+  }
+  .dash-main {
+    padding: 1.5rem;
+  }
+  .deliv-card {
+    width: 100%;
+  }
+  .benefits-grid {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .testi-card {
+    padding: 2rem 1.25rem;
+  }
+  .testi-card p {
+    font-size: 1.15rem;
+  }
 }
+
+@media (max-width: 480px) {
+  .section-padding {
+    padding: 3.5rem 0;
+  }
+  .svc-hero__title {
+    font-size: clamp(2rem, 7vw, 2.75rem);
+  }
+  .svc-hero__desc {
+    font-size: 1rem;
+  }
+  .comp-card {
+    width: 100%;
+    padding: 2rem 1.25rem;
+  }
+}
+

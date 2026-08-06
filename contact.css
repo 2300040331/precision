@@ -329,3 +329,57 @@
     color: var(--navy-700);
     line-height: 1.6;
 }
+
+/* Mobile Responsiveness Overrides */
+@media (max-width: 768px) {
+    .contact-section {
+        padding: 50px 0;
+    }
+    .contact-hero {
+        min-height: 320px;
+        height: auto;
+        padding: 100px 0 40px 0;
+    }
+    .contact-hero__content {
+        margin-top: 20px;
+        padding: 0 16px;
+    }
+    .contact-form-wrap {
+        padding: 30px 20px;
+    }
+    .contact-hours {
+        padding-right: 0;
+    }
+    .contact-map {
+        height: 300px;
+    }
+    .contact-features {
+        padding: 50px 0;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Prevents auto-zoom on iOS */
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-form-wrap {
+        padding: 24px 16px;
+    }
+    .contact-heading {
+        font-size: 1.75rem;
+    }
+    .contact-text {
+        font-size: 1rem;
+        margin-bottom: 24px;
+    }
+    .contact-map {
+        height: 250px;
+    }
+    .form-submit-btn {
+        padding: 16px;
+        font-size: 0.95rem;
+    }
+}
+

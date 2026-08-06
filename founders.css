@@ -469,3 +469,54 @@
     background-color: var(--f-gold);
 }
 
+/* Mobile Responsiveness Overrides */
+@media (max-width: 1023px) {
+    .founders-grid-container {
+        padding: 0 20px;
+    }
+    .founders-main {
+        padding-top: 100px;
+        padding-bottom: 40px;
+    }
+    .founders-header {
+        margin-bottom: 30px;
+    }
+    .founders-grid {
+        gap: 30px;
+    }
+    .fmodal-close {
+        top: 15px;
+        right: 15px;
+        width: 44px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        color: var(--f-navy);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        z-index: 100;
+    }
+    .fmodal-text-col {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .founders-grid-container {
+        padding: 0 16px;
+    }
+    .fcard-name {
+        font-size: 1.5rem;
+    }
+    .fcard-info {
+        padding: 1.5rem 1.25rem;
+    }
+    .fmodal-name {
+        font-size: 2rem;
+    }
+}
+
+
