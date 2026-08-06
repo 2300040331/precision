@@ -2434,12 +2434,20 @@ body:not(.loaded) .hero__visual {
     text-align: center;
   }
 
+  .hero, .hero--light {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
   .hero--light .hero__inner {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    padding: calc(var(--navbar-h) + 1.25rem) 1.25rem 2rem 1.25rem !important;
+    padding: calc(var(--navbar-h) + 1rem) 1.25rem 2.5rem 1.25rem !important;
+    min-height: auto !important;
+    height: auto !important;
   }
 
   .hero--light > .hero__inner > .hero__visual {
@@ -2449,14 +2457,15 @@ body:not(.loaded) .hero__visual {
     left: auto !important;
     width: 100% !important;
     max-width: 520px !important;
-    margin: 0 auto 1.75rem auto !important;
+    margin: 0 auto 1.25rem auto !important;
     height: auto !important;
     order: 1 !important;
   }
 
   .hero--light .hero__image-frame {
     width: 100% !important;
-    height: 260px !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
     border-radius: 16px !important;
     overflow: hidden !important;
     box-shadow: var(--shadow-xl) !important;
@@ -2467,8 +2476,8 @@ body:not(.loaded) .hero__visual {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    object-position: center 30% !important;
-    transform: scale(1.15) !important;
+    object-position: center center !important;
+    transform: none !important;
     display: block !important;
   }
 
@@ -2480,9 +2489,12 @@ body:not(.loaded) .hero__visual {
   .hero--light .hero__content {
     width: 100% !important;
     padding: 0 !important;
+    margin: 0 !important;
     align-items: center !important;
     text-align: center !important;
     order: 2 !important;
+    height: auto !important;
+    min-height: auto !important;
   }
 
   .hero--light .hero__image-frame::after {
