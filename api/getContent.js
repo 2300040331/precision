@@ -33,6 +33,24 @@ export default async function handler(request, response) {
 
   const { page } = request.query || {};
 
+  // Check shared in-memory global store
+  if (global.__PRECISION_CMS_STORE__) {
+    const data = global.__PRECISION_CMS_STORE__;
+    if (page === 'fullStore' && data.fullStore) {
+      return response.status(200).json(data.fullStore);
+    }
+    if (page && data.flat && data.flat[page]) {
+      return response.status(200).json(data.flat[page]);
+    }
+    if (page && data[page]) {
+      return response.status(200).json(data[page]);
+    }
+    if (data.flat) {
+      return response.status(200).json(data.flat);
+    }
+    return response.status(200).json(data);
+  }
+
   try {
     const { blobs } = await list({ prefix: 'content.json' });
 

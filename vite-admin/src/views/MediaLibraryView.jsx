@@ -21,7 +21,18 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
   const [isUploading, setIsUploading] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
 
-  const folders = ['all', 'logos', 'banners', 'services', 'documents', 'general'];
+  const folderConfig = [
+    { id: 'all', label: 'All Website Media' },
+    { id: 'logos', label: 'Logos & Branding' },
+    { id: 'hero', label: 'Hero & Banners' },
+    { id: 'about', label: 'About & Leadership' },
+    { id: 'services', label: 'Services & Methodology' },
+    { id: 'insights', label: 'Insights & Articles' },
+    { id: 'testimonials', label: 'Client Testimonials' },
+    { id: 'industries', label: 'Industries We Serve' },
+    { id: 'contact', label: 'Contact & Location' },
+    { id: 'documents', label: 'Documents & Files' },
+  ];
 
   const filteredMedia = media.filter(m => {
     const matchesFolder = selectedFolder === 'all' || m.folder === selectedFolder;
@@ -34,14 +45,30 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-    formData.append('folder', selectedFolder === 'all' ? 'general' : selectedFolder);
+    const targetFolder = selectedFolder === 'all' ? 'general' : selectedFolder;
 
     try {
-      await onUpload(formData);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const dataUrl = event.target.result;
+            const mediaObj = {
+              filename: file.name,
+              originalName: file.name,
+              url: dataUrl,
+              mimeType: file.type || 'image/jpeg',
+              size: file.size,
+              folder: targetFolder,
+              altText: file.name.replace(/\.[^/.]+$/, ''),
+            };
+            await onUpload(mediaObj);
+            resolve();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
     } catch (err) {
       alert('Upload failed: ' + err.message);
     } finally {
@@ -65,7 +92,7 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">Enterprise Media Library</h1>
-            <p className="text-slate-400 text-xs">Upload, organize, optimize, and manage all website image assets, PDFs, and videos.</p>
+            <p className="text-slate-400 text-xs">Organized section-by-section. Manage, upload, and assign photos to specific website sections.</p>
           </div>
         </div>
 
@@ -82,27 +109,30 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Folders List (3 cols) */}
         <div className="lg:col-span-3 bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-3">
-          <span className="text-xs font-bold text-white uppercase tracking-wider block border-b border-slate-800 pb-2">Folders</span>
+          <span className="text-xs font-bold text-white uppercase tracking-wider block border-b border-slate-800 pb-2">Section Folders</span>
           <div className="space-y-1 text-xs">
-            {folders.map(f => (
-              <button
-                key={f}
-                onClick={() => setSelectedFolder(f)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl capitalize font-medium transition-all ${
-                  selectedFolder === f
-                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 font-bold'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <div className="flex items-center">
-                  <Folder className="w-4 h-4 mr-2 text-indigo-400" />
-                  <span>{f}</span>
-                </div>
-                <span className="text-[10px] text-slate-500 font-mono">
-                  {f === 'all' ? media.length : media.filter(m => m.folder === f).length}
-                </span>
-              </button>
-            ))}
+            {folderConfig.map(f => {
+              const count = f.id === 'all' ? media.length : media.filter(m => m.folder === f.id).length;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setSelectedFolder(f.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all ${
+                    selectedFolder === f.id
+                      ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 font-bold shadow-sm'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 truncate mr-1">
+                    <Folder className={`w-4 h-4 shrink-0 ${selectedFolder === f.id ? 'text-indigo-400' : 'text-slate-500'}`} />
+                    <span className="truncate">{f.label}</span>
+                  </div>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${selectedFolder === f.id ? 'bg-indigo-500/20 text-indigo-300' : 'bg-slate-800 text-slate-500'}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -190,6 +220,22 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
                       {copiedId === selectedItem.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Assigned Section Folder</span>
+                  <select
+                    value={selectedItem.folder || 'general'}
+                    onChange={(e) => {
+                      const newFolder = e.target.value;
+                      onUpdate(selectedItem.id, { folder: newFolder });
+                      setSelectedItem(prev => ({ ...prev, folder: newFolder }));
+                    }}
+                    className="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-white mt-1 focus:outline-none focus:border-indigo-500 font-medium"
+                  >
+                    {folderConfig.filter(f => f.id !== 'all').map(f => (
+                      <option key={f.id} value={f.id}>{f.label}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <span className="text-slate-400 text-[10px] uppercase font-bold block">Alt Text</span>

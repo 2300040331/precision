@@ -5,7 +5,15 @@ export default function LiveDeviceFrame({ pageSlug = 'home', keyValData }) {
   const [mode, setMode] = useState('desktop'); // desktop | tablet | mobile
   const [key, setKey] = useState(0);
 
-  const targetUrl = `http://localhost:5000/${pageSlug === 'home' ? 'home.html' : pageSlug + '.html'}`;
+  const getSiteUrl = (slug) => {
+    const filename = !slug || slug === 'home' || slug === 'index' ? 'home.html' : slug.endsWith('.html') ? slug : `${slug}.html`;
+    if (typeof window !== 'undefined' && window.location) {
+      return `${window.location.protocol}//${window.location.host}/${filename}`;
+    }
+    return `https://precision-henna.vercel.app/${filename}`;
+  };
+
+  const targetUrl = getSiteUrl(pageSlug);
 
   const dimensions = {
     desktop: 'w-full h-[650px]',

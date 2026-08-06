@@ -36,9 +36,9 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
     }
     if (sec.type === 'hero' || sec.id === 'sec-hero') {
       const defaultHero = {
+        subtitle: 'ACCURATE. TRUSTED. IMPACTFUL.',
         title: 'Precision in<br>Numbers.<br>Excellence in<br><span class="gold-text">Business.</span>',
-        subtitle: 'ABOUT PRECISION & CO.',
-        description: 'A trusted advisory firm providing financial governance, taxation strategy, M&A advisory, and risk management.',
+        description: 'We deliver strategic financial solutions with accuracy, integrity and insight to help your business grow with confidence.',
         ctaPrimaryText: 'Our Services',
         ctaPrimaryLink: 'services.html',
         ctaSecondaryText: 'Book a Consultation',
@@ -58,6 +58,44 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
         aboutImage: 'assets/images/new-team.jpg',
       };
       return { ...defaultAbout, ...parsed };
+    }
+    if (sec.type === 'services_overview' || sec.id === 'sec-services-grid') {
+      const defaultServices = {
+        subheading: 'WHAT WE DO',
+        heading: 'Comprehensive Financial <span class="gold-text">Solutions</span>',
+        description: 'From audit assurance to strategic advisory, we offer end-to-end financial services tailored to your business needs.',
+      };
+      if (parsed.subheading === 'OUR CORE PRACTICE' || (parsed.heading && parsed.heading.includes('Governance'))) {
+        return defaultServices;
+      }
+      return { ...defaultServices, ...parsed };
+    }
+    if (sec.type === 'industries_overview' || sec.id === 'sec-industries-grid') {
+      const defaultIndustries = {
+        subheading: 'INDUSTRIES WE SERVE',
+        heading: 'Deep Expertise Across <span class="gold-text">Sectors</span>',
+        description: 'Our specialists understand the unique challenges and regulatory requirements of each industry.',
+      };
+      return { ...defaultIndustries, ...parsed };
+    }
+    if (sec.type === 'cta' || sec.id === 'sec-cta') {
+      const defaultCta = {
+        title: 'Ready to Elevate Your Business?',
+        description: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+        buttonText: 'Book a Consultation',
+        buttonLink: 'contact.html',
+      };
+      return { ...defaultCta, ...parsed };
+    }
+    if (sec.type === 'footer' || sec.id === 'sec-footer') {
+      const defaultFooter = {
+        description: 'Delivering strategic financial solutions with accuracy, integrity, and insight. Your trusted partner in navigating the complexities of modern business finance.',
+        address: '14th Floor, Prestige Tower, MG Road, Bengaluru 560001',
+        phone: '+91 98765 43210',
+        email: 'info@precisionandco.com',
+        copyright: '© 2026 Precision & Co. All rights reserved. | Chartered Accountants',
+      };
+      return { ...defaultFooter, ...parsed };
     }
     return parsed;
   };
@@ -315,14 +353,14 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                           </button>
                         </label>
                         {key.toLowerCase().includes('image') || key.toLowerCase().includes('img') || key.toLowerCase().includes('bg') || key.toLowerCase().includes('logo') || key.toLowerCase().includes('photo') ? (
-                          <div className="space-y-2">
+                          <div className="space-y-2.5">
                             {val && (
-                              <div className="w-full h-24 rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center relative group">
+                              <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center relative group shadow-md">
                                 <img src={val} alt="Section Media Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
-                                <span className="absolute bottom-1.5 right-1.5 px-2 py-0.5 bg-slate-900/80 backdrop-blur-md rounded text-[10px] text-slate-300 font-mono">Image Preview</span>
+                                <span className="absolute bottom-2 right-2 px-2.5 py-1 bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] text-indigo-300 font-mono border border-slate-700">Image Preview</span>
                               </div>
                             )}
-                            <div className="flex items-center space-x-2">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                               <input
                                 type="text"
                                 value={val}
@@ -330,6 +368,57 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                                 placeholder="Image URL (e.g. assets/images/hero-bg.jpg)"
                                 className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50"
                               />
+                              <label className="px-3 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-xl text-xs font-semibold cursor-pointer transition-all flex items-center justify-center shrink-0">
+                                <span>Upload Photo</span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const reader = new FileReader();
+                                      reader.onload = (evt) => {
+                                        if (evt.target?.result) handleFieldChange(key, evt.target.result);
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }
+                                  }}
+                                />
+                              </label>
+                            </div>
+
+                            {/* Quick Select Website Asset Preset */}
+                            <div className="space-y-1">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Choose Existing Website Photo:</span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  { label: 'Hero Banner', url: 'assets/images/hero-bg.jpg' },
+                                  { label: 'Executive Team', url: 'assets/images/new-team.jpg' },
+                                  { label: 'Office Culture', url: 'assets/images/about-team.jpg' },
+                                  { label: 'Brand Logo', url: 'assets/images/logo.png' },
+                                  { label: 'Methodology', url: 'assets/methodology.jpg' },
+                                  { label: 'Growth Insight', url: 'assets/images/insights-1.jpg' },
+                                  { label: 'Tax Insight', url: 'assets/images/insights-2.jpg' },
+                                  { label: 'M&A Insight', url: 'assets/images/insights-3.jpg' },
+                                  { label: 'Client 1', url: 'assets/images/testimonial-1.jpg' },
+                                  { label: 'Client 2', url: 'assets/images/testimonial-2.jpg' },
+                                  { label: 'Client 3', url: 'assets/images/testimonial-3.jpg' },
+                                ].map((asset) => (
+                                  <button
+                                    key={asset.url}
+                                    type="button"
+                                    onClick={() => handleFieldChange(key, asset.url)}
+                                    className={`px-2 py-1 rounded-lg text-[10px] font-medium border transition-all ${
+                                      val === asset.url
+                                        ? 'bg-indigo-600 text-white border-indigo-400 font-bold shadow'
+                                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                                    }`}
+                                  >
+                                    {asset.label}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         ) : key.toLowerCase().includes('title') || key.toLowerCase().includes('text') || key.toLowerCase().includes('desc') || key.toLowerCase().includes('subtitle') || key.toLowerCase().includes('content') || key.toLowerCase().includes('address') || key.toLowerCase().includes('quote') ? (

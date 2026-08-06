@@ -32,34 +32,22 @@
         }
       });
 
-      // 3. Fetch Latest Dynamic Content from CMS API for current page ONLY
+      // 3. Fetch Latest Dynamic Content from CMS API for current page
       try {
-        const res = await fetch(`${API_BASE}/content?page=${pageKey}`);
+        const res = await fetch(`/api/getContent?page=${pageKey}`);
         if (res.ok) {
           const pageData = await res.json();
-          if (pageData) {
+          if (pageData && typeof pageData === 'object' && Object.keys(pageData).length > 0) {
             const flatData = extractPageFlatContent(pageData, pageKey);
-            const currentCache = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
-            const merged = { ...flatData, ...currentCache };
-            applyContentBindings(merged);
-            localStorage.setItem('precision_cms_content', JSON.stringify(merged));
-          }
-        }
-      } catch (err1) {
-        try {
-          const res2 = await fetch(`/api/getContent?page=${pageKey}`);
-          if (res2.ok) {
-            const pageData2 = await res2.json();
-            if (pageData2) {
-              const flatData2 = extractPageFlatContent(pageData2, pageKey);
-              const currentCache2 = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
-              const merged2 = { ...flatData2, ...currentCache2 };
-              applyContentBindings(merged2);
-              localStorage.setItem('precision_cms_content', JSON.stringify(merged2));
+            if (Object.keys(flatData).length > 0) {
+              const currentCache = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
+              const merged = { ...currentCache, ...flatData };
+              applyContentBindings(merged);
+              localStorage.setItem('precision_cms_content', JSON.stringify(merged));
             }
           }
-        } catch (err2) {}
-      }
+        }
+      } catch (err) {}
 
       // 4. Attach Consultation & Contact Form Listeners
       setupFormListeners();
@@ -120,8 +108,15 @@
     return typeof raw === 'object' ? raw : {};
   }
 
+  // Freeze main website content so admin edits do not alter main website
+  const FREEZE_MAIN_WEBSITE = true;
+
   // Apply content bindings for data-content attributes
   function applyContentBindings(data) {
+    if (FREEZE_MAIN_WEBSITE) {
+      // Main website remains strictly constant as designed
+      return;
+    }
     if (!data || typeof data !== 'object') return;
     const elements = document.querySelectorAll('[data-content]');
     elements.forEach(el => {

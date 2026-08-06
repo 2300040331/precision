@@ -22,8 +22,8 @@ import { ShieldCheck, Lock, ArrowRight } from 'lucide-react';
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [loginEmail, setLoginEmail] = useState('admin@precisionandco.com');
-  const [loginPassword, setLoginPassword] = useState('admin123');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
 
@@ -173,6 +173,10 @@ export default function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
+    if (!loginEmail || !loginPassword) {
+      setLoginError('Please enter both admin email and password.');
+      return;
+    }
     setLoginLoading(true);
     try {
       const data = await api.login(loginEmail, loginPassword);
@@ -181,16 +185,12 @@ export default function App() {
         setUser(data.user || { name: 'Super Admin', email: loginEmail, role: 'SUPER_ADMIN' });
         setIsAuthenticated(true);
       } else {
-        setUser({ name: 'Super Admin', email: loginEmail, role: 'SUPER_ADMIN' });
-        setIsAuthenticated(true);
+        setLoginError('Invalid email or password. Access denied.');
+        setIsAuthenticated(false);
       }
     } catch (err) {
-      if (loginEmail && loginPassword) {
-        setUser({ name: 'Super Admin', email: loginEmail, role: 'SUPER_ADMIN' });
-        setIsAuthenticated(true);
-      } else {
-        setLoginError(err.message || 'Invalid credentials');
-      }
+      setLoginError(err.message || 'Invalid email or password. Access denied.');
+      setIsAuthenticated(false);
     } finally {
       setLoginLoading(false);
     }
@@ -384,7 +384,7 @@ export default function App() {
           </form>
 
           <div className="pt-2 text-center border-t border-[#c8a45e]/20">
-            <p className="text-[11px] text-slate-400">Default Super Admin Credentials pre-filled.</p>
+            <p className="text-[11px] text-slate-400">Default Super Admin Credentials: <code className="text-[#c8a45e] font-mono">admin@precisionandco.com</code> / <code className="text-[#c8a45e] font-mono">admin123</code></p>
           </div>
         </div>
       </div>

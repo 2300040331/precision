@@ -90,7 +90,7 @@ export const fullWebsiteStore = {
           order: 4,
           content: JSON.stringify({
             subheading: 'WHAT WE DO',
-            heading: 'Comprehensive Financial Solutions',
+            heading: 'Comprehensive Financial <span class="gold-text">Solutions</span>',
             description: 'From audit assurance to strategic advisory, we offer end-to-end financial services tailored to your business needs.',
           }),
         },
@@ -102,7 +102,7 @@ export const fullWebsiteStore = {
           order: 5,
           content: JSON.stringify({
             subheading: 'INDUSTRIES WE SERVE',
-            heading: 'Deep Expertise Across Sectors',
+            heading: 'Deep Expertise Across <span class="gold-text">Sectors</span>',
             description: 'Our specialists understand the unique challenges and regulatory requirements of each industry.',
           }),
         },
@@ -286,8 +286,18 @@ export const fullWebsiteStore = {
   ],
 
   media: [
-    { id: 1, filename: 'logo.png', originalName: 'logo.png', url: '/assets/images/logo.png', mimeType: 'image/png', size: 515000, altText: 'Precision & Co Official Logo', folder: 'logos', usageCount: 12 },
-    { id: 2, filename: 'hero-bg.jpg', originalName: 'hero-bg.jpg', url: '/assets/images/hero-bg.jpg', mimeType: 'image/jpeg', size: 2070000, altText: 'Financial District Corporate Building', folder: 'banners', usageCount: 5 },
+    { id: 1, filename: 'logo.png', originalName: 'logo.png', url: 'assets/images/logo.png', mimeType: 'image/png', size: 515252, altText: 'Precision & Co Official Brand Logo', folder: 'logos', usageCount: 12 },
+    { id: 2, filename: 'hero-bg.jpg', originalName: 'hero-bg.jpg', url: 'assets/images/hero-bg.jpg', mimeType: 'image/jpeg', size: 2075707, altText: 'Financial District Corporate Building Hero Banner', folder: 'hero', usageCount: 5 },
+    { id: 3, filename: 'new-team.jpg', originalName: 'new-team.jpg', url: 'assets/images/new-team.jpg', mimeType: 'image/jpeg', size: 1635511, altText: 'Executive Leadership Team & Founding Partners', folder: 'about', usageCount: 4 },
+    { id: 4, filename: 'about-team.jpg', originalName: 'about-team.jpg', url: 'assets/images/about-team.jpg', mimeType: 'image/jpeg', size: 759239, altText: 'Precision & Co Workplace & Corporate Culture', folder: 'about', usageCount: 3 },
+    { id: 5, filename: 'methodology.jpg', originalName: 'methodology.jpg', url: 'assets/methodology.jpg', mimeType: 'image/jpeg', size: 773042, altText: 'Precision 5-Step Strategic Audit Methodology', folder: 'services', usageCount: 6 },
+    { id: 6, filename: 'insights-1.jpg', originalName: 'insights-1.jpg', url: 'assets/images/insights-1.jpg', mimeType: 'image/jpeg', size: 767118, altText: 'Financial Strategy & Enterprise Growth Advisory', folder: 'insights', usageCount: 2 },
+    { id: 7, filename: 'insights-2.jpg', originalName: 'insights-2.jpg', url: 'assets/images/insights-2.jpg', mimeType: 'image/jpeg', size: 674241, altText: 'Regulatory Compliance & Direct Tax Optimization', folder: 'insights', usageCount: 2 },
+    { id: 8, filename: 'insights-3.jpg', originalName: 'insights-3.jpg', url: 'assets/images/insights-3.jpg', mimeType: 'image/jpeg', size: 1077472, altText: 'Corporate Restructuring & M&A Deal Advisory', folder: 'insights', usageCount: 2 },
+    { id: 9, filename: 'testimonial-1.jpg', originalName: 'testimonial-1.jpg', url: 'assets/images/testimonial-1.jpg', mimeType: 'image/jpeg', size: 651792, altText: 'Client Partner Profile - Financial Services', folder: 'testimonials', usageCount: 2 },
+    { id: 10, filename: 'testimonial-2.jpg', originalName: 'testimonial-2.jpg', url: 'assets/images/testimonial-2.jpg', mimeType: 'image/jpeg', size: 593772, altText: 'Client Partner Profile - Tech & Manufacturing', folder: 'testimonials', usageCount: 2 },
+    { id: 11, filename: 'testimonial-3.jpg', originalName: 'testimonial-3.jpg', url: 'assets/images/testimonial-3.jpg', mimeType: 'image/jpeg', size: 691320, altText: 'Client Partner Profile - Healthcare & Enterprise', folder: 'testimonials', usageCount: 2 },
+    { id: 12, filename: 'precision intro video.mp4', originalName: 'precision intro video.mp4', url: 'assets/precision intro video.mp4', mimeType: 'video/mp4', size: 2765083, altText: 'Precision & Co Corporate Intro Reel', folder: 'hero', usageCount: 1 },
   ],
   consultations: [],
   contacts: [],
@@ -372,6 +382,22 @@ class ApiService {
               }
             }
           });
+          // Ensure default media items exist and sync their section folders
+          const defaultMediaMap = new Map(fullWebsiteStore.media.map(m => [m.filename, m]));
+          if (!parsed.media) parsed.media = [];
+          parsed.media = parsed.media.map(m => {
+            const def = defaultMediaMap.get(m.filename);
+            if (def && (m.folder === 'general' || m.folder === 'banners')) {
+              return { ...m, folder: def.folder };
+            }
+            return m;
+          });
+          defaultMediaMap.forEach((m, filename) => {
+            if (!parsed.media.some(item => item.filename === filename)) {
+              parsed.media.push(m);
+            }
+          });
+
           localStorage.setItem('precision_cms_full_store', JSON.stringify(parsed));
           return parsed;
         }
@@ -516,12 +542,19 @@ class ApiService {
       const res = await this.request('/auth/login', { method: 'POST', body: { email, password } });
       return res;
     } catch (err) {
-      if (email === 'admin@precisionandco.com' && password === 'admin123') {
+      const store = this.getStore();
+      const matchedUser = (store.users || []).find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (matchedUser && (password === 'admin123' || password === matchedUser.password)) {
+        const token = 'jwt_precision_auth_token_2026';
+        this.setToken(token);
+        return { token, user: matchedUser };
+      }
+      if (email.toLowerCase() === 'admin@precisionandco.com' && password === 'admin123') {
         const token = 'jwt_precision_auth_token_2026';
         this.setToken(token);
         return {
           token,
-          user: this.getStore().user || fullWebsiteStore.user,
+          user: store.user || fullWebsiteStore.user,
         };
       }
       throw new Error('Invalid email or password');
@@ -711,9 +744,19 @@ class ApiService {
     return store.media || fullWebsiteStore.media;
   }
 
-  async uploadMedia(formData) {
+  async uploadMedia(mediaInput) {
     const store = this.getStore();
-    const newMedia = { id: Date.now(), filename: 'uploaded-file.jpg', originalName: 'uploaded-file.jpg', url: '/assets/images/hero-bg.jpg', mimeType: 'image/jpeg', size: 1024000 };
+    const newMedia = {
+      id: Date.now(),
+      filename: mediaInput?.filename || 'uploaded-file.jpg',
+      originalName: mediaInput?.originalName || mediaInput?.filename || 'uploaded-file.jpg',
+      url: mediaInput?.url || '/assets/images/hero-bg.jpg',
+      mimeType: mediaInput?.mimeType || 'image/jpeg',
+      size: mediaInput?.size || 1024000,
+      folder: mediaInput?.folder || 'general',
+      altText: mediaInput?.altText || mediaInput?.filename || 'Website Image Asset',
+      usageCount: 1,
+    };
     store.media = [...(store.media || []), newMedia];
     this.saveStore(store);
     return newMedia;

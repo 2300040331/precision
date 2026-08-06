@@ -15,6 +15,9 @@ export default async function handler(request, response) {
 
   try {
     const data = typeof request.body === 'string' ? JSON.parse(request.body) : request.body;
+    
+    // Save to shared in-memory global store across serverless requests
+    global.__PRECISION_CMS_STORE__ = data;
 
     try {
       const blob = await put('content.json', JSON.stringify(data), {
@@ -23,7 +26,7 @@ export default async function handler(request, response) {
       });
       return response.status(200).json({ success: true, url: blob.url, data });
     } catch (e) {
-      return response.status(200).json({ success: true, warning: 'Saved locally', data });
+      return response.status(200).json({ success: true, warning: 'Saved to memory cache', data });
     }
   } catch (error) {
     return response.status(500).json({ error: error.message });
