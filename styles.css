@@ -2445,9 +2445,10 @@ body:not(.loaded) .hero__visual {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    padding: calc(var(--navbar-h) + 1rem) 1.25rem 2.5rem 1.25rem !important;
+    padding: calc(var(--navbar-h) + 0.5rem) 1.25rem 2rem 1.25rem !important;
     min-height: auto !important;
     height: auto !important;
+    gap: 0 !important;
   }
 
   .hero--light > .hero__inner > .hero__visual {
@@ -2457,7 +2458,7 @@ body:not(.loaded) .hero__visual {
     left: auto !important;
     width: 100% !important;
     max-width: 520px !important;
-    margin: 0 auto 1.25rem auto !important;
+    margin: 0 auto 0.5rem auto !important;
     height: auto !important;
     order: 1 !important;
   }
@@ -2510,7 +2511,14 @@ body:not(.loaded) .hero__visual {
   }
 
   .hero__label {
-    justify-content: center;
+    justify-content: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .hero__title {
+    margin-top: 0 !important;
+    margin-bottom: 0.75rem !important;
   }
 
   .hero__description {
@@ -2708,18 +2716,13 @@ body:not(.loaded) .hero__visual {
   }
 
   .hero {
-    padding-top: calc(var(--navbar-h) + 2rem);
+    padding-top: calc(var(--navbar-h) + 1rem);
     min-height: auto;
-    padding-bottom: 4rem;
+    padding-bottom: 2rem;
   }
 
   .hero--light {
     padding-top: 0;
-  }
-
-  .hero__visual {
-    display: block;
-    margin-top: 2rem;
   }
 
   .hero__scroll-indicator {
