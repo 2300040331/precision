@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Search, X, Layers, Briefcase, Building2, CalendarCheck, Image, Settings } from 'lucide-react';
 
-export default function GlobalSearchModal({ isOpen, onClose, pages, services, industries, consultations, onNavigate }) {
+export default function GlobalSearchModal({ isOpen, onClose, pages = [], services = [], industries = [], consultations = [], onNavigate }) {
   const [query, setQuery] = useState('');
 
   if (!isOpen) return null;
 
   const q = query.toLowerCase().trim();
 
-  const filteredPages = q ? pages.filter(p => p.title.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)) : pages.slice(0, 3);
-  const filteredServices = q ? services.filter(s => s.title.toLowerCase().includes(q) || s.summary?.toLowerCase().includes(q)) : services.slice(0, 3);
-  const filteredIndustries = q ? industries.filter(i => i.title.toLowerCase().includes(q)) : industries.slice(0, 3);
-  const filteredLeads = q ? consultations.filter(c => c.fullName.toLowerCase().includes(q) || c.company?.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)) : consultations.slice(0, 3);
+  const safePages = Array.isArray(pages) ? pages : [];
+  const safeServices = Array.isArray(services) ? services : [];
+  const safeIndustries = Array.isArray(industries) ? industries : [];
+  const safeLeads = Array.isArray(consultations) ? consultations : [];
+
+  const filteredPages = q ? safePages.filter(p => p && (p.title?.toLowerCase().includes(q) || p.id?.toLowerCase().includes(q))) : safePages.slice(0, 3);
+  const filteredServices = q ? safeServices.filter(s => s && (s.title?.toLowerCase().includes(q) || s.summary?.toLowerCase().includes(q))) : safeServices.slice(0, 3);
+  const filteredIndustries = q ? safeIndustries.filter(i => i && i.title?.toLowerCase().includes(q)) : safeIndustries.slice(0, 3);
+  const filteredLeads = q ? safeLeads.filter(c => c && (c.fullName?.toLowerCase().includes(q) || c.company?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q))) : safeLeads.slice(0, 3);
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-950/80 backdrop-blur-md p-4 animate-fade-in">

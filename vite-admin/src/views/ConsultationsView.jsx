@@ -22,13 +22,15 @@ export default function ConsultationsView({ consultations, onUpdateStatus, onDel
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedLead, setSelectedLead] = useState(null);
 
-  const filtered = consultations.filter(c => {
-    const matchesStatus = statusFilter === 'ALL' || c.status === statusFilter;
+  const safeConsultations = Array.isArray(consultations) ? consultations : [];
+
+  const filtered = safeConsultations.filter(c => {
+    const matchesStatus = statusFilter === 'ALL' || c?.status === statusFilter;
     const matchesSearch =
       !search ||
-      c.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      c.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.company?.toLowerCase().includes(search.toLowerCase());
+      c?.fullName?.toLowerCase().includes(search.toLowerCase()) ||
+      c?.email?.toLowerCase().includes(search.toLowerCase()) ||
+      c?.company?.toLowerCase().includes(search.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -116,31 +118,42 @@ export default function ConsultationsView({ consultations, onUpdateStatus, onDel
       <div className="bg-slate-900/80 p-6 rounded-2xl border border-slate-800/80 shadow-xl overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider">
-              <th className="py-3 px-4">Client Contact</th>
-              <th className="py-3 px-4">Requested Service</th>
-              <th className="py-3 px-4">Budget Range</th>
-              <th className="py-3 px-4">Preferred Date</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-right">Actions</th>
+            <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+              <th className="py-3.5 px-4">Client Name & Contact</th>
+              <th className="py-3.5 px-4">Requested Service</th>
+              <th className="py-3.5 px-4">Message / Inquiry</th>
+              <th className="py-3.5 px-4">Date & Time</th>
+              <th className="py-3.5 px-4">Status</th>
+              <th className="py-3.5 px-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/60">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-slate-500">No consultation records match the current criteria.</td>
+                <td colSpan={6} className="py-12 text-center text-slate-500">No consultation requests have been submitted yet.</td>
               </tr>
             ) : (
               filtered.map(item => (
                 <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-3 px-4">
-                    <div className="font-semibold text-white">{item.fullName}</div>
-                    <div className="text-[10px] text-slate-400">{item.company || 'Private'} • {item.email}</div>
+                  <td className="py-3.5 px-4">
+                    <div className="font-bold text-white text-xs">{item.fullName}</div>
+                    <div className="text-[11px] text-indigo-400 font-mono">{item.phone}</div>
+                    <div className="text-[10px] text-slate-400">{item.email}</div>
                   </td>
-                  <td className="py-3 px-4 text-purple-400 font-semibold">{item.serviceSelected || 'General'}</td>
-                  <td className="py-3 px-4 text-slate-300 font-mono">{item.budget || 'Undisclosed'}</td>
-                  <td className="py-3 px-4 text-slate-400">{item.preferredDate || 'Flexible'}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3.5 px-4">
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                      {item.serviceSelected || 'General Consultation'}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-4 max-w-xs">
+                    <p className="text-slate-300 text-xs truncate" title={item.message}>
+                      {item.message || 'No additional message provided.'}
+                    </p>
+                  </td>
+                  <td className="py-3.5 px-4 text-slate-400 text-xs font-mono">
+                    {item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : item.preferredDate || 'Recent'}
+                  </td>
+                  <td className="py-3.5 px-4">
                     <span
                       className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         item.status === 'NEW'
@@ -150,15 +163,15 @@ export default function ConsultationsView({ consultations, onUpdateStatus, onDel
                           : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                       }`}
                     >
-                      {item.status}
+                      {item.status || 'NEW'}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-right">
+                  <td className="py-3.5 px-4 text-right">
                     <button
                       onClick={() => setSelectedLead(item)}
-                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shadow"
+                      className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow transition-all cursor-pointer"
                     >
-                      View & Manage
+                      View Details
                     </button>
                   </td>
                 </tr>

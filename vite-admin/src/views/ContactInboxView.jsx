@@ -7,9 +7,11 @@ export default function ContactInboxView({ contacts, onUpdateStatus, onDelete })
   const [search, setSearch] = useState('');
   const [replyNote, setReplyNote] = useState('');
 
-  const filtered = contacts.filter(c => {
-    const matchesStatus = statusFilter === 'ALL' || c.status === statusFilter;
-    const matchesSearch = !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase());
+  const safeContacts = Array.isArray(contacts) ? contacts : [];
+
+  const filtered = safeContacts.filter(c => {
+    const matchesStatus = statusFilter === 'ALL' || c?.status === statusFilter;
+    const matchesSearch = !search || c?.name?.toLowerCase().includes(search.toLowerCase()) || c?.email?.toLowerCase().includes(search.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 

@@ -100,10 +100,11 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
     return parsed;
   };
 
-  const currentPage = pages.find(p => p.id === selectedPageId) || pages[0] || { id: 'home', title: 'Home Page', sections: [] };
+  const safePages = Array.isArray(pages) ? pages : [];
+  const currentPage = safePages.find(p => p.id === selectedPageId) || safePages[0] || { id: 'home', title: 'Home Page', sections: [] };
 
   useEffect(() => {
-    if (currentPage && currentPage.sections && currentPage.sections.length > 0) {
+    if (currentPage && Array.isArray(currentPage.sections) && currentPage.sections.length > 0) {
       const first = currentPage.sections[0];
       setEditingSection(first);
       setSectionData(prepareSectionContent(first));

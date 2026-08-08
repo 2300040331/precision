@@ -11,7 +11,7 @@ const getPublicSiteUrl = (path = '/home.html') => {
   return `https://precision-henna.vercel.app${path}`;
 };
 
-export default function Header({ collapsed, onOpenSearch, notifications, onClearNotifications, user }) {
+export default function Header({ collapsed, onOpenSearch, notifications = [], onClearNotifications, user, onOpenConsultationModal }) {
   const [time, setTime] = useState('');
   const [showNotifDrawer, setShowNotifDrawer] = useState(false);
 
@@ -25,7 +25,8 @@ export default function Header({ collapsed, onOpenSearch, notifications, onClear
     return () => clearInterval(timer);
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const safeNotifications = Array.isArray(notifications) ? notifications : [];
+  const unreadCount = safeNotifications.filter(n => n && !n.read).length;
 
   return (
     <header
@@ -37,7 +38,7 @@ export default function Header({ collapsed, onOpenSearch, notifications, onClear
       <div className="flex items-center space-x-4">
         <button
           onClick={onOpenSearch}
-          className="flex items-center bg-[#0f1d32] border border-[#c8a45e]/30 hover:border-[#c8a45e] rounded-xl px-4 py-2 w-80 text-slate-300 hover:text-white transition-all text-xs shadow-inner group"
+          className="flex items-center bg-[#0f1d32] border border-[#c8a45e]/30 hover:border-[#c8a45e] rounded-xl px-4 py-2 w-80 text-slate-300 hover:text-white transition-all text-xs shadow-inner group cursor-pointer"
         >
           <Search className="w-4 h-4 text-[#c8a45e] group-hover:scale-110 transition-transform mr-2.5" />
           <span className="flex-1 text-left">Search pages, services, leads...</span>
@@ -48,9 +49,9 @@ export default function Header({ collapsed, onOpenSearch, notifications, onClear
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3">
         {/* Live Clock & DB Status */}
-        <div className="hidden lg:flex items-center space-x-3 text-xs border-r border-[#c8a45e]/20 pr-4">
+        <div className="hidden lg:flex items-center space-x-3 text-xs border-r border-[#c8a45e]/20 pr-3">
           <div className="flex items-center text-[#c8a45e] font-mono bg-[#0f1d32] px-3 py-1.5 rounded-xl border border-[#c8a45e]/30">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></span>
             {time || '17:58:00'}
@@ -60,11 +61,20 @@ export default function Header({ collapsed, onOpenSearch, notifications, onClear
           </div>
         </div>
 
+        {/* Book Consultation Popup Trigger */}
+        <button
+          onClick={() => onOpenConsultationModal && onOpenConsultationModal()}
+          className="hidden md:flex items-center space-x-1.5 px-3.5 py-2 bg-[#0f1d32] hover:bg-[#152540] text-[#c8a45e] rounded-xl text-xs font-bold transition-all border border-[#c8a45e]/40 shadow-sm cursor-pointer"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#c8a45e] animate-pulse"></span>
+          <span>Book Consultation</span>
+        </button>
+
         {/* Real-time Notifications */}
         <div className="relative">
           <button
             onClick={() => setShowNotifDrawer(!showNotifDrawer)}
-            className="p-2 text-slate-300 hover:text-white hover:bg-[#0f1d32] rounded-xl transition-colors relative border border-transparent hover:border-[#c8a45e]/30"
+            className="p-2 text-slate-300 hover:text-white hover:bg-[#0f1d32] rounded-xl transition-colors relative border border-transparent hover:border-[#c8a45e]/30 cursor-pointer"
             title="Notifications"
           >
             <Bell className="w-5 h-5 text-[#c8a45e]" />

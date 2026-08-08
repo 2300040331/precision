@@ -34,6 +34,8 @@ import {
   Truck,
   Rocket,
   HeartHandshake,
+  Award,
+  Mail,
 } from 'lucide-react';
 
 const getPublicSiteUrl = (path = '/home.html') => {
@@ -178,6 +180,42 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
           >
             <Sparkles className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'live-editor' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
             {!collapsed && <span className="flex-1 text-left truncate">Live Visual Editor</span>}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('experts')}
+            className={`w-full flex items-center px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${
+              activeTab === 'experts'
+                ? 'bg-gradient-to-r from-[#c8a45e] to-[#a8863e] text-[#071322] font-bold shadow-lg shadow-[#c8a45e]/20 border border-[#e0c580]/40'
+                : 'text-slate-300 hover:text-white hover:bg-[#0f1d32]'
+            }`}
+          >
+            <Users className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'experts' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
+            {!collapsed && <span className="flex-1 text-left truncate">Our Experts Manager</span>}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('why-choose-us')}
+            className={`w-full flex items-center px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${
+              activeTab === 'why-choose-us'
+                ? 'bg-gradient-to-r from-[#c8a45e] to-[#a8863e] text-[#071322] font-bold shadow-lg shadow-[#c8a45e]/20 border border-[#e0c580]/40'
+                : 'text-slate-300 hover:text-white hover:bg-[#0f1d32]'
+            }`}
+          >
+            <Award className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'why-choose-us' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
+            {!collapsed && <span className="flex-1 text-left truncate">Why Choose Us Manager</span>}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('contact')}
+            className={`w-full flex items-center px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${
+              activeTab === 'contact'
+                ? 'bg-gradient-to-r from-[#c8a45e] to-[#a8863e] text-[#071322] font-bold shadow-lg shadow-[#c8a45e]/20 border border-[#e0c580]/40'
+                : 'text-slate-300 hover:text-white hover:bg-[#0f1d32]'
+            }`}
+          >
+            <Mail className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'contact' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
+            {!collapsed && <span className="flex-1 text-left truncate">Contact Us Manager</span>}
           </button>
 
           <button

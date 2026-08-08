@@ -54,7 +54,7 @@ export default function UsersView({ users, onCreateUser, onUpdateUser, onDeleteU
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/60">
-            {users.map(u => (
+            {(Array.isArray(users) ? users : []).map(u => (
               <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
                 <td className="py-3 px-4 font-semibold text-white flex items-center space-x-2">
                   <div className="w-7 h-7 rounded-lg bg-indigo-600/30 text-indigo-300 font-bold flex items-center justify-center text-xs">

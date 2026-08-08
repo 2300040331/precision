@@ -34,9 +34,11 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
     { id: 'documents', label: 'Documents & Files' },
   ];
 
-  const filteredMedia = media.filter(m => {
-    const matchesFolder = selectedFolder === 'all' || m.folder === selectedFolder;
-    const matchesSearch = !search || m.filename.toLowerCase().includes(search.toLowerCase()) || (m.altText && m.altText.toLowerCase().includes(search.toLowerCase()));
+  const safeMedia = Array.isArray(media) ? media : [];
+
+  const filteredMedia = safeMedia.filter(m => {
+    const matchesFolder = selectedFolder === 'all' || m?.folder === selectedFolder;
+    const matchesSearch = !search || m?.filename?.toLowerCase().includes(search.toLowerCase()) || (m?.altText && m?.altText?.toLowerCase().includes(search.toLowerCase()));
     return matchesFolder && matchesSearch;
   });
 

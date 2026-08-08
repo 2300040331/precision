@@ -57,11 +57,25 @@
   });
 
   function refreshFromCache(pageKey) {
+    const fullStoreStr = localStorage.getItem('precision_cms_full_store');
+    if (fullStoreStr) {
+      try {
+        const fullStore = JSON.parse(fullStoreStr);
+        const flatData = extractPageFlatContent(fullStore, pageKey);
+        if (flatData && Object.keys(flatData).length > 0) {
+          applyContentBindings(flatData);
+          return;
+        }
+      } catch (e) {}
+    }
+
     const cached = localStorage.getItem('precision_cms_content');
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        applyContentBindings(parsed);
+        if (parsed[pageKey] && typeof parsed[pageKey] === 'object') {
+          applyContentBindings(parsed[pageKey]);
+        }
       } catch (e) {}
     }
   }
@@ -78,14 +92,19 @@
         if (sec && sec.content) {
           try {
             const parsed = typeof sec.content === 'string' ? JSON.parse(sec.content) : sec.content;
-            flat = { ...flat, ...parsed };
+            if (sec.type === 'cta' || sec.id === 'sec-cta') {
+              if (parsed.title) flat.ctaTitle = parsed.title;
+              if (parsed.description) flat.ctaDescription = parsed.description;
+            } else {
+              flat = { ...parsed, ...flat };
+            }
           } catch (e) {}
         }
       });
       return flat;
     }
 
-    // Full store object containing pages array or key-values
+    // Full store object containing pages array
     if (raw.pages && Array.isArray(raw.pages)) {
       const pageObj = raw.pages.find(p => p.id === pageKey || p.slug === pageKey);
       if (pageObj && Array.isArray(pageObj.sections)) {
@@ -93,7 +112,12 @@
           if (sec && sec.content) {
             try {
               const parsed = typeof sec.content === 'string' ? JSON.parse(sec.content) : sec.content;
-              flat = { ...flat, ...parsed };
+              if (sec.type === 'cta' || sec.id === 'sec-cta') {
+                if (parsed.title) flat.ctaTitle = parsed.title;
+                if (parsed.description) flat.ctaDescription = parsed.description;
+              } else {
+                flat = { ...parsed, ...flat };
+              }
             } catch (e) {}
           }
         });
@@ -105,19 +129,33 @@
       return raw[pageKey];
     }
 
-    return typeof raw === 'object' ? raw : {};
+    return {};
   }
 
-  // Freeze main website content so admin edits do not alter main website
-  const FREEZE_MAIN_WEBSITE = true;
+  // Enable Live Admin CMS Sync
+  const FREEZE_MAIN_WEBSITE = false;
 
   // Apply content bindings for data-content attributes
   function applyContentBindings(data) {
     if (FREEZE_MAIN_WEBSITE) {
-      // Main website remains strictly constant as designed
       return;
     }
     if (!data || typeof data !== 'object') return;
+
+    // 1. Dynamic SEO & Meta Tags
+    if (data.metaTitle) {
+      document.title = data.metaTitle;
+    }
+    if (data.metaDesc) {
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', data.metaDesc);
+    }
+    if (data.keywords) {
+      let metaKw = document.querySelector('meta[name="keywords"]');
+      if (metaKw) metaKw.setAttribute('content', data.keywords);
+    }
+
+    // 2. Element Content & Attribute Bindings
     const elements = document.querySelectorAll('[data-content]');
     elements.forEach(el => {
       const key = el.getAttribute('data-content');

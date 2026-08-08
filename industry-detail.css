@@ -157,23 +157,26 @@
 
 /* ── Marquee ── */
 .idetail-marquee-wrap {
-    background-color: var(--idetail-navy);
-    color: var(--idetail-gold);
-    padding: 30px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    border-top: 1px solid rgba(201, 154, 58, 0.2);
-    border-bottom: 1px solid rgba(201, 154, 58, 0.2);
+    background: linear-gradient(135deg, #d8b15d 0%, #c8a45e 50%, #a8863e 100%) !important;
+    color: #071322 !important;
+    padding: 22px 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    border-top: 1px solid rgba(7, 19, 34, 0.15) !important;
+    border-bottom: 1px solid rgba(7, 19, 34, 0.15) !important;
+    box-shadow: 0 4px 20px rgba(200, 164, 94, 0.25) !important;
 }
 
 .idetail-marquee {
-    display: inline-block;
-    font-family: var(--idetail-font-heading);
-    font-size: 1.5rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    animation: marquee 30s linear infinite;
+    display: inline-block !important;
+    font-family: var(--ff-heading, 'Playfair Display', Georgia, serif) !important;
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    animation: marquee 22s linear infinite !important;
+    color: #071322 !important;
 }
 
 @keyframes marquee {
@@ -182,7 +185,9 @@
 }
 
 .idetail-marquee span {
-    padding: 0 40px;
+    padding: 0 35px !important;
+    color: #071322 !important;
+    font-weight: 800 !important;
 }
 
 /* ── Impact Timeline ── */

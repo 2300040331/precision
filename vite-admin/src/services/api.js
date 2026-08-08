@@ -252,37 +252,772 @@ export const fullWebsiteStore = {
 
   // ALL 12 SERVICES FROM MAIN WEBSITE DROPDOWN
   services: [
-    { id: 1, title: 'Audit & Assurance', slug: 'services-audit', icon: 'ShieldCheck', summary: 'Statutory audits, internal financial controls, tax audits, and assurance under Indian & International accounting standards.', description: 'Rigorous independent auditing to ensure regulatory compliance and shareholder transparency.', active: true, order: 1 },
-    { id: 2, title: 'Taxation', slug: 'services-taxation', icon: 'FileSpreadsheet', summary: 'Corporate income tax, international taxation, transfer pricing, and direct tax litigation.', description: 'Strategic tax advisory to optimize effective tax rates while adhering to statutory regulations.', active: true, order: 2 },
-    { id: 3, title: 'Business Advisory', slug: 'services-business-advisory', icon: 'TrendingUp', summary: 'Corporate restructuring, capital allocation strategy, financial modeling, and growth planning.', description: 'Strategic advisory for scaling businesses, M&A readiness, and capital structuring.', active: true, order: 3 },
-    { id: 4, title: 'Virtual CFO', slug: 'services-vcfo', icon: 'TrendingUp', summary: 'Executive financial leadership, cash flow management, investor reporting, and strategic budgeting.', description: 'Top-tier CFO oversight for growth companies without full-time executive overhead.', active: true, order: 4 },
-    { id: 5, title: 'Accounting & Bookkeeping', slug: 'services-accounting', icon: 'FileText', summary: 'End-to-end accounting, Ind AS compliance, payroll management, and monthly MIS decks.', description: 'Accurate financial ledger maintenance and compliant monthly financial reporting.', active: true, order: 5 },
-    { id: 6, title: 'Company Law & ROC', slug: 'services-company-law', icon: 'Building', summary: 'Secretarial compliance, ROC filings, board resolutions, FDI filings, and FEMA compliance.', description: 'End-to-end corporate law advisory and corporate secretarial governance.', active: true, order: 6 },
-    { id: 7, title: 'Startup Advisory', slug: 'services-startup-advisory', icon: 'Sparkles', summary: 'Incorporation, cap table management, ESOP design, seed funding advisory, and pitch decks.', description: 'Specialized advisory for high-growth tech startups from seed to Series C.', active: true, order: 7 },
-    { id: 8, title: 'Regulatory Compliance', slug: 'services-compliance', icon: 'ShieldCheck', summary: 'RBI, SEBI, RERA, and statutory compliance framework auditing and implementation.', description: 'Proactive regulatory risk management to prevent penalty notices and compliance friction.', active: true, order: 8 },
-    { id: 9, title: 'Transaction Advisory', slug: 'services-transaction-advisory', icon: 'PieChart', summary: 'M&A due diligence, deal structuring, post-merger integration, and transaction tax.', description: 'Buy-side and sell-side transaction advisory for corporate acquisitions.', active: true, order: 9 },
-    { id: 10, title: 'Risk Advisory', slug: 'services-risk-advisory', icon: 'ShieldCheck', summary: 'Enterprise risk management (ERM), internal audits, fraud investigation, and SOP design.', description: 'Robust internal control reviews to safeguard corporate assets and mitigate operational risks.', active: true, order: 10 },
-    { id: 11, title: 'Valuation', slug: 'services-valuation', icon: 'PieChart', summary: 'IBBI registered business valuation reports for RBI, Income Tax, and investor rounds.', description: 'Certified DCF, Net Asset Value, and comparable transaction valuation reports.', active: true, order: 11 },
-    { id: 12, title: 'Wealth Advisory', slug: 'services-wealth-advisory', icon: 'Coins', summary: 'High-net-worth individual (HNWI) tax planning, estate planning, and family office setup.', description: 'Personalized wealth preservation and tax-optimized family office management.', active: true, order: 12 },
+    {
+      id: 1,
+      title: 'Audit & Assurance',
+      slug: 'services-audit',
+      icon: 'ShieldCheck',
+      summary: 'Statutory audits, internal financial controls, tax audits, and assurance under Indian & International accounting standards.',
+      description: 'Rigorous independent auditing to ensure regulatory compliance and shareholder transparency.',
+      heroSubtitle: 'Ensuring financial integrity and stakeholder trust.',
+      heroDescription: 'We improve transparency, credibility, and regulatory compliance through rigorous auditing standards.',
+      heroBtnText: 'Book Consultation',
+      heroImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'An effective Audit & Assurance strategy provides a distinct competitive advantage',
+      introText1: 'Enhancing stakeholder value is a fundamental concept which drives every management effort in the modern business environment. Progressive organizations have realized that audits should be viewed as a dynamic tool for insight rather than a passive compliance check.',
+      introText2: 'We have developed a total audit capability which encompasses the entire spectrum of financial and operational risk. Our approach is multi-jurisdictional, allowing us to provide quality national and international assurance.',
+      capabilitiesTitle: 'Our Capabilities',
+      capabilities: [
+        { id: 1, title: 'Statutory Audit', text: 'Dedicated audit professionals with in-depth technical knowledge ensuring compliance and transparency.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Internal Audit', text: "In today's interconnected global economy, leaders are grappling with the complexities of stringently managing internal controls.", image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Information Systems Audit', text: 'Technology is the primary driver of operations around the world. We ensure your systems are robust and secure.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Forensic Audit', text: 'Whether dealing with small-scale or large investigations, understanding how to effectively manage risks is crucial.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Compliance', text: 'Ensure adherence to the latest regulations.' },
+        { title: 'Risk Reduction', text: 'Identify and mitigate potential vulnerabilities.' },
+        { title: 'Financial Accuracy', text: 'Maintain pristine records for stakeholders.' },
+        { title: 'Business Growth', text: 'Unlock strategic insights for scaling.' },
+      ],
+      timelineTitle: 'What We Do',
+      timelineSteps: [
+        { title: 'Comprehensive Review', text: 'Deep-dive analysis into your current operations.' },
+        { title: 'Strategic Planning', text: 'Customized roadmaps aligning with your goals.' },
+      ],
+      active: true,
+      order: 1,
+    },
+    {
+      id: 2,
+      title: 'Taxation',
+      slug: 'services-taxation',
+      icon: 'FileSpreadsheet',
+      summary: 'Corporate income tax, international taxation, transfer pricing, and direct tax litigation.',
+      description: 'Strategic tax advisory to optimize effective tax rates while adhering to statutory regulations.',
+      heroSubtitle: 'Optimizing corporate tax structures with total compliance.',
+      heroDescription: 'Our tax experts guide enterprises through complex tax legislation, transfer pricing, and international DTAA treaties.',
+      heroBtnText: 'Consult Tax Partners',
+      heroImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Proactive tax advisory preserves corporate capital and mitigates litigation exposure',
+      introText1: 'Tax planning is an essential element of long-term business strategy. We help clients navigate shifting statutory frameworks.',
+      introText2: 'Our team delivers comprehensive solutions covering corporate tax filings, transfer pricing documentation, and representation.',
+      capabilitiesTitle: 'Taxation Capabilities',
+      capabilities: [
+        { id: 1, title: 'Corporate Direct Tax', text: 'Income tax return filing, tax audits, and advisory on corporate tax exemptions.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'GST & Indirect Tax', text: 'GST monthly returns, inverted duty refunds, and cross-border transport GST.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Transfer Pricing', text: 'OECD-compliant transfer pricing reports and cross-border transaction valuation.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Tax Litigation & Appeals', text: 'Representation before Tax Tribunals (ITAT) and Appellate Commissioners.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Tax Savings', text: 'Maximize legal deductions and R&D tax credits.' },
+        { title: 'Litigation Shield', text: 'Minimize tax audit scrutiny and penalty notices.' },
+        { title: 'Cross-Border Ease', text: 'Smooth DTAA foreign tax credit filing.' },
+        { title: 'Cash Flow Protection', text: 'Timely GST refund filings.' },
+      ],
+      timelineTitle: 'Our Tax Workflow',
+      timelineSteps: [
+        { title: 'Tax Audit & Assessment', text: 'Detailed review of previous returns and open tax years.' },
+        { title: 'Structuring & Execution', text: 'Implementing tax-optimized accounting structures.' },
+      ],
+      active: true,
+      order: 2,
+    },
+    {
+      id: 3,
+      title: 'Business Advisory',
+      slug: 'services-business-advisory',
+      icon: 'TrendingUp',
+      summary: 'Corporate restructuring, capital allocation strategy, financial modeling, and growth planning.',
+      description: 'Strategic advisory for scaling businesses, M&A readiness, and capital structuring.',
+      heroSubtitle: 'Transformative financial guidance for enterprise expansion.',
+      heroDescription: 'Partnering with leadership teams to design resilient financial strategies, capital allocation frameworks, and M&A roadmaps.',
+      heroBtnText: 'Schedule Strategy Session',
+      heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Strategic advisory bridges the gap between financial vision and operational execution',
+      introText1: 'High-growth companies require agile capital frameworks and rigorous financial modeling to capture emerging market opportunities.',
+      introText2: 'We provide board-level advisory to optimize capital structure, improve margins, and maximize shareholder value.',
+      capabilitiesTitle: 'Advisory Capabilities',
+      capabilities: [
+        { id: 1, title: 'M&A Advisory', text: 'Buy-side and sell-side transaction structuring, valuation, and due diligence.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Capital Structuring', text: 'Debt vs equity optimization and Working Capital modeling.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Corporate Restructuring', text: 'Spin-offs, slump sales, and business group restructuring.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Financial Modeling', text: 'Multi-scenario 5-year financial models for investor decks.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Valuation Boost', text: 'Maximize business valuation for fundraising.' },
+        { title: 'Risk Control', text: 'Stress-test financial projections against downturns.' },
+        { title: 'Margin Optimization', text: 'Identify product line profit drivers.' },
+        { title: 'Scale Readiness', text: 'Prepare financial infrastructure for rapid growth.' },
+      ],
+      timelineTitle: 'Our Advisory Process',
+      timelineSteps: [
+        { title: 'Diagnostic Review', text: 'Analyzing historical performance and margin drivers.' },
+        { title: 'Strategic Roadmap', text: 'Executing capital restructuring and growth initiatives.' },
+      ],
+      active: true,
+      order: 3,
+    },
+    {
+      id: 4,
+      title: 'Virtual CFO',
+      slug: 'services-vcfo',
+      icon: 'TrendingUp',
+      summary: 'Executive financial leadership, cash flow management, investor reporting, and strategic budgeting.',
+      description: 'Top-tier CFO oversight for growth companies without full-time executive overhead.',
+      heroSubtitle: 'Executive CFO leadership on demand.',
+      heroDescription: 'Complete financial stewardship, board reporting, working capital management, and investor relations.',
+      heroBtnText: 'Hire Virtual CFO',
+      heroImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Strategic CFO leadership drives sustainable business growth and capital efficiency',
+      introText1: 'Growing companies reach a critical threshold where high-level financial strategy becomes essential for scaling.',
+      introText2: 'Our Virtual CFO practice provides experienced financial leadership, investor readiness, and dynamic cash flow forecasting.',
+      capabilitiesTitle: 'Virtual CFO Capabilities',
+      capabilities: [
+        { id: 1, title: 'Cash Flow Management', text: 'Rolling 13-week cash flow modeling and treasury optimization.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Investor Deck & MIS', text: 'Monthly executive decks, SaaS unit economics, and KPI tracking.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Budgeting & Variance', text: 'Annual operating plans, zero-based budgeting, and variance analysis.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Fundraising Support', text: 'Data room management, investor Q&A preparation, and term sheet evaluation.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Cost Savings', text: 'CFO expertise at a fraction of full-time executive cost.' },
+        { title: 'Investor Trust', text: 'Clean financial decks build confidence for round closure.' },
+        { title: 'Runway Control', text: 'Proactive burn rate management to extend capital.' },
+        { title: 'Strategic Clarity', text: 'Data-driven decision making for key investments.' },
+      ],
+      timelineTitle: 'Engagement Roadmap',
+      timelineSteps: [
+        { title: 'Financial Audit & Onboarding', text: 'Complete analysis of current accounting & reporting.' },
+        { title: 'Monthly Executive Oversight', text: 'Continuous CFO steering, board decks, and strategy.' },
+      ],
+      active: true,
+      order: 4,
+    },
+    {
+      id: 5,
+      title: 'Accounting & Bookkeeping',
+      slug: 'services-accounting',
+      icon: 'FileText',
+      summary: 'End-to-end accounting, Ind AS compliance, payroll management, and monthly MIS decks.',
+      description: 'Accurate financial ledger maintenance and compliant monthly financial reporting.',
+      heroSubtitle: 'Flawless accounting & MIS reporting.',
+      heroDescription: 'Timely financial ledger updates, bank reconciliations, statutory register maintenance, and executive dashboards.',
+      heroBtnText: 'Outsource Accounting',
+      heroImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Clean, real-time ledger accounting forms the foundation of corporate compliance',
+      introText1: 'Accurate bookkeeping gives management clear visibility into monthly income, vendor payables, and customer receivables.',
+      introText2: 'Our dedicated accounting team maintains pristine ledgers aligned with Indian GAAP and Ind AS standards.',
+      capabilitiesTitle: 'Accounting Capabilities',
+      capabilities: [
+        { id: 1, title: 'Bookkeeping & Ledgers', text: 'Day-to-day transaction recording, voucher entries, and journal processing.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Bank Reconciliation', text: 'Daily and weekly bank statement matching and automated reconciliation.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Payroll Processing', text: 'PF, ESI, TDS on salary, CTC structuring, and pay slip generation.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'MIS Dashboarding', text: 'Monthly P&L, Balance Sheet, cash flow statements, and AR/AP aging.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Zero Errors', text: 'Prevent costly accounting errors and interest penalties.' },
+        { title: 'Audit Ready', text: 'Maintain books in audit-ready condition year-round.' },
+        { title: 'Timely Payables', text: 'Efficient vendor payment schedules and credit management.' },
+        { title: 'Regulatory Ease', text: 'Seamless GST and TDS data extraction.' },
+      ],
+      timelineTitle: 'Our Workflow',
+      timelineSteps: [
+        { title: 'Chart of Accounts Setup', text: 'Customizing ledgers to match business structure.' },
+        { title: 'Monthly Ledger Closing', text: 'Timely 5th-of-the-month financial closing & MIS delivery.' },
+      ],
+      active: true,
+      order: 5,
+    },
+    {
+      id: 6,
+      title: 'Company Law & ROC',
+      slug: 'services-company-law',
+      icon: 'Building',
+      summary: 'Secretarial compliance, ROC filings, board resolutions, FDI filings, and FEMA compliance.',
+      description: 'End-to-end corporate law advisory and corporate secretarial governance.',
+      heroSubtitle: 'Corporate secretarial governance & ROC filings.',
+      heroDescription: 'Ensuring 100% compliance with Companies Act, MCA portal regulations, and board secretarial records.',
+      heroBtnText: 'Get ROC Assistance',
+      heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Corporate secretarial governance safeguards directors from regulatory penalties',
+      introText1: 'The Companies Act mandates strict timelines for annual filings, board meetings, and statutory registers.',
+      introText2: 'Our team of Company Secretaries ensures your corporate entity maintains pristine secretarial compliance.',
+      capabilitiesTitle: 'ROC & Governance Capabilities',
+      capabilities: [
+        { id: 1, title: 'Annual ROC Filings', text: 'AOC-4, MGT-7, DIR-3 KYC, and annual general meeting (AGM) documentation.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Board Resolutions', text: 'Drafting minutes for board meetings, committee meetings, and shareholder resolutions.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Share Allotment & Transfers', text: 'SH-7, PAS-3 equity issuance, rights issues, and share certificate stamping.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Director Identification (DIN)', text: 'DIN application, director appointments, resignations, and disqualification removal.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Penalty Defense', text: 'Avoid daily fine penalties on late MCA form submissions.' },
+        { title: 'Director Shield', text: 'Protect board members from regulatory disqualification notices.' },
+        { title: 'Clean Due Diligence', text: 'Pristine secretarial records for future M&A deal closure.' },
+        { title: 'FDI Compliance', text: 'Compliant foreign direct investment reporting on FIRMS portal.' },
+      ],
+      timelineTitle: 'Compliance Calendar',
+      timelineSteps: [
+        { title: 'Annual Secretarial Audit', text: 'Reviewing current statutory registers and filings.' },
+        { title: 'Ongoing ROC Execution', text: 'Timely filing of event-based and annual MCA forms.' },
+      ],
+      active: true,
+      order: 6,
+    },
+    {
+      id: 7,
+      title: 'Startup Advisory',
+      slug: 'services-startup-advisory',
+      icon: 'Sparkles',
+      summary: 'Incorporation, cap table management, ESOP design, seed funding advisory, and pitch decks.',
+      description: 'Specialized advisory for high-growth tech startups from seed to Series C.',
+      heroSubtitle: 'Turnkey advisory for high-growth startups.',
+      heroDescription: 'DPIIT registration, angel tax relief, ESOP plans, fundraising data rooms, and strategic growth modeling.',
+      heroBtnText: 'Launch Startup',
+      heroImage: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Empowering innovative founders with world-class financial & legal foundations',
+      introText1: 'Early-stage founders need agile financial guidance to structure cap tables, secure tax benefits, and raise capital.',
+      introText2: 'We serve as long-term strategic partners from day zero incorporation through institutional Series A/B fundraising rounds.',
+      capabilitiesTitle: 'Startup Capabilities',
+      capabilities: [
+        { id: 1, title: 'DPIIT & Angel Tax', text: 'Startup India recognition, 80-IAC tax holiday filing, and Section 56 exemption.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'ESOP Structuring', text: 'Employee Stock Option Plan design, pool creation, grant letters, and vesting schedules.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Cap Table Dilution', text: 'Pre and post-money valuation modeling, SAFE notes, and convertible notes.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Fundraising Data Room', text: 'Setting up financial models, cap table decks, and due diligence folders for VCs.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Tax Exemption', text: '3-year 100% income tax exemption under 80-IAC.' },
+        { title: 'Talent Retention', text: 'Attract top engineering talent with structured ESOPs.' },
+        { title: 'Faster Deal Close', text: 'Clean data rooms accelerate investor term sheet execution.' },
+        { title: 'Zero Dilution Trap', text: 'Avoid founder over-dilution in early seed rounds.' },
+      ],
+      timelineTitle: 'Founder Journey',
+      timelineSteps: [
+        { title: 'Incorporation & DPIIT', text: 'Setting up private limited company & DPIIT startup status.' },
+        { title: 'Scale & Raise', text: 'Financial modeling, valuation certificates, and investor closing.' },
+      ],
+      active: true,
+      order: 7,
+    },
+    {
+      id: 8,
+      title: 'Regulatory Compliance',
+      slug: 'services-compliance',
+      icon: 'ShieldCheck',
+      summary: 'RBI, SEBI, RERA, and statutory compliance framework auditing and implementation.',
+      description: 'Proactive regulatory risk management to prevent penalty notices and compliance friction.',
+      heroSubtitle: 'Complete statutory risk prevention.',
+      heroDescription: 'RBI master direction compliance, SEBI regulations, RERA audits, and statutory license filings.',
+      heroBtnText: 'Check Compliance',
+      heroImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Proactive regulatory auditing safeguards corporate licenses and brand reputation',
+      introText1: 'Regulatory bodies in India enforce rigorous audit trails, compliance certifications, and periodic filings.',
+      introText2: 'Our regulatory specialists conduct gap analyses and design internal controls to guarantee statutory adherence.',
+      capabilitiesTitle: 'Compliance Capabilities',
+      capabilities: [
+        { id: 1, title: 'RBI & FEMA Audits', text: 'Cross-border remittances, ECB compliance, FLA returns, and ODI approvals.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'SEBI & Capital Markets', text: 'Merchant banking compliance, insider trading regulations, and AIF filings.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'RERA Certification', text: 'Real estate project fund allocation certificates and quarterly progress filings.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Statutory Health Audit', text: 'Comprehensive review of labor laws, environmental permits, and municipal licenses.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Zero Fines', text: 'Eliminate compounding penalty interest and show-cause notices.' },
+        { title: 'License Safety', text: 'Prevent regulatory license suspensions or cancellations.' },
+        { title: 'Peace of Mind', text: 'Ensure executive board operates with complete statutory clearance.' },
+        { title: 'Smooth Operations', text: 'Prevent operational friction during statutory inspections.' },
+      ],
+      timelineTitle: 'Audit Workflow',
+      timelineSteps: [
+        { title: 'Statutory Health Check', text: 'Mapping all regulatory applicable laws & license status.' },
+        { title: 'Remediation & Filings', text: 'Closing compliance gaps and filing statutory returns.' },
+      ],
+      active: true,
+      order: 8,
+    },
+    {
+      id: 9,
+      title: 'Transaction Advisory',
+      slug: 'services-transaction-advisory',
+      icon: 'PieChart',
+      summary: 'M&A due diligence, deal structuring, post-merger integration, and transaction tax.',
+      description: 'Buy-side and sell-side transaction advisory for corporate acquisitions.',
+      heroSubtitle: 'Precision M&A diligence & transaction structuring.',
+      heroDescription: 'Comprehensive financial, tax, and legal due diligence for corporate acquisitions, slump sales, and joint ventures.',
+      heroBtnText: 'Book Due Diligence',
+      heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Rigorous deal diligence uncovers hidden liabilities and protects transaction value',
+      introText1: 'Mergers and acquisitions require exhaustive due diligence to validate financial quality of earnings and tax exposure.',
+      introText2: 'We support acquirers and target companies throughout the transaction lifecycle from LOI execution to post-merger integration.',
+      capabilitiesTitle: 'Transaction Capabilities',
+      capabilities: [
+        { id: 1, title: 'Financial Due Diligence', text: 'Quality of Earnings (QoE) analysis, working capital peg calculation, and debt-like items.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Tax Due Diligence', text: 'Historical tax assessment liability review, open tax litigation risk, and structuring.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Deal Structuring', text: 'Slump sale vs share purchase agreement (SPA) tax optimization and stamp duty planning.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Post-Merger Integration', text: 'ERP alignment, chart of accounts unification, and accounting policy harmonization.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Valuation Shield', text: 'Adjust deal purchase price for undisclosed liabilities.' },
+        { title: 'Tax Savings', text: 'Optimize capital gains tax for sell-side founders.' },
+        { title: 'Risk Indemnity', text: 'Draft strong Representations & Warranties clauses in SPA.' },
+        { title: 'Seamless Integration', text: 'Achieve post-closing operational synergies swiftly.' },
+      ],
+      timelineTitle: 'Deal Lifecycle',
+      timelineSteps: [
+        { title: 'Diligence & QoE Report', text: 'Detailed 60-page diligence deck with key red flags.' },
+        { title: 'Definitive Document Review', text: 'Closing financial conditions, SPA review, and settlement.' },
+      ],
+      active: true,
+      order: 9,
+    },
+    {
+      id: 10,
+      title: 'Risk Advisory',
+      slug: 'services-risk-advisory',
+      icon: 'ShieldCheck',
+      summary: 'Enterprise risk management (ERM), internal audits, fraud investigation, and SOP design.',
+      description: 'Robust internal control reviews to safeguard corporate assets and mitigate operational risks.',
+      heroSubtitle: 'Safeguarding enterprise assets & internal controls.',
+      heroDescription: 'ERM framework design, internal financial controls (IFC), SOP documentation, and forensic risk reviews.',
+      heroBtnText: 'Mitigate Risk',
+      heroImage: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Enterprise risk frameworks protect operating margins and prevent fraud leakage',
+      introText1: 'As organizations expand across multiple geographies, maintaining robust internal controls becomes vital.',
+      introText2: 'Our Risk Advisory practice audits operational processes, documents standard operating procedures (SOPs), and prevents asset leakage.',
+      capabilitiesTitle: 'Risk Capabilities',
+      capabilities: [
+        { id: 1, title: 'Internal Controls (IFC)', text: 'Risk Control Matrix (RCM) creation and testing under Companies Act Section 134.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'SOP Design & Audit', text: 'Procure-to-Pay, Order-to-Cash, and Inventory management process flow documentation.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Forensic Investigation', text: 'Digital evidence retrieval, whistle-blower hotline management, and fraud auditing.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Enterprise Risk Management', text: 'COSO ERM framework implementation and executive risk register updates.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Fraud Prevention', text: 'Plug revenue leakage and procurement kickbacks.' },
+        { title: 'Operational Efficiency', text: 'Standardize workflows across regional branch offices.' },
+        { title: 'Board Confidence', text: 'Demonstrate active risk governance to audit committee.' },
+        { title: 'Audit Efficiency', text: 'Streamline annual statutory audit readiness.' },
+      ],
+      timelineTitle: 'Risk Roadmap',
+      timelineSteps: [
+        { title: 'Process Mapping & RCM', text: 'Deep-dive review of key operational cycles.' },
+        { title: 'Testing & SOP Rollout', text: 'Implementing strengthened internal controls.' },
+      ],
+      active: true,
+      order: 10,
+    },
+    {
+      id: 11,
+      title: 'Valuation',
+      slug: 'services-valuation',
+      icon: 'PieChart',
+      summary: 'IBBI registered business valuation reports for RBI, Income Tax, and investor rounds.',
+      description: 'Certified DCF, Net Asset Value, and comparable transaction valuation reports.',
+      heroSubtitle: 'Certified IBBI business valuations.',
+      heroDescription: 'Valuation reports for fundraising, ESOPs, M&A, Income Tax Section 56, and RBI FIRMS filings.',
+      heroBtnText: 'Request Valuation',
+      heroImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Certified IBBI valuation reports deliver credibility for transactions and tax authorities',
+      introText1: 'Valuation is mandatory under Income Tax Act, Companies Act, and RBI FEMA guidelines during share issuances.',
+      introText2: 'Our Registered Valuers issue legally compliant valuation certificates based on DCF, NAV, and Comparable Market Multiples.',
+      capabilitiesTitle: 'Valuation Capabilities',
+      capabilities: [
+        { id: 1, title: 'DCF Financial Valuation', text: 'Discounted Cash Flow modeling for equity share price determination.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Tax & Regulatory Reports', text: 'Section 56 Rule 11UA FMV certificates for Income Tax Department filings.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'FEMA & RBI Valuation', text: 'Internationally accepted pricing methodology reports for cross-border FDI/ODI.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Intangible Asset Valuation', text: 'Brand value, patent, customer relationship, and goodwill impairment valuation.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Statutory Defense', text: 'Defend share issuance price against tax assessment scrutiny.' },
+        { title: 'Investor Alignment', text: 'Fair market value consensus for investment rounds.' },
+        { title: 'RBI Approval', text: 'Hassle-free FC-GPR filing approval by AD Category Bank.' },
+        { title: 'ESOP Pricing', text: 'Compliant strike price determination for option grants.' },
+      ],
+      timelineTitle: 'Valuation Process',
+      timelineSteps: [
+        { title: 'Financial Modeling', text: 'Building 5-year cash flow projections & WACC calculation.' },
+        { title: 'Certificate Issuance', text: 'Issuing signed IBBI Registered Valuer report.' },
+      ],
+      active: true,
+      order: 11,
+    },
+    {
+      id: 12,
+      title: 'Wealth Advisory',
+      slug: 'services-wealth-advisory',
+      icon: 'Coins',
+      summary: 'High-net-worth individual (HNWI) tax planning, estate planning, and family office setup.',
+      description: 'Personalized wealth preservation and tax-optimized family office management.',
+      heroSubtitle: 'HNWI wealth preservation & family office management.',
+      heroDescription: 'Estate tax planning, family trust creation, succession structuring, and international asset protection.',
+      heroBtnText: 'Consult Wealth Partner',
+      heroImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop',
+      introHeading: 'Personalized family office structures preserve inter-generational wealth and minimize tax',
+      introText1: 'High-net-worth business owners require bespoke estate planning and capital gains tax optimization.',
+      introText2: 'Our Wealth Advisory practice designs private discretionary family trusts, holding companies, and global tax strategies.',
+      capabilitiesTitle: 'Wealth Capabilities',
+      capabilities: [
+        { id: 1, title: 'Private Family Trusts', text: 'Settlement of family trusts for asset protection and succession planning.', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop' },
+        { id: 2, title: 'Capital Gains Strategy', text: 'Tax-optimized exit planning on business sales, real estate, and equity portfolios.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop' },
+        { id: 3, title: 'Succession Planning', text: 'Drafting complex wills, family constitutions, and business transfer agreements.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop' },
+        { id: 4, title: 'Cross-Border Wealth', text: 'LRS remittance advisory, foreign asset disclosure (Schedule FA), and offshore trusts.', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop' },
+      ],
+      mattersTitle: 'Why It Matters',
+      mattersCards: [
+        { title: 'Tax Preservation', text: 'Legally reduce capital gains tax burdens on exit.' },
+        { title: 'Asset Protection', text: 'Shield family wealth from future commercial litigation.' },
+        { title: 'Smooth Succession', text: 'Prevent family disputes through structured trust governance.' },
+        { title: 'Global Compliance', text: 'Full adherence to Black Money Act and Schedule FA disclosures.' },
+      ],
+      timelineTitle: 'Family Office Roadmap',
+      timelineSteps: [
+        { title: 'Wealth Structuring Audit', text: 'Reviewing current asset holdings & tax exposure.' },
+        { title: 'Trust Settlement & Management', text: 'Creating private trust deed & ongoing advisory.' },
+      ],
+      active: true,
+      order: 12,
+    },
   ],
 
   // ALL 15 INDUSTRIES FROM MAIN WEBSITE DROPDOWN
   industries: [
-    { id: 1, title: 'Manufacturing', slug: 'industry-manufacturing', icon: 'Building2', summary: 'Cost accounting, factory inventory audit, export incentives, and GST advisory for manufacturers.', category: 'Industrial', featured: true, active: true },
-    { id: 2, title: 'Technology', slug: 'industry-technology', icon: 'Laptop', summary: 'SaaS revenue recognition, R&D tax credits, cross-border IP transfer pricing, and ESOP design.', category: 'Technology', featured: true, active: true },
-    { id: 3, title: 'Healthcare', slug: 'industry-healthcare', icon: 'Stethoscope', summary: 'Hospital inventory management, inverted duty GST refund filing, and pharma export compliance.', category: 'Healthcare', featured: true, active: true },
-    { id: 4, title: 'Banking & Finance', slug: 'industry-banking-finance', icon: 'Landmark', summary: 'NBFC compliance, RBI master direction auditing, risk management, and concurrent audits.', category: 'Finance', featured: true, active: true },
-    { id: 5, title: 'Real Estate', slug: 'industry-real-estate', icon: 'Building2', summary: 'RERA annual certifications, Joint Development Agreement (JDA) tax, and SPV accounting.', category: 'Real Estate', featured: true, active: true },
-    { id: 6, title: 'Retail & E-Commerce', slug: 'industry-retail', icon: 'Coins', summary: 'Multi-channel GST reconciliation, marketplace TCS management, and inventory audit.', category: 'Commerce', featured: false, active: true },
-    { id: 7, title: 'Education', slug: 'industry-education', icon: 'Building', summary: 'Educational trust compliance, 12A/80G tax exemptions, and university financial audits.', category: 'Education', featured: false, active: true },
-    { id: 8, title: 'Hospitality', slug: 'industry-hospitality', icon: 'Building2', summary: 'Hotel chain GST audit, POS reconciliation, lease accounting, and luxury tax compliance.', category: 'Services', featured: false, active: true },
-    { id: 9, title: 'Energy', slug: 'industry-energy', icon: 'Building', summary: 'Renewable energy project accounting, carbon credit tax, and infrastructure subsidies.', category: 'Energy', featured: false, active: true },
-    { id: 10, title: 'Logistics', slug: 'industry-logistics', icon: 'Building2', summary: 'Fleet management tax strategy, e-way bill compliance, and cross-border transport GST.', category: 'Transport', featured: false, active: true },
-    { id: 11, title: 'Government', slug: 'industry-government', icon: 'Landmark', summary: 'Public sector undertaking (PSU) audit, municipal accounting, and grant audit.', category: 'Public Sector', featured: false, active: true },
-    { id: 12, title: 'Startups', slug: 'industry-startups', icon: 'Sparkles', summary: 'DPIIT startup registration, angel tax exemption, cap table structuring, and investor decks.', category: 'Innovation', featured: true, active: true },
-    { id: 13, title: 'Infrastructure', slug: 'industry-infrastructure', icon: 'Building2', summary: 'EPC contract accounting, joint venture tax advisory, and long-term project audit.', category: 'Construction', featured: false, active: true },
-    { id: 14, title: 'NGOs', slug: 'industry-ngos', icon: 'Building', summary: 'FCRA registration & renewal, 12AB tax exemption, CSR fund auditing, and donor reporting.', category: 'Social Sector', featured: false, active: true },
-    { id: 15, title: 'Global Business', slug: 'industry-global-business', icon: 'Globe', summary: 'FDI compliance, outbound investment advisory, double tax avoidance (DTAA), and offshore entities.', category: 'International', featured: true, active: true },
+    {
+      id: 1,
+      title: 'Manufacturing',
+      slug: 'industry-manufacturing',
+      icon: 'Building2',
+      category: 'Industrial',
+      summary: 'Cost accounting, factory inventory audit, export incentives, and GST advisory for manufacturers.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'In an era of supply chain disruptions and margin pressures, we help manufacturing firms optimize capital allocation, manage complex inventories, and achieve long-term scalable growth.',
+      heroImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Cost Accounting Models',
+      card1Text: 'Develop precise cost-accounting frameworks to identify inefficiencies and improve product margins.',
+      card2Title: 'Tax Structuring',
+      card2Text: 'Strategic tax advisory for capital expansions, including R&D credits for process innovations.',
+      card3Title: 'Supply Chain Advisory',
+      card3Text: 'Financial risk modeling for supply chain volatility and vendor dependency.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 2,
+      title: 'Technology',
+      slug: 'industry-technology',
+      icon: 'Laptop',
+      category: 'Technology',
+      summary: 'SaaS revenue recognition, R&D tax credits, cross-border IP transfer pricing, and ESOP design.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Empowering software, SaaS, and deep-tech enterprises with specialized valuation, transfer pricing, and investor compliance.',
+      heroImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'SaaS Revenue Recognition',
+      card1Text: 'ASC 606 & Ind AS 115 compliant subscription accounting and deferred revenue audit.',
+      card2Title: 'R&D Tax Incentives',
+      card2Text: 'Maximize R&D tax credits and tax deductions for tech innovations.',
+      card3Title: 'IP Transfer Pricing',
+      card3Text: 'Cross-border IP valuation and OECD compliant transfer pricing documentation.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 3,
+      title: 'Healthcare',
+      slug: 'industry-healthcare',
+      icon: 'Stethoscope',
+      category: 'Healthcare',
+      summary: 'Hospital inventory management, inverted duty GST refund filing, and pharma export compliance.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Navigating stringent healthcare regulations, hospital cost structures, and pharmaceutical tax exemptions.',
+      heroImage: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Hospital Cost Audit',
+      card1Text: 'Departmental profitability analysis and medical equipment asset management.',
+      card2Title: 'Inverted Duty Refund',
+      card2Text: 'Expedited filing for inverted duty structure GST refunds on pharma inputs.',
+      card3Title: 'Pharma Export Advisory',
+      card3Text: 'Cross-border trade tax incentives and export compliance for healthcare exporters.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 4,
+      title: 'Banking & Finance',
+      slug: 'industry-banking-finance',
+      icon: 'Landmark',
+      category: 'Finance',
+      summary: 'NBFC compliance, RBI master direction auditing, risk management, and concurrent audits.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'We navigate the intricacies of financial services, offering rigorous audit, risk management, and regulatory advisory to banks, NBFCs, and funds.',
+      heroImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Risk Advisory',
+      card1Text: 'Implementation of comprehensive enterprise risk management frameworks.',
+      card2Title: 'Statutory Audits',
+      card2Text: 'Rigorous statutory and concurrent audits for banking institutions.',
+      card3Title: 'Regulatory Compliance',
+      card3Text: 'RBI and SEBI compliance advisory for financial services firms.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 5,
+      title: 'Real Estate',
+      slug: 'industry-real-estate',
+      icon: 'Building2',
+      category: 'Real Estate',
+      summary: 'RERA annual certifications, Joint Development Agreement (JDA) tax, and SPV accounting.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Specialized accounting for real estate developers, SPVs, and REITs navigating complex land acquisition tax.',
+      heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'RERA Certifications',
+      card1Text: 'Annual Form 3 audits and bank withdrawal certifications for real estate projects.',
+      card2Title: 'JDA Taxation',
+      card2Text: 'Optimized capital gains tax structuring for Joint Development Agreements.',
+      card3Title: 'SPV & REIT Accounting',
+      card3Text: 'Consolidated financial modeling for real estate SPVs and fund investments.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 6,
+      title: 'Retail & E-Commerce',
+      slug: 'industry-retail',
+      icon: 'Coins',
+      category: 'Commerce',
+      summary: 'Multi-channel GST reconciliation, marketplace TCS management, and inventory audit.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'High-velocity accounting for D2C brands, retail chains, and e-commerce platforms.',
+      heroImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Multi-Channel GST',
+      card1Text: 'Automated marketplace sales vs GST return reconciliation across Amazon, Flipkart & Shopify.',
+      card2Title: 'TCS & TDS Audit',
+      card2Text: 'Recovery and credit filing for marketplace tax deductions.',
+      card3Title: 'Inventory Valuation',
+      card3Text: 'Physical stock reconciliation and FIFO inventory accounting.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 7,
+      title: 'Education',
+      slug: 'industry-education',
+      icon: 'Building',
+      category: 'Education',
+      summary: 'Educational trust compliance, 12A/80G tax exemptions, and university financial audits.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Financial compliance and trust tax advisory for educational institutions and ed-tech platforms.',
+      heroImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Trust Exemptions',
+      card1Text: 'Section 12AB and 80G tax exemption renewals and Form 10B filings.',
+      card2Title: 'University Audits',
+      card2Text: 'Comprehensive statutory audits for private universities and colleges.',
+      card3Title: 'Grant Accounting',
+      card3Text: 'Tracking government research grants and donor endowment funds.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 8,
+      title: 'Hospitality',
+      slug: 'industry-hospitality',
+      icon: 'Building2',
+      category: 'Services',
+      summary: 'Hotel chain GST audit, POS reconciliation, lease accounting, and luxury tax compliance.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Financial management for luxury hotel chains, resorts, and restaurant franchises.',
+      heroImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'POS Reconciliation',
+      card1Text: 'Daily revenue vs bank deposit reconciliation across PMS & POS systems.',
+      card2Title: 'Lease Accounting',
+      card2Text: 'Ind AS 116 long-term hotel property lease accounting.',
+      card3Title: 'Hospitality GST Audit',
+      card3Text: 'Room tariff vs F&B GST rate classification and input credit optimization.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 9,
+      title: 'Energy',
+      slug: 'industry-energy',
+      icon: 'Building',
+      category: 'Energy',
+      summary: 'Renewable energy project accounting, carbon credit tax, and infrastructure subsidies.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Capital project accounting and tax advisory for solar, wind, and clean energy developers.',
+      heroImage: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Renewable Subsidies',
+      card1Text: 'Government clean energy subsidy claims and state tax exemption filings.',
+      card2Title: 'Carbon Credit Tax',
+      card2Text: 'Structuring and taxation of carbon credit sales and ESG investments.',
+      card3Title: 'Project Asset Depreciation',
+      card3Text: 'Accelerated tax depreciation modeling for power plant assets.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 10,
+      title: 'Logistics',
+      slug: 'industry-logistics',
+      icon: 'Building2',
+      category: 'Transport',
+      summary: 'Fleet management tax strategy, e-way bill compliance, and cross-border transport GST.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Streamlining taxation and audit for supply chain, warehousing, and transport fleets.',
+      heroImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'Transport GST (RCM)',
+      card1Text: 'Reverse Charge Mechanism (RCM) GST compliance for GTA services.',
+      card2Title: 'Fleet Depreciation',
+      card2Text: 'Optimized fleet asset lifecycle accounting and fuel expense audit.',
+      card3Title: 'E-Way Bill Compliance',
+      card3Text: 'Automated e-way bill audit and interstate transport tax advisory.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 11,
+      title: 'Government',
+      slug: 'industry-government',
+      icon: 'Landmark',
+      category: 'Public Sector',
+      summary: 'Public sector undertaking (PSU) audit, municipal accounting, and grant audit.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Public sector financial auditing, municipal fund accounting, and CAG audit preparation.',
+      heroImage: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'CAG Audit Readiness',
+      card1Text: 'Pre-audit preparation for Comptroller and Auditor General (CAG) inspections.',
+      card2Title: 'Municipal Accounting',
+      card2Text: 'Accrual-based double-entry accounting implementation for civic bodies.',
+      card3Title: 'Grant Utilization Audit',
+      card3Text: 'Certification of utilization certificates (UC) for public development funds.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 12,
+      title: 'Startups',
+      slug: 'industry-startups',
+      icon: 'Sparkles',
+      category: 'Innovation',
+      summary: 'DPIIT startup registration, angel tax exemption, cap table structuring, and investor decks.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'End-to-end CFO and tax partner for high-growth ventures from seed to Series C.',
+      heroImage: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'DPIIT & Angel Tax',
+      card1Text: 'DPIIT recognition and Section 56(2)(viib) angel tax exemption filings.',
+      card2Title: 'Cap Table & ESOPs',
+      card2Text: 'ESOP scheme creation, valuation, and cap table dilution modeling.',
+      card3Title: 'Investor Due Diligence',
+      card3Text: 'Financial data room preparation for VC & PE fundraising diligence.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
+    {
+      id: 13,
+      title: 'Infrastructure',
+      slug: 'industry-infrastructure',
+      icon: 'Building2',
+      category: 'Construction',
+      summary: 'EPC contract accounting, joint venture tax advisory, and long-term project audit.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Financial advisory for large-scale EPC contractors, highways, and urban infrastructure developers.',
+      heroImage: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'EPC Contract Accounting',
+      card1Text: 'Percentage of completion method (POCM) revenue recognition under Ind AS 115.',
+      card2Title: 'JV Tax Structuring',
+      card2Text: 'Tax optimization for consortiums and Joint Venture agreements.',
+      card3Title: 'Mobilization Advance Audit',
+      card3Text: 'Bank guarantee and mobilization advance cash flow auditing.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 14,
+      title: 'NGOs',
+      slug: 'industry-ngos',
+      icon: 'Building',
+      category: 'Social Sector',
+      summary: 'FCRA registration & renewal, 12AB tax exemption, CSR fund auditing, and donor reporting.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Compliance and audit partner for non-profit organizations, trusts, and CSR foundations.',
+      heroImage: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'FCRA Compliance',
+      card1Text: 'FCRA registration, bank account compliance, and Form FC-4 annual returns.',
+      card2Title: 'CSR Fund Audits',
+      card2Text: 'Auditing corporate social responsibility grant deployment and impact metrics.',
+      card3Title: '12AB Exemption',
+      card3Text: 'Re-registration under Section 12AB and 80G tax benefit compliance.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: false,
+      active: true,
+    },
+    {
+      id: 15,
+      title: 'Global Business',
+      slug: 'industry-global-business',
+      icon: 'Globe',
+      category: 'International',
+      summary: 'FDI compliance, outbound investment advisory, double tax avoidance (DTAA), and offshore entities.',
+      heroSubtitle: 'INDUSTRY EXPERTISE',
+      heroDescription: 'Cross-border tax planning, foreign direct investment (FDI) compliance, and global entity setup.',
+      heroImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop',
+      sectionTitle: 'How We Help',
+      card1Title: 'FDI & RBI Reporting',
+      card1Text: 'Form FC-GPR filing, valuation certificates, and RBI FIRMS portal compliance.',
+      card2Title: 'DTAA Advisory',
+      card2Text: 'Double Taxation Avoidance Agreement relief claims and withholding tax strategy.',
+      card3Title: 'Outbound Investments',
+      card3Text: 'Overseas Direct Investment (ODI) advisory and holding company structuring.',
+      ctaTitle: 'Ready to Elevate Your Business?',
+      ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+      featured: true,
+      active: true,
+    },
   ],
 
   media: [
@@ -427,21 +1162,30 @@ class ApiService {
     try {
       localStorage.setItem('precision_cms_full_store', JSON.stringify(store));
 
-      // Flatten and extract section content for dynamic-content.js
+      // Flatten and extract section content per page for dynamic-content.js
       let flat = {};
       if (Array.isArray(store.pages)) {
         store.pages.forEach(p => {
+          let pageFlat = {};
           if (Array.isArray(p.sections)) {
             p.sections.forEach(sec => {
               if (sec.content) {
                 try {
                   const parsed = typeof sec.content === 'string' ? JSON.parse(sec.content) : sec.content;
-                  flat = { ...flat, ...parsed };
+                  pageFlat = { ...pageFlat, ...parsed };
                 } catch (e) {}
               }
             });
           }
+          if (p.isEdited || (store.customEdits && store.customEdits[p.id])) {
+            pageFlat._edited = true;
+          }
+          flat[p.id] = pageFlat;
+          flat[p.slug] = pageFlat;
         });
+      }
+      if (store.customEdits) {
+        flat._customEdits = store.customEdits;
       }
       localStorage.setItem('precision_cms_content', JSON.stringify(flat));
 
@@ -452,6 +1196,38 @@ class ApiService {
         body: JSON.stringify({ fullStore: store, flat }),
       }).catch(() => {});
     } catch (e) {}
+  }
+
+  async updateSection(id, sectionData) {
+    const store = this.getStore();
+    const parsedContent = typeof sectionData.content === 'object' ? sectionData.content : JSON.parse(sectionData.content || '{}');
+    const contentString = typeof sectionData.content === 'object' ? JSON.stringify(sectionData.content) : sectionData.content;
+
+    let targetPageId = 'home';
+    store.pages = (store.pages || []).map(p => {
+      const hasSec = (p.sections || []).some(s => s.id === id);
+      if (hasSec) targetPageId = p.id;
+      return {
+        ...p,
+        isEdited: hasSec ? true : p.isEdited,
+        sections: (p.sections || []).map(sec => {
+          if (sec.id === id) {
+            return {
+              ...sec,
+              ...sectionData,
+              content: contentString,
+            };
+          }
+          return sec;
+        }),
+      };
+    });
+
+    store.customEdits = store.customEdits || {};
+    store.customEdits[targetPageId] = { ...(store.customEdits[targetPageId] || {}), ...parsedContent, _edited: true };
+
+    this.saveStore(store);
+    return { id, ...sectionData, content: contentString };
   }
 
   async resetPageSections(pageId) {
@@ -504,36 +1280,14 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      if (response.status === 401 || response.status === 403) {
-        if (!endpoint.includes('/auth/login')) {
-          this.setToken('');
-        }
-      }
-
-      if (response.headers.get('content-type')?.includes('application/json')) {
+      if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
         const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || `HTTP ${response.status}`);
-        }
-        if (Array.isArray(data) && data.length > 0) {
-          return data;
-        }
-        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
-          return data;
-        }
+        if (data) return data;
       }
-
-      const text = await response.text();
-      if (!response.ok) {
-        throw new Error(text || `HTTP ${response.status}`);
-      }
-      return text;
     } catch (error) {
-      if (fallbackData !== null) {
-        return fallbackData;
-      }
-      throw error;
+      // silent catch
     }
+    return fallbackData !== null ? fallbackData : {};
   }
 
   // Auth Endpoints
@@ -609,6 +1363,13 @@ class ApiService {
     return data;
   }
 
+  async publishPage(pageId) {
+    const store = this.getStore();
+    store.pages = (store.pages || []).map(p => p.id === pageId ? { ...p, isPublished: true, isEdited: true } : p);
+    this.saveStore(store);
+    return store;
+  }
+
   async addSection(pageId, sectionData) {
     const store = this.getStore();
     const newSec = { id: `sec-${Date.now()}`, pageId, ...sectionData };
@@ -674,7 +1435,22 @@ class ApiService {
   // Services Endpoints (All 12 Services)
   async getServices(all = true) {
     const store = this.getStore();
-    return store.services || fullWebsiteStore.services;
+    const defaults = fullWebsiteStore.services || [];
+    const current = store.services || defaults;
+
+    return current.map(s => {
+      const def = defaults.find(d => String(d.id) === String(s.id) || d.slug === s.slug);
+      if (def) {
+        return {
+          ...def,
+          ...s,
+          capabilities: Array.isArray(s.capabilities) && s.capabilities.length ? s.capabilities : (def.capabilities || []),
+          mattersCards: Array.isArray(s.mattersCards) && s.mattersCards.length ? s.mattersCards : (def.mattersCards || []),
+          timelineSteps: Array.isArray(s.timelineSteps) && s.timelineSteps.length ? s.timelineSteps : (def.timelineSteps || []),
+        };
+      }
+      return s;
+    });
   }
 
   async createService(data) {
@@ -687,14 +1463,14 @@ class ApiService {
 
   async updateService(id, data) {
     const store = this.getStore();
-    store.services = (store.services || []).map(s => s.id === id ? { ...s, ...data } : s);
+    store.services = (store.services || []).map(s => String(s.id) === String(id) ? { ...s, ...data } : s);
     this.saveStore(store);
     return data;
   }
 
   async duplicateService(id) {
     const store = this.getStore();
-    const target = (store.services || []).find(s => s.id === id);
+    const target = (store.services || []).find(s => String(s.id) === String(id));
     if (target) {
       const dup = { ...target, id: Date.now(), title: `${target.title} (Copy)` };
       store.services = [...(store.services || []), dup];
@@ -705,7 +1481,7 @@ class ApiService {
 
   async deleteService(id) {
     const store = this.getStore();
-    store.services = (store.services || []).filter(s => s.id !== id);
+    store.services = (store.services || []).filter(s => String(s.id) !== String(id));
     this.saveStore(store);
     return { success: true };
   }
@@ -713,7 +1489,19 @@ class ApiService {
   // Industries Endpoints (All 15 Industries)
   async getIndustries(all = true) {
     const store = this.getStore();
-    return store.industries || fullWebsiteStore.industries;
+    const defaults = fullWebsiteStore.industries || [];
+    const current = store.industries || defaults;
+
+    return current.map(ind => {
+      const def = defaults.find(d => String(d.id) === String(ind.id) || d.slug === ind.slug);
+      if (def) {
+        return {
+          ...def,
+          ...ind,
+        };
+      }
+      return ind;
+    });
   }
 
   async createIndustry(data) {
@@ -779,26 +1567,28 @@ class ApiService {
   // CRM Endpoints
   async getConsultations(status = '', search = '') {
     const store = this.getStore();
-    return store.consultations || fullWebsiteStore.consultations;
+    return Array.isArray(store.consultations) ? store.consultations : [];
   }
 
   async updateConsultation(id, data) {
     const store = this.getStore();
-    store.consultations = (store.consultations || []).map(c => c.id === id ? { ...c, ...data } : c);
+    const current = Array.isArray(store.consultations) ? store.consultations : [];
+    store.consultations = current.map(c => c.id === id ? { ...c, ...data } : c);
     this.saveStore(store);
     return data;
   }
 
   async deleteConsultation(id) {
     const store = this.getStore();
-    store.consultations = (store.consultations || []).filter(c => c.id !== id);
+    const current = Array.isArray(store.consultations) ? store.consultations : [];
+    store.consultations = current.filter(c => c.id !== id);
     this.saveStore(store);
     return { success: true };
   }
 
   async getContacts(status = '', search = '') {
     const store = this.getStore();
-    return store.contacts || fullWebsiteStore.contacts;
+    return Array.isArray(store.contacts) ? store.contacts : [];
   }
 
   async updateContact(id, data) {

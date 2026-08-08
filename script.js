@@ -641,4 +641,172 @@
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // WHATSAPP CONSULTATION POPUP MODAL
+  // ═══════════════════════════════════════════════════════════
+  function createWhatsAppModal() {
+    if (document.getElementById('whatsapp-consultation-modal')) return;
+
+    const modalDiv = document.createElement('div');
+    modalDiv.id = 'whatsapp-consultation-modal';
+    modalDiv.style.cssText = `
+      position: fixed; inset: 0; z-index: 99999;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(7, 19, 34, 0.85); backdrop-filter: blur(8px);
+      padding: 16px; font-family: system-ui, -apple-system, sans-serif;
+    `;
+
+    modalDiv.innerHTML = `
+      <div style="
+        width: 100%; max-width: 580px; background-color: #0b1426;
+        border: 1px solid rgba(200, 164, 94, 0.3); border-radius: 24px;
+        padding: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        position: relative; overflow: hidden; color: #f8fafc;
+      ">
+        <button id="wa-modal-close" type="button" style="
+          position: absolute; top: 20px; right: 20px; border: none; background: transparent;
+          color: #c8a45e; font-size: 24px; cursor: pointer; line-height: 1; padding: 4px 8px;
+        ">&times;</button>
+        
+        <form id="wa-consultation-form" style="display: flex; flex-direction: column; gap: 20px;">
+          <div id="wa-status-msg" style="display:none; padding:10px; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.4); color:#34d399; border-radius:10px; font-size:12px; text-align:center; font-weight:600;"></div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">FULL NAME</label>
+              <input type="text" id="wa-fullname" required placeholder="John Doe" style="
+                background: #0b1426; border: none; border-bottom: 1px solid #334155;
+                color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
+              ">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">PHONE NUMBER</label>
+              <input type="text" id="wa-phone" required placeholder="+91 98765 43210" style="
+                background: #0b1426; border: none; border-bottom: 1px solid #334155;
+                color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
+              ">
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">EMAIL ADDRESS</label>
+            <input type="email" id="wa-email" placeholder="john@company.com" style="
+              background: #0b1426; border: none; border-bottom: 1px solid #334155;
+              color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
+            ">
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">SERVICE OF INTEREST</label>
+            <div style="position: relative;">
+              <select id="wa-service" style="
+                width: 100%; background: #0b1426; border: none; border-bottom: 1px solid #334155;
+                color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; appearance: none; cursor: pointer;
+              ">
+                <option value="Audit & Assurance" style="background:#0b1426; color:#fff;">Audit & Assurance</option>
+                <option value="Taxation" style="background:#0b1426; color:#fff;">Taxation</option>
+                <option value="Business Advisory" style="background:#0b1426; color:#fff;">Business Advisory</option>
+                <option value="Virtual CFO" style="background:#0b1426; color:#fff;">Virtual CFO</option>
+                <option value="Accounting & Bookkeeping" style="background:#0b1426; color:#fff;">Accounting & Bookkeeping</option>
+                <option value="Company Law & ROC" style="background:#0b1426; color:#fff;">Company Law & ROC</option>
+                <option value="Startup Advisory" style="background:#0b1426; color:#fff;">Startup Advisory</option>
+                <option value="Regulatory Compliance" style="background:#0b1426; color:#fff;">Regulatory Compliance</option>
+                <option value="Transaction Advisory" style="background:#0b1426; color:#fff;">Transaction Advisory</option>
+                <option value="Risk Advisory" style="background:#0b1426; color:#fff;">Risk Advisory</option>
+                <option value="Valuation" style="background:#0b1426; color:#fff;">Valuation</option>
+                <option value="Wealth Advisory" style="background:#0b1426; color:#fff;">Wealth Advisory</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">YOUR MESSAGE</label>
+            <textarea id="wa-message" rows="3" placeholder="Briefly describe your requirements..." style="
+              background: #0b1426; border: none; border-bottom: 1px solid #334155;
+              color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; resize: none; font-family: inherit;
+            "></textarea>
+          </div>
+
+          <div style="padding-top: 10px;">
+            <button type="submit" style="
+              width: 100%; padding: 16px; background-color: #c8a45e; color: #0b1426;
+              border: none; border-radius: 12px; font-size: 14px; font-weight: 800;
+              letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+              box-shadow: 0 10px 25px -5px rgba(200, 164, 94, 0.3); transition: all 0.2s;
+            ">SEND MESSAGE</button>
+          </div>
+        </form>
+      </div>
+    `;
+
+    document.body.appendChild(modalDiv);
+
+    const closeBtn = document.getElementById('wa-modal-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        modalDiv.style.display = 'none';
+      });
+    }
+
+    modalDiv.addEventListener('click', function(e) {
+      if (e.target === modalDiv) modalDiv.style.display = 'none';
+    });
+
+    const form = document.getElementById('wa-consultation-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const fullName = document.getElementById('wa-fullname').value.trim();
+        const phone = document.getElementById('wa-phone').value.trim();
+        const email = document.getElementById('wa-email').value.trim();
+        const service = document.getElementById('wa-service').value;
+        const message = document.getElementById('wa-message').value.trim();
+        const statusMsg = document.getElementById('wa-status-msg');
+
+        if (!fullName || !phone) {
+          alert('Please enter your full name and phone number.');
+          return;
+        }
+
+        const waText = `Hello Precision & Co.,\n\nI would like to book a consultation.\n\n*Full Name:* ${fullName}\n*Phone Number:* ${phone}\n*Email Address:* ${email || 'N/A'}\n*Service of Interest:* ${service}\n*Message:* ${message || 'No details provided.'}`;
+
+        const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(waText)}`;
+        
+        if (statusMsg) {
+          statusMsg.style.display = 'block';
+          statusMsg.textContent = 'Redirecting to WhatsApp...';
+        }
+
+        window.open(whatsappUrl, '_blank');
+
+        setTimeout(function() {
+          modalDiv.style.display = 'none';
+          if (statusMsg) statusMsg.style.display = 'none';
+          form.reset();
+        }, 800);
+      });
+    }
+  }
+
+  window.openWhatsAppConsultationModal = function() {
+    createWhatsAppModal();
+    const modal = document.getElementById('whatsapp-consultation-modal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  // Bind click handlers to "Book Consultation" links/buttons across website
+  document.addEventListener('DOMContentLoaded', function() {
+    createWhatsAppModal();
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('a, button');
+      if (target) {
+        const text = (target.textContent || '').trim().toLowerCase();
+        if (text.includes('book consultation') || text.includes('book a consultation') || target.getAttribute('data-consultation-modal') === 'true') {
+          e.preventDefault();
+          window.openWhatsAppConsultationModal();
+        }
+      }
+    });
+  });
+
 })();

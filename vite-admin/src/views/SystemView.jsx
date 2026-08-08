@@ -74,7 +74,7 @@ export default function SystemView({ systemHealth, auditLogs }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono text-[11px]">
-              {auditLogs.map(log => (
+              {(Array.isArray(auditLogs) ? auditLogs : []).map(log => (
                 <tr key={log.id} className="hover:bg-slate-800/40 transition-colors">
                   <td className="py-3 px-4 text-slate-400">{new Date(log.createdAt).toLocaleString()}</td>
                   <td className="py-3 px-4 font-semibold text-white">{log.userName || 'System'}</td>

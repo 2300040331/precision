@@ -53,7 +53,8 @@ export default function LiveVisualEditor({ pages, onSaveSection }) {
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const activePageMeta = allWebsitePages.find(p => p.id === selectedPageId) || allWebsitePages[0];
-  const currentPageObj = pages.find(p => p.id === selectedPageId || p.slug === selectedPageId) || {
+  const safePages = Array.isArray(pages) ? pages : [];
+  const currentPageObj = safePages.find(p => p.id === selectedPageId || p.slug === selectedPageId) || {
     id: selectedPageId,
     title: activePageMeta.title,
     sections: [
@@ -63,7 +64,7 @@ export default function LiveVisualEditor({ pages, onSaveSection }) {
   };
 
   useEffect(() => {
-    if (currentPageObj && currentPageObj.sections && currentPageObj.sections.length > 0) {
+    if (currentPageObj && Array.isArray(currentPageObj.sections) && currentPageObj.sections.length > 0) {
       const sec = currentPageObj.sections[0];
       setSelectedSectionId(sec.id);
       loadSectionContent(sec);

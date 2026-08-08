@@ -14,7 +14,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-export default function DashboardView({ analytics, consultations, services, systemHealth, onNavigate }) {
+export default function DashboardView({ analytics, consultations = [], services = [], systemHealth, onNavigate, onOpenConsultationModal }) {
   const stats = analytics || {
     totalVisitors: 24592,
     todayVisitors: 1420,
@@ -25,7 +25,9 @@ export default function DashboardView({ analytics, consultations, services, syst
     referrers: { Direct: 42, Google: 38, LinkedIn: 14, Referral: 6 },
   };
 
-  const pendingConsultations = consultations.filter(c => c.status === 'NEW').length;
+  const safeConsultations = Array.isArray(consultations) ? consultations : [];
+  const safeServices = Array.isArray(services) ? services : [];
+  const pendingConsultations = safeConsultations.filter(c => c && c.status === 'NEW').length;
 
   return (
     <div className="space-y-8 animate-fade-in text-slate-100 font-sans">
@@ -45,16 +47,22 @@ export default function DashboardView({ analytics, consultations, services, syst
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 relative z-10">
+        <div className="flex flex-wrap items-center gap-3 relative z-10">
+          <button
+            onClick={() => onOpenConsultationModal && onOpenConsultationModal()}
+            className="flex items-center px-4 py-2.5 bg-gradient-to-r from-[#c8a45e] to-[#a8863e] hover:from-[#d4b46f] hover:to-[#c8a45e] text-[#071322] rounded-xl text-xs font-extrabold shadow-lg shadow-[#c8a45e]/20 transition-all border border-[#e0c580]/40 uppercase tracking-wider cursor-pointer"
+          >
+            <CalendarCheck className="w-4 h-4 mr-2" /> Book Consultation
+          </button>
           <button
             onClick={() => onNavigate('builder')}
-            className="flex items-center px-4 py-2.5 bg-gradient-to-r from-[#c8a45e] to-[#a8863e] hover:from-[#d4b46f] hover:to-[#c8a45e] text-[#071322] rounded-xl text-xs font-extrabold shadow-lg shadow-[#c8a45e]/20 transition-all border border-[#e0c580]/40 uppercase tracking-wider"
+            className="flex items-center px-4 py-2.5 bg-[#0f1d32] hover:bg-[#152540] text-slate-200 rounded-xl text-xs font-bold transition-all border border-[#c8a45e]/30 cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 mr-2" /> Page Builder
+            <Sparkles className="w-4 h-4 mr-2 text-[#c8a45e]" /> Page Builder
           </button>
           <button
             onClick={() => onNavigate('services')}
-            className="flex items-center px-4 py-2.5 bg-[#0f1d32] hover:bg-[#152540] text-[#c8a45e] rounded-xl text-xs font-bold transition-all border border-[#c8a45e]/30"
+            className="flex items-center px-4 py-2.5 bg-[#0f1d32] hover:bg-[#152540] text-[#c8a45e] rounded-xl text-xs font-bold transition-all border border-[#c8a45e]/30 cursor-pointer"
           >
             <Plus className="w-4 h-4 mr-2" /> Add Service
           </button>
@@ -158,6 +166,17 @@ export default function DashboardView({ analytics, consultations, services, syst
         <div className="bg-[#0f1d32]/90 p-6 rounded-3xl border border-[#c8a45e]/20 shadow-xl space-y-4">
           <h2 className="text-sm font-bold text-[#c8a45e] uppercase tracking-wider">Quick Action Shortcuts</h2>
           <div className="space-y-3">
+            <button
+              onClick={() => onOpenConsultationModal && onOpenConsultationModal()}
+              className="w-full p-3.5 bg-gradient-to-r from-[#c8a45e]/20 via-[#0f1d32] to-[#071322] hover:from-[#c8a45e]/30 border border-[#c8a45e]/40 hover:border-[#c8a45e] rounded-2xl text-left transition-all flex items-center justify-between group cursor-pointer shadow-lg shadow-[#c8a45e]/10"
+            >
+              <div className="flex items-center">
+                <CalendarCheck className="w-4 h-4 text-[#c8a45e] mr-3" />
+                <span className="text-xs font-extrabold text-white group-hover:text-[#c8a45e]">Book Consultation (WhatsApp Popup)</span>
+              </div>
+              <span className="text-[#c8a45e] text-xs font-bold">→</span>
+            </button>
+
             <button
               onClick={() => onNavigate('builder', 'home')}
               className="w-full p-3.5 bg-[#071322] hover:bg-[#152540] border border-[#c8a45e]/20 hover:border-[#c8a45e]/60 rounded-2xl text-left transition-all flex items-center justify-between group"
