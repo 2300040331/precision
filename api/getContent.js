@@ -26,6 +26,28 @@ function extractPageContent(data, targetPage) {
   if (!data) return null;
 
   const store = data.fullStore || data;
+
+  if (targetPage === 'experts') {
+    if (store.experts || store.expertsHeader) {
+      return {
+        experts: store.experts || [],
+        expertsHeader: store.expertsHeader || null,
+      };
+    }
+  }
+
+  if (targetPage === 'why-choose-us') {
+    if (store.whyChooseUs) {
+      return store.whyChooseUs;
+    }
+  }
+
+  if (targetPage === 'contact') {
+    if (store.contactUs) {
+      return store.contactUs;
+    }
+  }
+
   if (store.pages && Array.isArray(store.pages)) {
     const pageObj = store.pages.find(p => p.id === targetPage || p.slug === targetPage);
     if (pageObj && Array.isArray(pageObj.sections)) {

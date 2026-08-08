@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export default function DashboardView({ analytics, consultations = [], services = [], systemHealth, onNavigate, onOpenConsultationModal }) {
-  const stats = analytics || {
+  const defaultAnalytics = {
     totalVisitors: 24592,
     todayVisitors: 1420,
     monthVisitors: 18450,
@@ -24,6 +24,10 @@ export default function DashboardView({ analytics, consultations = [], services 
     devices: { Desktop: 68, Mobile: 26, Tablet: 6 },
     referrers: { Direct: 42, Google: 38, LinkedIn: 14, Referral: 6 },
   };
+
+  const stats = (analytics && typeof analytics === 'object' && (analytics.totalVisitors || analytics.liveVisitors))
+    ? { ...defaultAnalytics, ...analytics }
+    : defaultAnalytics;
 
   const safeConsultations = Array.isArray(consultations) ? consultations : [];
   const safeServices = Array.isArray(services) ? services : [];

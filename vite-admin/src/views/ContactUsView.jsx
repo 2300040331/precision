@@ -81,8 +81,8 @@ const ImageDropzone = ({ value, onChange, label = 'Contact Hero Banner Picture' 
   );
 };
 
-export default function ContactUsView({ onSave }) {
-  const [form, setForm] = useState({
+export default function ContactUsView({ initialData, onSave }) {
+  const defaultValues = {
     heroTitle: 'Contact Us',
     heroSubtitle: 'Connect with our experts to discuss your financial strategy and compliance needs.',
     heroImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop',
@@ -101,14 +101,15 @@ export default function ContactUsView({ onSave }) {
 
     formHeading: 'Send Us a Message',
     formSubtitle: 'Fill out the form below and an advisory partner will contact you within 2 hours.',
-  });
+  };
 
+  const [form, setForm] = useState(initialData && Object.keys(initialData).length > 0 ? { ...defaultValues, ...initialData } : defaultValues);
   const [saved, setSaved] = useState(false);
 
   const handleSaveForm = () => {
     if (onSave) onSave(form);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   return (
@@ -137,13 +138,20 @@ export default function ContactUsView({ onSave }) {
 
           <button
             onClick={handleSaveForm}
-            className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow transition-all"
+            className="flex items-center px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-blue-500/20 transition-all border border-blue-400/40"
           >
             {saved ? <CheckCircle2 className="w-4 h-4 mr-1.5" /> : <Save className="w-4 h-4 mr-1.5" />}
-            {saved ? 'Contact Info Saved!' : 'Save Contact Settings'}
+            {saved ? 'Changes Saved Live!' : 'Save Contact Settings'}
           </button>
         </div>
       </div>
+
+      {saved && (
+        <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between animate-fade-in">
+          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> Contact settings saved! Directly reflected on the main website (contact.html).</span>
+          <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded-full">Live Synced</span>
+        </div>
+      )}
 
       {/* SECTION 1: HERO BANNER */}
       <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl text-xs">

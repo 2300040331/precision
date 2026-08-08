@@ -54,42 +54,33 @@ function MainApp() {
   const [users, setUsers] = useState(fullWebsiteStore.users || []);
   const [systemHealth, setSystemHealth] = useState(fullWebsiteStore.systemHealth || {});
   const [auditLogs, setAuditLogs] = useState(fullWebsiteStore.auditLogs || []);
+  const [experts, setExperts] = useState(fullWebsiteStore.experts || []);
+  const [expertsHeader, setExpertsHeader] = useState(fullWebsiteStore.expertsHeader || { title: 'Our Experts', subtitle: 'The best industry experts will share their experience and talk about their projects.' });
+  const [whyChooseUs, setWhyChooseUs] = useState(fullWebsiteStore.whyChooseUs || {});
+  const [contactUs, setContactUs] = useState(fullWebsiteStore.contactUs || {});
+
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Welcome to Enterprise CMS', message: 'Connected to live database.', time: 'Just now', read: false },
   ]);
 
-  // Auth Check on load - Auto authenticates as Super Admin for instant access
+  // Auth Check on load - Strict session authentication required
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const urlToken = params.get('token');
-      if (urlToken) {
-        localStorage.setItem('precision_admin_token', urlToken);
-        api.setToken(urlToken);
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
+    const isSessionAuth = sessionStorage.getItem('precision_admin_authenticated') === 'true';
+    if (isSessionAuth) {
+      const token = localStorage.getItem('precision_admin_token');
+      if (token) api.setToken(token);
+      setUser(fullWebsiteStore.user);
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
-
-    const token = localStorage.getItem('precision_admin_token') || 'jwt_precision_auth_token_2026';
-    localStorage.setItem('precision_admin_token', token);
-    api.setToken(token);
-
-    api.getMe()
-      .then(u => {
-        setUser(u || fullWebsiteStore.user);
-        setIsAuthenticated(true);
-      })
-      .catch(() => {
-        setUser(fullWebsiteStore.user);
-        setIsAuthenticated(true);
-      });
   }, []);
 
   // Fetch All Data when authenticated
   const loadAllData = async () => {
     try {
       await api.syncRemoteStore();
-      const [pData, sData, iData, mData, cData, ctData, aData, settData, uData, sysData, logData] = await Promise.all([
+      const [pData, sData, iData, mData, cData, ctData, aData, settData, uData, sysData, logData, expData, whyData, cuData] = await Promise.all([
         api.getPages(),
         api.getServices(),
         api.getIndustries(),
@@ -101,6 +92,9 @@ function MainApp() {
         api.getUsers(),
         api.getSystemHealth(),
         api.getAuditLogs(),
+        api.getExperts(),
+        api.getWhyChooseUs(),
+        api.getContactUs(),
       ]);
 
       setPages(pData);
@@ -114,6 +108,12 @@ function MainApp() {
       setUsers(uData);
       setSystemHealth(sysData);
       setAuditLogs(logData);
+      if (expData) {
+        if (expData.list) setExperts(expData.list);
+        if (expData.header) setExpertsHeader(expData.header);
+      }
+      if (whyData) setWhyChooseUs(whyData);
+      if (cuData) setContactUs(cuData);
     } catch (err) {
       console.error('Data load error:', err);
     }
@@ -169,16 +169,23 @@ function MainApp() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
-    if (!loginEmail || !loginPassword) {
+    const cleanEmail = (loginEmail || '').trim();
+    const cleanPassword = (loginPassword || '').trim();
+    if (!cleanEmail || !cleanPassword) {
       setLoginError('Please enter both admin email and password.');
       return;
     }
     setLoginLoading(true);
     try {
-      const data = await api.login(loginEmail, loginPassword);
-      if (data && data.token) {
-        api.setToken(data.token);
-        setUser(data.user || { name: 'Super Admin', email: loginEmail, role: 'SUPER_ADMIN' });
+      const data = await api.login(cleanEmail, cleanPassword);
+      if (data && (data.token || data.user)) {
+        sessionStorage.setItem('precision_admin_authenticated', 'true');
+        if (data.token) {
+          localStorage.setItem('precision_admin_token', data.token);
+          api.setToken(data.token);
+        }
+        setUser(data.user || fullWebsiteStore.user);
+        setActiveTab('dashboard');
         setIsAuthenticated(true);
       } else {
         setLoginError('Invalid email or password. Access denied.');
@@ -194,6 +201,8 @@ function MainApp() {
 
   // Logout Handler
   const handleLogout = () => {
+    sessionStorage.removeItem('precision_admin_authenticated');
+    localStorage.removeItem('precision_admin_token');
     api.setToken('');
     setIsAuthenticated(false);
     setUser(null);
@@ -236,6 +245,24 @@ function MainApp() {
     await api.publishPage(pageId);
     await loadAllData();
     alert(`Page "${pageId}" changes published live to production website!`);
+  };
+
+  // Experts Handlers
+  const handleSaveExperts = async (updatedList, updatedHeader) => {
+    await api.updateExperts(updatedList, updatedHeader);
+    await loadAllData();
+  };
+
+  // Why Choose Us Handler
+  const handleSaveWhyChooseUs = async (formData) => {
+    await api.updateWhyChooseUs(formData);
+    await loadAllData();
+  };
+
+  // Contact Us Handler
+  const handleSaveContactUs = async (formData) => {
+    await api.updateContactUs(formData);
+    await loadAllData();
   };
 
   // Services Handlers
@@ -347,7 +374,7 @@ function MainApp() {
 
         <div className="bg-[#0f1d32]/90 border border-[#c8a45e]/30 w-full max-w-md rounded-3xl p-8 shadow-2xl space-y-6 relative z-10 backdrop-blur-xl">
           <div className="text-center space-y-3">
-            <img src="/logo.png" alt="Precision & Co Logo" className="h-16 mx-auto object-contain" />
+            <img src="logo.png" onError={(e) => { e.target.src = '/assets/images/logo.png'; }} alt="Precision & Co Logo" className="h-16 mx-auto object-contain" />
             <h1 className="text-lg font-bold text-white tracking-wider uppercase">ENTERPRISE CMS PORTAL</h1>
             <div className="h-0.5 w-16 bg-[#c8a45e] mx-auto rounded-full"></div>
           </div>
@@ -390,10 +417,6 @@ function MainApp() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </button>
           </form>
-
-          <div className="pt-2 text-center border-t border-[#c8a45e]/20">
-            <p className="text-[11px] text-slate-400">Default Super Admin Credentials: <code className="text-[#c8a45e] font-mono">admin@precisionandco.com</code> / <code className="text-[#c8a45e] font-mono">admin123</code></p>
-          </div>
         </div>
       </div>
     );
@@ -407,6 +430,36 @@ function MainApp() {
     }
   };
 
+  const handleAddCustomPage = async (title, slug) => {
+    const newPage = {
+      id: slug || `page-${Date.now()}`,
+      title: title,
+      slug: slug || `page-${Date.now()}`,
+      metaTitle: `${title} | Precision & Co.`,
+      metaDesc: `Official ${title} page for Precision & Co.`,
+      sections: [
+        {
+          id: `sec-${Date.now()}`,
+          name: `${title} Hero Section`,
+          type: 'hero',
+          visible: true,
+          order: 1,
+          content: JSON.stringify({
+            title: title,
+            subtitle: 'PRECISION & CO.',
+            description: `Welcome to the ${title} page.`,
+          }),
+        },
+      ],
+    };
+    const store = api.getStore();
+    store.pages = [...(store.pages || []), newPage];
+    api.saveStore(store);
+    await loadAllData();
+    setActiveTab('builder');
+    alert(`New Custom Page "${title}" created! You can now add, edit, or reorder sections for this page.`);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex">
       {/* Sidebar */}
@@ -418,6 +471,7 @@ function MainApp() {
         user={user}
         onLogout={handleLogout}
         realtimeConnected={realtimeConnected}
+        onAddCustomPage={handleAddCustomPage}
       />
 
       {/* Main Content Workspace */}
@@ -458,11 +512,27 @@ function MainApp() {
             <LiveVisualEditor pages={pages} onSaveSection={handleSaveSection} />
           )}
 
-          {activeTab === 'experts' && <ExpertsView />}
+          {activeTab === 'experts' && (
+            <ExpertsView
+              experts={experts}
+              pageHeader={expertsHeader}
+              onSave={handleSaveExperts}
+            />
+          )}
 
-          {activeTab === 'why-choose-us' && <WhyChooseUsView />}
+          {activeTab === 'why-choose-us' && (
+            <WhyChooseUsView
+              initialData={whyChooseUs}
+              onSave={handleSaveWhyChooseUs}
+            />
+          )}
 
-          {activeTab === 'contact' && <ContactUsView />}
+          {activeTab === 'contact' && (
+            <ContactUsView
+              initialData={contactUs}
+              onSave={handleSaveContactUs}
+            />
+          )}
 
           {(activeTab === 'services' || activeTab.startsWith('service-') || activeTab === 'products') && (
             <ServicesView
@@ -527,17 +597,6 @@ function MainApp() {
 
           {activeTab === 'system' && (
             <SystemView systemHealth={systemHealth} auditLogs={auditLogs} />
-          )}
-
-          {!['dashboard', 'builder', 'live-editor', 'services', 'industries', 'media', 'consultations', 'inbox', 'analytics', 'settings', 'users', 'system', 'products'].includes(activeTab) && !activeTab.startsWith('service-') && !activeTab.startsWith('industry-') && (
-            <ServicesView
-              services={services}
-              selectedServiceId={null}
-              onCreate={handleCreateService}
-              onUpdate={handleUpdateService}
-              onDuplicate={handleDuplicateService}
-              onDelete={handleDeleteService}
-            />
           )}
         </main>
       </div>

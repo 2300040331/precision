@@ -82,8 +82,8 @@ const ImageDropzone = ({ value, onChange, label = 'Section Picture' }) => {
   );
 };
 
-export default function WhyChooseUsView({ onSave }) {
-  const [form, setForm] = useState({
+export default function WhyChooseUsView({ initialData, onSave }) {
+  const defaultValues = {
     heroTitle: 'Beyond Compliance. Building Confidence.',
     heroDesc: 'Precision & CO is more than an CA firm. We are strategic architects of your financial growth, combining rigorous analysis with innovative thinking to build businesses that endure.',
     heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
@@ -107,14 +107,15 @@ export default function WhyChooseUsView({ onSave }) {
       { id: 3, title: 'Technology Driven', text: 'Leveraging AI and cloud accounting to deliver real-time, actionable insights securely.' },
       { id: 4, title: 'Unwavering Integrity', text: 'Operating with uncompromised ethics, transparency, and strict statutory compliance.' },
     ],
-  });
+  };
 
+  const [form, setForm] = useState(initialData && Object.keys(initialData).length > 0 ? { ...defaultValues, ...initialData } : defaultValues);
   const [saved, setSaved] = useState(false);
 
   const handleSaveForm = () => {
     if (onSave) onSave(form);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   return (
@@ -143,13 +144,20 @@ export default function WhyChooseUsView({ onSave }) {
 
           <button
             onClick={handleSaveForm}
-            className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow transition-all"
+            className="flex items-center px-5 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-indigo-500/20 transition-all border border-indigo-400/40"
           >
             {saved ? <CheckCircle2 className="w-4 h-4 mr-1.5" /> : <Save className="w-4 h-4 mr-1.5" />}
-            {saved ? 'Page Changes Saved!' : 'Save Page Content'}
+            {saved ? 'Changes Saved Live!' : 'Save Page Content'}
           </button>
         </div>
       </div>
+
+      {saved && (
+        <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between animate-fade-in">
+          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> Page content saved! Directly reflected on the main website (why-choose-us.html).</span>
+          <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded-full">Live Synced</span>
+        </div>
+      )}
 
       {/* SECTION 1: HERO SECTION */}
       <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl text-xs">

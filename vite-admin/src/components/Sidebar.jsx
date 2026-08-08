@@ -36,6 +36,7 @@ import {
   HeartHandshake,
   Award,
   Mail,
+  Plus,
 } from 'lucide-react';
 
 const getPublicSiteUrl = (path = '/home.html') => {
@@ -48,7 +49,7 @@ const getPublicSiteUrl = (path = '/home.html') => {
   return `https://precision-henna.vercel.app${path}`;
 };
 
-export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, user, onLogout, realtimeConnected }) {
+export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, user, onLogout, realtimeConnected, onAddCustomPage }) {
   const [servicesOpen, setServicesOpen] = useState(true);
   const [industriesOpen, setIndustriesOpen] = useState(true);
 
@@ -229,6 +230,23 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
             <ImageIcon className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'media' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
             {!collapsed && <span className="flex-1 text-left truncate">Media Library</span>}
           </button>
+
+          {!collapsed && (
+            <button
+              onClick={() => {
+                const title = prompt('Enter New Page Title (e.g. Careers, Privacy Policy, CSR):');
+                if (!title) return;
+                const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                if (onAddCustomPage) {
+                  onAddCustomPage(title, slug);
+                }
+              }}
+              className="w-full flex items-center justify-center px-3 py-2 rounded-xl text-xs font-extrabold text-[#c8a45e] hover:text-white bg-[#0f1d32] hover:bg-[#152540] border border-[#c8a45e]/40 transition-all mt-2 cursor-pointer shadow-md"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>+ Add Custom Page</span>
+            </button>
+          )}
         </div>
 
         {/* PRACTICE MANAGEMENT */}

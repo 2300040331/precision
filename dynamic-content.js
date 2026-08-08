@@ -86,6 +86,16 @@
 
     if (!raw) return flat;
 
+    if (pageKey === 'contact' && (raw.contactUs || raw.contact)) {
+      flat = { ...(raw.contactUs || raw.contact), ...flat };
+    }
+    if (pageKey === 'why-choose-us' && (raw.whyChooseUs || raw['why-choose-us'])) {
+      flat = { ...(raw.whyChooseUs || raw['why-choose-us']), ...flat };
+    }
+    if (pageKey === 'experts' && (raw.experts || raw.expertsHeader)) {
+      flat = { experts: raw.experts, expertsHeader: raw.expertsHeader, ...flat };
+    }
+
     // Single page object returned for ?page=pageKey
     if (raw.sections && Array.isArray(raw.sections)) {
       raw.sections.forEach(sec => {
@@ -122,20 +132,19 @@
           }
         });
       }
-      return flat;
     }
 
     if (raw[pageKey] && typeof raw[pageKey] === 'object') {
-      return raw[pageKey];
+      flat = { ...raw[pageKey], ...flat };
     }
 
-    return {};
+    return flat;
   }
 
   // Enable Live Admin CMS Sync
   const FREEZE_MAIN_WEBSITE = false;
 
-  // Apply content bindings for data-content attributes
+  // Apply content bindings for data-content attributes and dynamic page sections
   function applyContentBindings(data) {
     if (FREEZE_MAIN_WEBSITE) {
       return;
@@ -168,6 +177,125 @@
           el.href = data[key];
         } else {
           el.innerHTML = data[key];
+        }
+      }
+    });
+
+    // 3. Experts Page Live Sync (experts.html or /experts)
+    const isExpertsPage = window.location.pathname.includes('experts');
+    if (isExpertsPage) {
+      try {
+        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
+        if (fullStoreStr) {
+          const store = JSON.parse(fullStoreStr);
+          updateExpertsPage(store.experts, store.expertsHeader);
+        } else if (data.experts || data.expertsHeader) {
+          updateExpertsPage(data.experts, data.expertsHeader);
+        }
+      } catch (e) {}
+    }
+
+    // 4. Why Choose Us Page Live Sync (why-choose-us.html or /why-choose-us)
+    const isWhyPage = window.location.pathname.includes('why-choose-us');
+    if (isWhyPage) {
+      try {
+        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
+        if (fullStoreStr) {
+          const store = JSON.parse(fullStoreStr);
+          const whyData = store.whyChooseUs;
+          if (whyData) {
+            const heroTitle = document.querySelector('.wcu-hero__title, .hero-title, h1');
+            if (heroTitle && whyData.heroTitle) heroTitle.innerHTML = whyData.heroTitle;
+            const heroDesc = document.querySelector('.wcu-hero__subtitle, .hero-desc, p.lead');
+            if (heroDesc && whyData.heroDesc) heroDesc.innerHTML = whyData.heroDesc;
+            const philBody = document.querySelector('.wcu-philosophy__text, .philosophy-body');
+            if (philBody && whyData.philosophyBody) philBody.innerHTML = whyData.philosophyBody;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 5. Contact Us Page Live Sync (contact.html or /contact)
+    const isContactPage = window.location.pathname.includes('contact');
+    if (isContactPage) {
+      try {
+        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
+        let cData = null;
+        if (fullStoreStr) {
+          const store = JSON.parse(fullStoreStr);
+          cData = store.contactUs || store.contact;
+        }
+        if (!cData) cData = data;
+
+        if (cData) {
+          const phoneEl = document.querySelector('[data-content="primaryPhone"]');
+          if (phoneEl && cData.primaryPhone) phoneEl.textContent = cData.primaryPhone;
+          const secPhoneEl = document.querySelector('[data-content="secondaryPhone"]');
+          if (secPhoneEl && cData.secondaryPhone) secPhoneEl.textContent = cData.secondaryPhone;
+          const emailEl = document.querySelector('[data-content="email"]');
+          if (emailEl && cData.email) emailEl.textContent = cData.email;
+          const taxEmailEl = document.querySelector('[data-content="taxEmail"]');
+          if (taxEmailEl && cData.taxEmail) taxEmailEl.textContent = cData.taxEmail;
+          const hqEl = document.querySelector('[data-content="headquarters"]');
+          if (hqEl && cData.headquarters) hqEl.textContent = cData.headquarters;
+        }
+      } catch (e) {}
+    }
+  }
+
+  function updateExpertsPage(experts, expertsHeader) {
+    if (expertsHeader) {
+      const h1 = document.querySelector('.founders-title');
+      if (h1 && expertsHeader.title) h1.textContent = expertsHeader.title;
+      const sub = document.querySelector('.founders-subtitle');
+      if (sub && expertsHeader.subtitle) sub.textContent = expertsHeader.subtitle;
+    }
+
+    if (!Array.isArray(experts) || experts.length === 0) return;
+
+    const cards = document.querySelectorAll('.founder-card');
+    cards.forEach((card, idx) => {
+      const exp = experts[idx];
+      if (!exp) return;
+
+      // Update Card Image
+      const cardImg = card.querySelector('.fcard-img-wrapper img');
+      if (cardImg && exp.image) {
+        cardImg.src = exp.image;
+      }
+
+      // Update Card Text
+      const nameEl = card.querySelector('.fcard-name');
+      if (nameEl && exp.name) nameEl.textContent = exp.name;
+
+      const roleEl = card.querySelector('.fcard-role');
+      if (roleEl && exp.role) roleEl.textContent = exp.role;
+
+      const qualEl = card.querySelector('.fcard-qual');
+      if (qualEl && exp.qualifications) qualEl.textContent = exp.qualifications;
+
+      // Update corresponding Modal Image and Text
+      const modalId = card.getAttribute('data-founder') || (idx + 1);
+      const modal = document.getElementById(`modal-${modalId}`) || document.querySelectorAll('.founder-modal')[idx];
+      if (modal) {
+        const modalImg = modal.querySelector('.fmodal-img-col img');
+        if (modalImg && exp.image) modalImg.src = exp.image;
+
+        const mName = modal.querySelector('.fmodal-name');
+        if (mName && exp.name) mName.textContent = exp.name;
+
+        const mRole = modal.querySelector('.fmodal-role');
+        if (mRole && exp.role) mRole.textContent = exp.role;
+
+        const mQual = modal.querySelector('.fmodal-qual');
+        if (mQual && exp.qualifications) mQual.textContent = exp.qualifications;
+
+        const mBodyParagraphs = modal.querySelectorAll('.fmodal-body p');
+        if (mBodyParagraphs && mBodyParagraphs.length >= 4) {
+          if (exp.summary) mBodyParagraphs[0].textContent = exp.summary;
+          if (exp.expertise) mBodyParagraphs[1].textContent = exp.expertise;
+          if (exp.memberships) mBodyParagraphs[2].textContent = exp.memberships;
+          if (exp.industries) mBodyParagraphs[3].textContent = exp.industries;
         }
       }
     });

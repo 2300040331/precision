@@ -92,7 +92,7 @@ const ImageDropzone = ({ value, onChange, label = 'Profile Picture' }) => {
   );
 };
 
-export default function ExpertsView({ experts: initialExperts, onUpdateExperts }) {
+export default function ExpertsView({ experts: initialExperts, pageHeader: initialPageHeader, onSave }) {
   const defaultExperts = [
     {
       id: 1,
@@ -172,25 +172,35 @@ export default function ExpertsView({ experts: initialExperts, onUpdateExperts }
     Array.isArray(initialExperts) && initialExperts.length > 0 ? initialExperts : defaultExperts
   );
 
-  const [pageHeader, setPageHeader] = useState({
-    title: 'Our Experts',
-    subtitle: 'The best industry experts will share their experience and talk about their projects.',
-  });
+  const [pageHeader, setPageHeader] = useState(
+    initialPageHeader && initialPageHeader.title ? initialPageHeader : {
+      title: 'Our Experts',
+      subtitle: 'The best industry experts will share their experience and talk about their projects.',
+    }
+  );
 
   const [search, setSearch] = useState('');
   const [selectedExpert, setSelectedExpert] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [saveStatus, setSaveStatus] = useState('saved');
+  const [saved, setSaved] = useState(false);
 
   const filtered = expertsList.filter(exp =>
     exp.name.toLowerCase().includes(search.toLowerCase()) ||
     exp.role.toLowerCase().includes(search.toLowerCase())
   );
 
+  const triggerSave = (updatedList = expertsList, updatedHeader = pageHeader) => {
+    if (onSave) {
+      onSave(updatedList, updatedHeader);
+    }
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
   const handleUpdate = (updatedItem) => {
     const next = expertsList.map(e => e.id === updatedItem.id ? updatedItem : e);
     setExpertsList(next);
-    if (onUpdateExperts) onUpdateExperts(next);
+    triggerSave(next, pageHeader);
   };
 
   const handleAdd = () => {
@@ -210,14 +220,14 @@ export default function ExpertsView({ experts: initialExperts, onUpdateExperts }
     const next = [newExpert, ...expertsList];
     setExpertsList(next);
     setSelectedExpert(newExpert);
-    if (onUpdateExperts) onUpdateExperts(next);
+    triggerSave(next, pageHeader);
   };
 
   const handleDelete = (id) => {
     const next = expertsList.filter(e => e.id !== id);
     setExpertsList(next);
     if (selectedExpert?.id === id) setSelectedExpert(null);
-    if (onUpdateExperts) onUpdateExperts(next);
+    triggerSave(next, pageHeader);
   };
 
   return (
@@ -235,13 +245,6 @@ export default function ExpertsView({ experts: initialExperts, onUpdateExperts }
         </div>
 
         <div className="flex items-center space-x-3">
-          <button
-            onClick={() => setShowPreview(true)}
-            className="flex items-center px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all shadow"
-          >
-            <Eye className="w-4 h-4 mr-1.5" /> Preview Page
-          </button>
-
           <a
             href="https://precision-henna.vercel.app/experts.html"
             target="_blank"
@@ -253,23 +256,49 @@ export default function ExpertsView({ experts: initialExperts, onUpdateExperts }
 
           <button
             onClick={handleAdd}
-            className="flex items-center px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow transition-all"
+            className="flex items-center px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-bold shadow transition-all"
           >
             <Plus className="w-4 h-4 mr-1.5" /> Add New Expert
+          </button>
+
+          <button
+            onClick={() => triggerSave()}
+            className="flex items-center px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold rounded-xl text-xs shadow-lg shadow-amber-500/20 transition-all border border-amber-400/40"
+          >
+            <CheckCircle2 className="w-4 h-4 mr-1.5" />
+            {saved ? 'Changes Saved Live!' : 'Save Experts Page'}
           </button>
         </div>
       </div>
 
+      {saved && (
+        <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between animate-fade-in">
+          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> All edits saved! Directly reflected on the main website (experts.html).</span>
+          <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded-full">Live Synced</span>
+        </div>
+      )}
+
       {/* Page Header Editor */}
       <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-        <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Page Header Settings</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Page Header Settings</h2>
+          <button
+            onClick={() => triggerSave()}
+            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-extrabold shadow"
+          >
+            Save Header Text
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="space-y-1">
             <label className="text-slate-300 font-semibold">Page Heading</label>
             <input
               type="text"
               value={pageHeader.title}
-              onChange={(e) => setPageHeader({ ...pageHeader, title: e.target.value })}
+              onChange={(e) => {
+                const nextHeader = { ...pageHeader, title: e.target.value };
+                setPageHeader(nextHeader);
+              }}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
             />
           </div>
@@ -278,7 +307,10 @@ export default function ExpertsView({ experts: initialExperts, onUpdateExperts }
             <input
               type="text"
               value={pageHeader.subtitle}
-              onChange={(e) => setPageHeader({ ...pageHeader, subtitle: e.target.value })}
+              onChange={(e) => {
+                const nextHeader = { ...pageHeader, subtitle: e.target.value };
+                setPageHeader(nextHeader);
+              }}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
             />
           </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2 } from 'lucide-react';
 
-export default function BookConsultationModal({ isOpen, onClose, onAddConsultation, targetWhatsAppNumber = '919876543210' }) {
+export default function BookConsultationModal({ isOpen, onClose, onAddConsultation, targetWhatsAppNumber = '919618757596' }) {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
@@ -35,8 +35,8 @@ export default function BookConsultationModal({ isOpen, onClose, onAddConsultati
     }
 
     // Clean phone number or default to target WhatsApp number
-    let cleanTarget = (targetWhatsAppNumber || '919876543210').replace(/[^0-9]/g, '');
-    if (!cleanTarget) cleanTarget = '919876543210';
+    let cleanTarget = (targetWhatsAppNumber || '919618757596').replace(/[^0-9]/g, '');
+    if (!cleanTarget) cleanTarget = '919618757596';
 
     // Build formatted message for WhatsApp
     const waMessage = 
@@ -120,7 +120,7 @@ I would like to book a consultation.
               <input
                 type="text"
                 required
-                placeholder="John Doe"
+                placeholder="Enter your full name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-full bg-[#0b1426] border-b border-slate-700 focus:border-[#c8a45e] py-2 text-sm text-white placeholder-slate-500 focus:outline-none transition-colors"
@@ -134,7 +134,7 @@ I would like to book a consultation.
               <input
                 type="text"
                 required
-                placeholder="+91 98765 43210"
+                placeholder="Enter your phone number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full bg-[#0b1426] border-b border-slate-700 focus:border-[#c8a45e] py-2 text-sm text-white placeholder-slate-500 focus:outline-none transition-colors"
@@ -149,7 +149,7 @@ I would like to book a consultation.
             </label>
             <input
               type="email"
-              placeholder="john@company.com"
+              placeholder="Enter your email address"
               value={emailAddress}
               onChange={(e) => setEmailAddress(e.target.value)}
               className="w-full bg-[#0b1426] border-b border-slate-700 focus:border-[#c8a45e] py-2 text-sm text-white placeholder-slate-500 focus:outline-none transition-colors"

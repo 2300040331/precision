@@ -674,14 +674,14 @@
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
             <div style="display: flex; flex-direction: column; gap: 6px;">
               <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">FULL NAME</label>
-              <input type="text" id="wa-fullname" required placeholder="John Doe" style="
+              <input type="text" id="wa-fullname" required placeholder="Enter your full name" style="
                 background: #0b1426; border: none; border-bottom: 1px solid #334155;
                 color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
               ">
             </div>
             <div style="display: flex; flex-direction: column; gap: 6px;">
               <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">PHONE NUMBER</label>
-              <input type="text" id="wa-phone" required placeholder="+91 98765 43210" style="
+              <input type="text" id="wa-phone" required placeholder="Enter your phone number" style="
                 background: #0b1426; border: none; border-bottom: 1px solid #334155;
                 color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
               ">
@@ -690,7 +690,7 @@
 
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 11px; font-weight: 800; color: #c8a45e; letter-spacing: 0.1em; text-transform: uppercase;">EMAIL ADDRESS</label>
-            <input type="email" id="wa-email" placeholder="john@company.com" style="
+            <input type="email" id="wa-email" placeholder="Enter your email address" style="
               background: #0b1426; border: none; border-bottom: 1px solid #334155;
               color: #ffffff; padding: 8px 0; font-size: 14px; outline: none; transition: border-color 0.2s;
             ">
@@ -770,7 +770,7 @@
 
         const waText = `Hello Precision & Co.,\n\nI would like to book a consultation.\n\n*Full Name:* ${fullName}\n*Phone Number:* ${phone}\n*Email Address:* ${email || 'N/A'}\n*Service of Interest:* ${service}\n*Message:* ${message || 'No details provided.'}`;
 
-        const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(waText)}`;
+        const whatsappUrl = `https://wa.me/919618757596?text=${encodeURIComponent(waText)}`;
         
         if (statusMsg) {
           statusMsg.style.display = 'block';

@@ -47,6 +47,19 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
       };
       return { ...defaultHero, ...parsed };
     }
+    if (sec.type === 'stats' || sec.id === 'sec-stats') {
+      const defaultStats = {
+        stat1Title: 'Trusted Expertise',
+        stat1Text: 'Decades of combined experience you can rely on.',
+        stat2Title: 'Strategic Approach',
+        stat2Text: 'Solutions tailored to your business goals.',
+        stat3Title: 'Value Driven',
+        stat3Text: 'Delivering measurable impact and long-term value.',
+        stat4Title: 'Client First',
+        stat4Text: 'Your success is our commitment.',
+      };
+      return { ...defaultStats, ...parsed };
+    }
     if (sec.type === 'about_preview' || sec.id === 'sec-about') {
       const defaultAbout = {
         subheading: 'ABOUT PRECISION & CO',
