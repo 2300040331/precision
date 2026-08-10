@@ -18,6 +18,7 @@
     try {
       let pageKey = window.location.pathname.split('/').pop().replace('.html', '');
       if (!pageKey || pageKey === 'index') pageKey = 'home';
+      let currentPageData = null;
 
       // 1. Send Visitor Telemetry
       trackVisitor();
@@ -27,29 +28,42 @@
 
       // Listen for real-time storage changes (cross-tab / cross-window CMS updates)
       window.addEventListener('storage', (e) => {
-        if (e.key === 'precision_cms_content' || e.key === 'precision_cms_full_store') {
+        if (!e.key || e.key === 'precision_cms_content' || e.key === 'precision_cms_full_store') {
           refreshFromCache(pageKey);
         }
       });
 
       // 3. Fetch Latest Dynamic Content from CMS API for current page
       try {
-        const res = await fetch(`/api/getContent?page=${pageKey}`);
+        const res = await fetch(`${API_BASE}/getContent?page=${encodeURIComponent(pageKey)}`);
         if (res.ok) {
           const pageData = await res.json();
           if (pageData && typeof pageData === 'object' && Object.keys(pageData).length > 0) {
             const flatData = extractPageFlatContent(pageData, pageKey);
             if (Object.keys(flatData).length > 0) {
+              currentPageData = flatData;
               const currentCache = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
-              const merged = { ...currentCache, ...flatData };
-              applyContentBindings(merged);
-              localStorage.setItem('precision_cms_content', JSON.stringify(merged));
+              const mergedPage = { ...(currentCache[pageKey] || {}), ...flatData };
+              applyContentBindings(mergedPage);
+              localStorage.setItem('precision_cms_content', JSON.stringify({
+                ...currentCache,
+                [pageKey]: mergedPage,
+              }));
             }
           }
         }
       } catch (err) {}
 
-      // 4. Attach Consultation & Contact Form Listeners
+      // 4. Fetch the complete CMS store for shared navigation, footer, services, and industries.
+      try {
+        const fullStore = await fetchFullStore();
+        if (fullStore) {
+          localStorage.setItem('precision_cms_full_store', JSON.stringify(fullStore));
+          applyFullStore(fullStore, pageKey, currentPageData);
+        }
+      } catch (err) {}
+
+      // 5. Attach Consultation & Contact Form Listeners
       setupFormListeners();
     } catch (err) {
       console.warn('CMS dynamic sync warning (using cached/default content):', err);
@@ -64,8 +78,9 @@
         const flatData = extractPageFlatContent(fullStore, pageKey);
         if (flatData && Object.keys(flatData).length > 0) {
           applyContentBindings(flatData);
-          return;
         }
+        applyFullStore(fullStore, pageKey, flatData);
+        return;
       } catch (e) {}
     }
 
@@ -138,7 +153,29 @@
       flat = { ...raw[pageKey], ...flat };
     }
 
+    if (raw.flat && raw.flat[pageKey] && typeof raw.flat[pageKey] === 'object') {
+      flat = { ...raw.flat[pageKey], ...flat };
+    }
+
+    if (
+      Object.keys(flat).length === 0 &&
+      !raw.fullStore &&
+      !raw.flat &&
+      !raw.pages &&
+      !raw.sections
+    ) {
+      flat = { ...raw };
+    }
+
     return flat;
+  }
+
+  async function fetchFullStore() {
+    const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data || typeof data !== 'object') return null;
+    return data.fullStore || data;
   }
 
   // Enable Live Admin CMS Sync
@@ -299,6 +336,462 @@
         }
       }
     });
+  }
+
+  const SERVICE_PUBLIC_SLUGS = {
+    'services-taxation': 'services-tax',
+    'services-business-advisory': 'services-consulting',
+    'services-startup-advisory': 'services-startup',
+    'services-compliance': 'services-regulatory',
+    'services-transaction-advisory': 'services-transaction',
+    'services-risk-advisory': 'services-risk',
+    'services-wealth-advisory': 'services-wealth',
+  };
+
+  const INDUSTRY_PUBLIC_SLUGS = {
+    'industry-global-business': 'industry-import-export',
+  };
+
+  function applyFullStore(rawStore, pageKey, pageData = null) {
+    if (!rawStore || typeof rawStore !== 'object') return;
+    const store = rawStore.fullStore || rawStore;
+
+    const flatData = pageData || extractPageFlatContent(store, pageKey);
+    if (flatData && Object.keys(flatData).length > 0) {
+      applyContentBindings(flatData);
+      applyPageChrome(flatData, pageKey);
+    }
+
+    updateSharedNavigation(store);
+    updateSharedFooter(store);
+
+    if (pageKey === 'services') {
+      renderServicesHub(store, flatData);
+    } else if (pageKey.startsWith('services-')) {
+      const service = findServiceForPage(store, pageKey);
+      if (service) renderServiceDetail(service);
+    } else if (pageKey === 'industries') {
+      renderIndustriesHub(store, flatData);
+    } else if (pageKey.startsWith('industry-')) {
+      const industry = findIndustryForPage(store, pageKey);
+      if (industry) renderIndustryDetail(industry);
+    }
+
+    refreshAnimationEngines();
+  }
+
+  function applyPageChrome(data, pageKey) {
+    if (!data) return;
+
+    if (pageKey === 'services') {
+      const title = document.querySelector('.services-hero__title');
+      const desc = document.querySelector('.services-hero__desc');
+      if (title && data.title) title.innerHTML = data.title;
+      if (desc && (data.description || data.subtitle)) desc.innerHTML = data.description || data.subtitle;
+    }
+
+    if (pageKey === 'industries') {
+      const title = document.querySelector('.ind-hero-title');
+      const desc = document.querySelector('.ind-hero-subtitle');
+      if (title && data.title) title.innerHTML = data.title;
+      if (desc && (data.description || data.subtitle)) desc.innerHTML = data.description || data.subtitle;
+    }
+
+    const ctaTitle = document.querySelectorAll('.royal-cta__title, .ind-final-content h2');
+    const ctaText = document.querySelectorAll('.royal-cta__text');
+    const ctaButtons = document.querySelectorAll('.royal-cta__btn, .ind-btn-gold');
+    ctaTitle.forEach(el => {
+      if (data.ctaTitle) el.innerHTML = data.ctaTitle;
+    });
+    ctaText.forEach(el => {
+      if (data.ctaDescription || data.ctaText) el.innerHTML = data.ctaDescription || data.ctaText;
+    });
+    ctaButtons.forEach(el => {
+      if (data.ctaButtonText || data.buttonText) {
+        const label = el.querySelector('span') || el;
+        label.textContent = data.ctaButtonText || data.buttonText;
+      }
+      if (data.ctaButtonLink || data.buttonLink) {
+        el.href = data.ctaButtonLink || data.buttonLink;
+      }
+    });
+  }
+
+  function updateSharedNavigation(store) {
+    const services = getActiveItems(store.services);
+    const industries = getActiveItems(store.industries);
+
+    document.querySelectorAll('.mega-menu__group').forEach(group => {
+      const category = group.querySelector('.mega-menu__category');
+      const pane = group.querySelector('.mega-menu__pane');
+      if (!category || !pane) return;
+
+      const label = (category.textContent || '').trim().toLowerCase();
+      if (label.startsWith('services') && services.length > 0) {
+        pane.innerHTML = services.map(service => {
+          const publicSlug = servicePublicSlug(service);
+          return `<a href="${escapeAttr(publicSlug)}.html" class="mega-menu__item">${escapeHtml(service.title || publicSlug)}</a>`;
+        }).join('');
+      }
+
+      if (label.startsWith('industries') && industries.length > 0) {
+        pane.innerHTML = industries.map(industry => {
+          const publicSlug = industryPublicSlug(industry);
+          return `<a href="${escapeAttr(publicSlug)}.html" class="mega-menu__item">${escapeHtml(industry.title || publicSlug)}</a>`;
+        }).join('');
+      }
+    });
+  }
+
+  function updateSharedFooter(store) {
+    const services = getActiveItems(store.services);
+    const settings = store.settings || {};
+    const contact = store.contactUs || store.contact || {};
+    const footerData = getFooterData(store);
+
+    document.querySelectorAll('.footer__links-group').forEach(group => {
+      const heading = group.querySelector('.footer__heading');
+      const list = group.querySelector('.footer__links');
+      if (!heading || !list) return;
+      if ((heading.textContent || '').trim().toLowerCase() === 'services' && services.length > 0) {
+        list.innerHTML = services.map(service => {
+          const publicSlug = servicePublicSlug(service);
+          return `<li><a href="${escapeAttr(publicSlug)}.html" class="footer__link">${escapeHtml(service.title || publicSlug)}</a></li>`;
+        }).join('');
+      }
+    });
+
+    document.querySelectorAll('.footer__description').forEach(el => {
+      const value = footerData.description || settings.tagline;
+      if (value) el.innerHTML = value;
+    });
+
+    document.querySelectorAll('.footer__copyright').forEach(el => {
+      if (footerData.copyright) el.innerHTML = footerData.copyright;
+    });
+
+    document.querySelectorAll('.footer__contact-item').forEach(item => {
+      const paragraphs = item.querySelectorAll('p');
+      if (paragraphs.length === 0) return;
+      const iconPath = item.querySelector('svg path, svg rect')?.getAttribute('d') || '';
+      if (iconPath.includes('M20 10') && (footerData.address || contact.headquarters || settings.address)) {
+        const address = footerData.address || contact.headquarters || settings.address;
+        paragraphs[0].textContent = address;
+        paragraphs.forEach((p, index) => {
+          if (index > 0) p.textContent = '';
+        });
+      } else if (iconPath.includes('M22 16.92') && (footerData.phone || contact.primaryPhone || settings.contactPhone)) {
+        paragraphs[0].textContent = footerData.phone || contact.primaryPhone || settings.contactPhone;
+        if (paragraphs[1] && contact.secondaryPhone) paragraphs[1].textContent = contact.secondaryPhone;
+      } else if ((footerData.email || contact.email || settings.contactEmail)) {
+        paragraphs[0].textContent = footerData.email || contact.email || settings.contactEmail;
+        if (paragraphs[1] && contact.taxEmail) paragraphs[1].textContent = contact.taxEmail;
+      }
+    });
+  }
+
+  function getFooterData(store) {
+    const pages = Array.isArray(store.pages) ? store.pages : [];
+    for (const page of pages) {
+      const section = (page.sections || []).find(sec => sec.type === 'footer' || sec.id === 'sec-footer');
+      if (!section || !section.content) continue;
+      try {
+        return typeof section.content === 'string' ? JSON.parse(section.content) : section.content;
+      } catch (e) {}
+    }
+    return {};
+  }
+
+  function renderServicesHub(store, pageData = {}) {
+    const services = getActiveItems(store.services);
+    const grid = document.querySelector('.service-cards-grid');
+    if (grid && services.length > 0) {
+      grid.innerHTML = services.map((service, index) => {
+        const publicSlug = servicePublicSlug(service);
+        const stagger = Math.min(index + 1, 12);
+        return `
+          <a href="${escapeAttr(publicSlug)}.html" class="service-hub-card glass-panel reveal-up stagger-${stagger}">
+            <h3>${escapeHtml(service.title || 'Service')}</h3>
+            <p>${escapeHtml(service.summary || service.description || '')}</p>
+            <span class="hub-card-arrow">&rarr;</span>
+          </a>
+        `;
+      }).join('');
+    }
+
+    applyPageChrome(pageData, 'services');
+  }
+
+  function renderServiceDetail(service) {
+    setDocumentMeta(service.metaTitle || service.title, service.metaDesc || service.summary || service.description, service.keywords);
+
+    setText('.svc-hero__title', service.title);
+    setText('.svc-hero__subtitle', service.heroSubtitle || service.subtitle || service.summary);
+    setText('.svc-hero__desc', service.heroDescription || service.description || service.summary);
+    setText('.svc-hero__ctas .btn-primary', service.heroBtnText || service.ctaText);
+    setImage('.svc-hero__image img', service.heroImage || service.image, service.title);
+
+    setText('.svc-intro__heading h2', service.introHeading);
+    const introText = document.querySelector('.svc-intro__text');
+    if (introText && (service.introText1 || service.introText2 || service.description)) {
+      introText.innerHTML = [service.introText1 || service.description, service.introText2]
+        .filter(Boolean)
+        .map(text => `<p>${escapeHtml(text)}</p>`)
+        .join('');
+    }
+
+    setText('.svc-capabilities .section-title', service.capabilitiesTitle || 'Our Capabilities');
+    const capabilities = Array.isArray(service.capabilities) && service.capabilities.length
+      ? service.capabilities
+      : arrayFromStrings(service.features).map((text, index) => ({ title: `Capability ${index + 1}`, text }));
+    renderServiceCards('.capabilities-grid', capabilities);
+
+    setText('.svc-matters .section-title', service.mattersTitle || 'Why It Matters');
+    renderSimpleCards('.matters-grid', service.mattersCards);
+
+    setText('.svc-wedo .section-title', service.timelineTitle || 'What We Do');
+    renderTimeline(service.timelineSteps);
+
+    updateCurrentPageCta(service);
+  }
+
+  function renderServiceCards(selector, cards) {
+    const grid = document.querySelector(selector);
+    if (!grid || !Array.isArray(cards) || cards.length === 0) return;
+
+    grid.innerHTML = cards.map(card => `
+      <div class="cap-card gsap-stagger">
+        ${card.image ? `<div class="cap-image"><img src="${escapeAttr(card.image)}" alt="${escapeAttr(card.title || 'Capability')}"></div>` : ''}
+        <div class="cap-content">
+          <h3>${escapeHtml(card.title || 'Capability')}</h3>
+          <p>${escapeHtml(card.text || card.description || '')}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderSimpleCards(selector, cards) {
+    const grid = document.querySelector(selector);
+    if (!grid || !Array.isArray(cards) || cards.length === 0) return;
+
+    grid.innerHTML = cards.map(card => `
+      <div class="matter-card glass-panel gsap-stagger">
+        <h3>${escapeHtml(card.title || 'Benefit')}</h3>
+        <p>${escapeHtml(card.text || card.description || '')}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderTimeline(steps) {
+    const timeline = document.querySelector('.alternating-timeline');
+    if (!timeline || !Array.isArray(steps) || steps.length === 0) return;
+
+    timeline.innerHTML = steps.map((step, index) => `
+      <div class="alt-block ${index % 2 === 0 ? 'left gsap-slide-right' : 'right gsap-slide-left'}">
+        <div class="alt-icon">*</div>
+        <h3>${escapeHtml(step.title || `Step ${index + 1}`)}</h3>
+        <p>${escapeHtml(step.text || step.description || '')}</p>
+      </div>
+    `).join('') + '<div class="alt-line"></div>';
+  }
+
+  function renderIndustriesHub(store, pageData = {}) {
+    const industries = getActiveItems(store.industries);
+    const nav = document.querySelector('.ind-nav');
+    const wrapper = document.querySelector('.ind-sections-wrapper');
+
+    if (nav && industries.length > 0) {
+      nav.innerHTML = industries.map(industry => {
+        const publicSlug = industryPublicSlug(industry);
+        const target = publicSlug.replace(/^industry-/, '');
+        return `<li><a href="${escapeAttr(publicSlug)}.html" class="ind-nav-link" data-target="${escapeAttr(target)}">${escapeHtml(industry.title || target)}</a></li>`;
+      }).join('');
+    }
+
+    if (wrapper && industries.length > 0) {
+      wrapper.innerHTML = industries.map((industry, index) => renderIndustryHubSection(industry, index)).join('');
+    }
+
+    applyPageChrome(pageData, 'industries');
+  }
+
+  function renderIndustryHubSection(industry, index) {
+    const publicSlug = industryPublicSlug(industry);
+    const target = publicSlug.replace(/^industry-/, '');
+    const imageBlock = `
+      <div class="ind-col ind-col-img gs-reveal-img">
+        <div class="ind-img-wrapper">
+          <img src="${escapeAttr(industry.heroImage || industry.image || '')}" alt="${escapeAttr(industry.title || 'Industry')}">
+        </div>
+      </div>
+    `;
+    const textBlock = `
+      <div class="ind-col ind-col-text gs-reveal-text">
+        <div class="ind-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/></svg></div>
+        <h2 class="ind-title">${escapeHtml(industry.title || 'Industry')}</h2>
+        <div class="ind-divider"></div>
+        <p class="ind-overview">${escapeHtml(industry.summary || industry.heroDescription || '')}</p>
+        <div class="ind-details">
+          <div class="ind-detail-block">
+            <h4>${escapeHtml(industry.card1Title || 'How We Help')}</h4>
+            <p>${escapeHtml(industry.card1Text || industry.heroDescription || '')}</p>
+          </div>
+          <div class="ind-detail-block">
+            <h4>${escapeHtml(industry.card2Title || 'Specialized Support')}</h4>
+            <p>${escapeHtml(industry.card2Text || industry.summary || '')}</p>
+          </div>
+        </div>
+        <a href="${escapeAttr(publicSlug)}.html" class="ind-cta">Explore Solutions <span class="arrow">&rarr;</span></a>
+      </div>
+    `;
+    const content = index % 2 === 0 ? `${imageBlock}${textBlock}` : `${textBlock}${imageBlock}`;
+    const layout = index % 2 === 0 ? 'ind-layout-img-left' : 'ind-layout-content-left';
+    return `<section class="ind-section" id="${escapeAttr(target)}"><div class="ind-floating-block ${layout}">${content}</div></section>`;
+  }
+
+  function renderIndustryDetail(industry) {
+    setDocumentMeta(industry.metaTitle || `${industry.title} Industry Expertise | Precision & Co`, industry.metaDesc || industry.heroDescription || industry.summary, industry.keywords);
+
+    setText('.idetail-hero-subtitle', industry.heroSubtitle || 'Industry Expertise');
+    setText('.idetail-hero-title', industry.title);
+    setText('.idetail-overview-text', industry.heroDescription || industry.summary);
+    const heroBg = document.querySelector('.idetail-hero-bg');
+    const heroImage = industry.heroImage || industry.image;
+    if (heroBg && heroImage) heroBg.style.backgroundImage = `url('${heroImage}')`;
+
+    setText('.idetail-section-title', industry.sectionTitle || 'How We Help');
+    const cards = [
+      { title: industry.card1Title, text: industry.card1Text },
+      { title: industry.card2Title, text: industry.card2Text },
+      { title: industry.card3Title, text: industry.card3Text },
+    ].filter(card => card.title || card.text);
+
+    if (cards.length === 0 && Array.isArray(industry.benefits)) {
+      industry.benefits.slice(0, 6).forEach((benefit, index) => {
+        cards.push({ title: `Solution ${index + 1}`, text: benefit });
+      });
+    }
+
+    const grid = document.querySelector('.idetail-grid');
+    if (grid && cards.length > 0) {
+      grid.innerHTML = cards.map(card => `
+        <div class="idetail-card">
+          <h4>${escapeHtml(card.title || 'Solution')}</h4>
+          <p>${escapeHtml(card.text || '')}</p>
+        </div>
+      `).join('');
+    }
+
+    updateCurrentPageCta(industry);
+  }
+
+  function updateCurrentPageCta(data) {
+    if (!data) return;
+    document.querySelectorAll('.royal-cta__title, .ind-final-content h2').forEach(el => {
+      if (data.ctaTitle) el.innerHTML = data.ctaTitle;
+    });
+    document.querySelectorAll('.royal-cta__text').forEach(el => {
+      if (data.ctaText) el.innerHTML = data.ctaText;
+    });
+  }
+
+  function findServiceForPage(store, pageKey) {
+    const aliasSlug = Object.entries(SERVICE_PUBLIC_SLUGS).find(([, publicSlug]) => publicSlug === pageKey)?.[0];
+    return getActiveItems(store.services).find(service => {
+      const slug = service.slug || '';
+      return slug === pageKey || slug === aliasSlug || servicePublicSlug(service) === pageKey;
+    });
+  }
+
+  function findIndustryForPage(store, pageKey) {
+    const aliasSlug = Object.entries(INDUSTRY_PUBLIC_SLUGS).find(([, publicSlug]) => publicSlug === pageKey)?.[0];
+    return getActiveItems(store.industries).find(industry => {
+      const slug = industry.slug || '';
+      return slug === pageKey || slug === aliasSlug || industryPublicSlug(industry) === pageKey;
+    });
+  }
+
+  function servicePublicSlug(service) {
+    const slug = service?.slug || slugify(service?.title || 'service');
+    return SERVICE_PUBLIC_SLUGS[slug] || slug;
+  }
+
+  function industryPublicSlug(industry) {
+    const slug = industry?.slug || `industry-${slugify(industry?.title || 'industry')}`;
+    return INDUSTRY_PUBLIC_SLUGS[slug] || slug;
+  }
+
+  function getActiveItems(items) {
+    if (!Array.isArray(items)) return [];
+    return items
+      .filter(item => item && item.active !== false)
+      .sort((a, b) => (Number(a.order || a.id || 0) - Number(b.order || b.id || 0)));
+  }
+
+  function arrayFromStrings(value) {
+    if (Array.isArray(value)) return value;
+    if (typeof value !== 'string') return [];
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function setText(selector, value) {
+    if (value === undefined || value === null || value === '') return;
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value;
+  }
+
+  function setImage(selector, src, alt) {
+    const img = document.querySelector(selector);
+    if (!img || !src) return;
+    img.src = src;
+    if (alt) img.alt = alt;
+  }
+
+  function setDocumentMeta(title, description, keywords) {
+    if (title) document.title = title.includes('Precision') ? title : `${title} | Precision & Co`;
+    if (description) {
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', description);
+    }
+    if (keywords) {
+      const metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (metaKeywords) metaKeywords.setAttribute('content', keywords);
+    }
+  }
+
+  function refreshAnimationEngines() {
+    try {
+      if (window.ScrollTrigger && typeof window.ScrollTrigger.refresh === 'function') {
+        window.ScrollTrigger.refresh();
+      }
+    } catch (e) {}
+  }
+
+  function slugify(value) {
+    return String(value || '')
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, 'and')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeAttr(value) {
+    return escapeHtml(value).replace(/`/g, '&#096;');
   }
 
   // Telemetry Tracker

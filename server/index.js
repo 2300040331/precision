@@ -13,6 +13,7 @@ import analyticsRoutes from './routes/analytics.js';
 import settingsRoutes from './routes/settings.js';
 import systemRoutes from './routes/system.js';
 import eventsRoutes from './routes/events.js';
+import instantContentRoutes from './routes/instantContent.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -42,6 +43,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/events', eventsRoutes);
+app.use('/api', instantContentRoutes);
 
 // General API Status
 app.get('/api', (req, res) => {
