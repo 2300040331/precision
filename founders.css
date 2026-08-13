@@ -615,7 +615,8 @@
     margin: 0;
 }
 
-.founders-showcase__headline .gold-text {
+.founders-showcase__headline .gold-text,
+.founders-showcase__headline span {
     color: #c8a45e !important;
     -webkit-text-fill-color: #c8a45e !important;
     background: none !important;

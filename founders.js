@@ -76,15 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
         
-        // Auto rotate quotes every 6 seconds when user is not hovering
+        // Auto-rotate disabled per design preference (prevents automatic quote/spotlight cycling)
         function startAutoRotate() {
             stopAutoRotate();
-            autoRotateTimer = setInterval(() => {
-                if (!isHovered) {
-                    const nextIndex = (currentIndex + 1) % nameItems.length;
-                    setActiveFounder(nextIndex);
-                }
-            }, 6000);
         }
         
         function stopAutoRotate() {
@@ -110,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Initialize first active founder (Azmal)
         setActiveFounder(0);
-        startAutoRotate();
     }
 
     // ═══════════════════════════════════════════════════════════

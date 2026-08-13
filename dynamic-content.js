@@ -235,25 +235,24 @@
         const rawTitle = expertsHeader.title.trim();
         const cleanText = rawTitle.replace(/<[^>]*>/g, '').trim();
 
-        // Do not mutate DOM headline if title is standard default (prevents any 1-second flash/change)
         const isDefaultTitle = !cleanText || 
           cleanText === 'Our Experts' || 
           cleanText === 'Built by People. Driven by Purpose.' || 
           cleanText === 'Your Vision. Our Financial Expertise' || 
           cleanText === 'Your Vision. Our Financial Expertise.';
 
-        if (!isDefaultTitle) {
-          if (cleanText.includes('Our Financial Expertise')) {
-            headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
+        if (isDefaultTitle) {
+          headline.innerHTML = 'Your Vision. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise.</span>';
+        } else if (cleanText.includes('Our Financial Expertise')) {
+          headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
+        } else {
+          const parts = cleanText.split('.');
+          if (parts.length > 1 && parts[1].trim()) {
+            const firstPart = parts[0].trim();
+            const remaining = parts.slice(1).join('.').trim();
+            headline.innerHTML = `${firstPart}. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${remaining}</span>`;
           } else {
-            const parts = cleanText.split('.');
-            if (parts.length > 1 && parts[1].trim()) {
-              const firstPart = parts[0].trim();
-              const remaining = parts.slice(1).join('.').trim();
-              headline.innerHTML = `${firstPart}. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${remaining}</span>`;
-            } else {
-              headline.innerHTML = `<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${cleanText}</span>`;
-            }
+            headline.innerHTML = `<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${cleanText}</span>`;
           }
         }
       }
@@ -264,10 +263,7 @@
       if (subtitle && expertsHeader.subtitle && expertsHeader.subtitle !== 'Words from the Founders') {
         subtitle.textContent = expertsHeader.subtitle;
       }
-      const groupImage = showcase.querySelector('.founders-showcase__group-img');
-      if (groupImage && expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg') {
-        groupImage.src = expertsHeader.heroImage;
-      }
+      // Group image is permanently locked to assets/images/founders-group.jpg per design
     }
 
       // The showcase has fixed visual slots, so update those existing elements
