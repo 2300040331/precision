@@ -436,6 +436,22 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                               </div>
                             </div>
                           </div>
+                        ) : key.toLowerCase().includes('color') || key.toLowerCase().includes('bg') ? (
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="color"
+                              value={val && val.startsWith('#') ? val : '#c8a45e'}
+                              onChange={(e) => handleFieldChange(key, e.target.value)}
+                              className="w-8 h-8 rounded-lg border border-slate-700 bg-transparent cursor-pointer shrink-0"
+                            />
+                            <input
+                              type="text"
+                              value={val}
+                              placeholder="#c8a45e"
+                              onChange={(e) => handleFieldChange(key, e.target.value)}
+                              className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 font-mono"
+                            />
+                          </div>
                         ) : key.toLowerCase().includes('title') || key.toLowerCase().includes('text') || key.toLowerCase().includes('desc') || key.toLowerCase().includes('subtitle') || key.toLowerCase().includes('content') || key.toLowerCase().includes('address') || key.toLowerCase().includes('quote') ? (
                           <textarea
                             rows={3}
@@ -455,15 +471,97 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                     ))
                   )}
 
+                  {/* Section Visual Theme & Color Editing Controls */}
+                  <div className="p-4 rounded-xl bg-slate-950 border border-[#c8a45e]/30 space-y-3">
+                    <span className="text-xs font-bold text-[#c8a45e] uppercase tracking-wider block">🎨 Section Color & Style Controls</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-300 font-semibold">Background Color</label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={sectionData.sectionBgColor && sectionData.sectionBgColor.startsWith('#') ? sectionData.sectionBgColor : '#050e17'}
+                            onChange={(e) => handleFieldChange('sectionBgColor', e.target.value)}
+                            className="w-7 h-7 rounded border border-slate-700 bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={sectionData.sectionBgColor || ''}
+                            placeholder="#050e17"
+                            onChange={(e) => handleFieldChange('sectionBgColor', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-300 font-semibold">Text Color</label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={sectionData.sectionTextColor && sectionData.sectionTextColor.startsWith('#') ? sectionData.sectionTextColor : '#94a3b8'}
+                            onChange={(e) => handleFieldChange('sectionTextColor', e.target.value)}
+                            className="w-7 h-7 rounded border border-slate-700 bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={sectionData.sectionTextColor || ''}
+                            placeholder="#94a3b8"
+                            onChange={(e) => handleFieldChange('sectionTextColor', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-300 font-semibold">Heading Color</label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={sectionData.sectionHeadingColor && sectionData.sectionHeadingColor.startsWith('#') ? sectionData.sectionHeadingColor : '#ffffff'}
+                            onChange={(e) => handleFieldChange('sectionHeadingColor', e.target.value)}
+                            className="w-7 h-7 rounded border border-slate-700 bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={sectionData.sectionHeadingColor || ''}
+                            placeholder="#ffffff"
+                            onChange={(e) => handleFieldChange('sectionHeadingColor', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-300 font-semibold">Accent Gold Color</label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={sectionData.sectionAccentColor && sectionData.sectionAccentColor.startsWith('#') ? sectionData.sectionAccentColor : '#c8a45e'}
+                            onChange={(e) => handleFieldChange('sectionAccentColor', e.target.value)}
+                            className="w-7 h-7 rounded border border-slate-700 bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={sectionData.sectionAccentColor || ''}
+                            placeholder="#c8a45e"
+                            onChange={(e) => handleFieldChange('sectionAccentColor', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Add New Custom Field */}
                   <button
                     onClick={() => {
-                      const fieldKey = prompt('Enter field key name (e.g. heroTitle, ctaText):');
+                      const fieldKey = prompt('Enter field key name (e.g. heroTitle, sectionBgColor):');
                       if (fieldKey) handleFieldChange(fieldKey, '');
                     }}
                     className="w-full py-2 bg-slate-950 hover:bg-slate-900 border border-dashed border-slate-800 hover:border-slate-700 rounded-xl text-slate-400 hover:text-slate-200 text-xs font-semibold transition-all flex items-center justify-center"
                   >
-                    <Plus className="w-3.5 h-3.5 mr-1.5" /> Add New Field Parameter
+                    <Plus className="w-3.5 h-3.5 mr-1.5" /> Add New Field Parameter / Color
                   </button>
                 </div>
               </>
