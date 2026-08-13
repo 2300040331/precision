@@ -215,6 +215,13 @@ h4 { font-family: var(--ff-body); font-size: var(--fs-h4); font-weight: 600; }
   animation: goldShimmer 4s ease-in-out infinite;
 }
 
+.founders-showcase__headline .gold-text {
+  color: #c8a45e !important;
+  -webkit-text-fill-color: #c8a45e !important;
+  background: none !important;
+  font-style: italic !important;
+}
+
 
 /* ============================================================
    4. LAYOUT

@@ -616,12 +616,11 @@
 }
 
 .founders-showcase__headline .gold-text {
-    color: #dfb969;
-    background: linear-gradient(135deg, #c99a3a 0%, #f3e5ab 50%, #c99a3a 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-style: italic;
+    color: #c8a45e !important;
+    -webkit-text-fill-color: #c8a45e !important;
+    background: none !important;
+    font-style: italic !important;
+    font-weight: 500;
 }
 
 /* 3. Group Visual Hero Frame */

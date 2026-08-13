@@ -221,29 +221,38 @@
   function updateExpertsPage(experts, expertsHeader) {
     const showcase = document.querySelector('.founders-showcase');
     if (showcase) {
-      if (expertsHeader) {
-        const eyebrow = showcase.querySelector('.founders-showcase__eyebrow');
-        if (eyebrow && expertsHeader.eyebrow) eyebrow.textContent = expertsHeader.eyebrow;
-        const headline = showcase.querySelector('.founders-showcase__headline');
-        if (headline) {
-          let titleText = (expertsHeader && expertsHeader.title) ? expertsHeader.title : 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
-          if (titleText === 'Our Experts' || titleText === 'Built by People. Driven by Purpose.') {
-            titleText = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
-          }
-          
-          if (titleText.includes('<span')) {
-            headline.innerHTML = titleText;
-          } else if (titleText.includes('Our Financial Expertise')) {
-            headline.innerHTML = titleText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
+      const eyebrow = showcase.querySelector('.founders-showcase__eyebrow');
+      if (eyebrow && expertsHeader && expertsHeader.eyebrow) {
+        eyebrow.textContent = expertsHeader.eyebrow;
+      }
+      
+      const headline = showcase.querySelector('.founders-showcase__headline');
+      if (headline) {
+        let rawTitle = (expertsHeader && expertsHeader.title) ? expertsHeader.title : 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
+        if (rawTitle === 'Our Experts' || rawTitle === 'Built by People. Driven by Purpose.') {
+          rawTitle = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
+        }
+        
+        // Strip HTML tags to get raw clean text for robust replacement
+        const cleanText = rawTitle.replace(/<[^>]*>/g, '').trim();
+
+        if (!cleanText || cleanText.includes('Your Vision. Our Financial Expertise')) {
+          headline.innerHTML = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
+        } else if (cleanText.includes('Our Financial Expertise')) {
+          headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
+        } else {
+          const parts = cleanText.split('.');
+          if (parts.length > 1 && parts[1].trim()) {
+            const firstPart = parts[0].trim();
+            const remaining = parts.slice(1).join('.').trim();
+            headline.innerHTML = `${firstPart}. <span class="gold-text">${remaining}</span>`;
           } else {
-            const parts = titleText.split('. ');
-            if (parts.length > 1) {
-              headline.innerHTML = `${parts[0]}. <span class="gold-text">${parts.slice(1).join('. ')}</span>`;
-            } else {
-              headline.innerHTML = `<span class="gold-text">${titleText}</span>`;
-            }
+            headline.innerHTML = `<span class="gold-text">${cleanText}</span>`;
           }
         }
+      }
+
+      if (expertsHeader) {
         const subtitle = showcase.querySelector('.founders-showcase__words-sub');
         if (subtitle && expertsHeader.subtitle) subtitle.textContent = expertsHeader.subtitle;
         const groupImage = showcase.querySelector('.founders-showcase__group-img');
