@@ -15,11 +15,23 @@ import { uploadImageToBlob } from '../services/blobUpload';
 
 const ImageDropzone = ({ value, onChange, label = 'Contact Hero Banner Picture' }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const handleFile = async (file) => {
     if (!file) return;
-    if (file.type.startsWith('image/')) {
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select an image file.');
+      return;
+    }
+    setIsUploading(true);
+    setUploadError('');
+    try {
       onChange(await uploadImageToBlob(file));
+    } catch (error) {
+      setUploadError(error.message || 'Image upload failed.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -27,7 +39,7 @@ const ImageDropzone = ({ value, onChange, label = 'Contact Hero Banner Picture' 
     <div className="space-y-2">
       <label className="text-slate-300 font-semibold flex items-center justify-between text-xs">
         <span>{label}</span>
-        {value && <span className="text-[10px] text-emerald-400 font-bold flex items-center"><Check className="w-3 h-3 mr-1" /> Image Loaded</span>}
+        {isUploading ? <span className="text-[10px] text-blue-400 font-bold">Uploading…</span> : value && <span className="text-[10px] text-emerald-400 font-bold flex items-center"><Check className="w-3 h-3 mr-1" /> Image Loaded</span>}
       </label>
       
       <div
@@ -74,6 +86,7 @@ const ImageDropzone = ({ value, onChange, label = 'Contact Hero Banner Picture' 
           </label>
         )}
       </div>
+      {uploadError && <p className="text-[11px] text-red-400">{uploadError}</p>}
     </div>
   );
 };

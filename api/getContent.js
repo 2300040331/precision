@@ -1,5 +1,7 @@
 import { list } from '@vercel/blob';
 
+const CMS_BLOB_KEY = 'cms/live-content.json';
+
 // Default static content fallback matching main website fields
 const defaultContentStore = {
   home: {
@@ -95,7 +97,7 @@ export default async function handler(request, response) {
 
   // 1. Fetch from Vercel Blob storage first (ensures global sync across serverless instances)
   try {
-      const { blobs } = await list({ prefix: 'content.json' });
+      const { blobs } = await list({ prefix: CMS_BLOB_KEY });
 
     if (blobs && blobs.length > 0) {
       const latestBlob = blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))[0];
@@ -104,15 +106,16 @@ export default async function handler(request, response) {
       });
       if (res.ok) {
         const data = await res.json();
+        const store = data.fullStore || data;
         if (page === 'fullStore') {
-          return response.status(200).json(data.fullStore || data);
+          return response.status(200).json(store);
         }
         if (page) {
           const pageData = extractPageContent(data, page);
           if (pageData) return response.status(200).json(pageData);
           if (defaultContentStore[page]) return response.status(200).json(defaultContentStore[page]);
         }
-        return response.status(200).json(data.fullStore || data);
+        return response.status(200).json(store);
       }
     }
   } catch (error) {

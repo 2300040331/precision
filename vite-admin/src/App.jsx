@@ -110,13 +110,31 @@ function MainApp() {
     }
   };
 
+  // Only refresh live CRM/analytics in the background. Refreshing the entire
+  // CMS document while an editor is typing replaces unsaved field values with
+  // the last published version, which makes edits appear to disappear.
+  const refreshLiveData = async () => {
+    try {
+      const [consultationData, contactData, analyticsData] = await Promise.all([
+        api.getConsultations(),
+        api.getContacts(),
+        api.getAnalyticsStats(),
+      ]);
+      setConsultations(consultationData);
+      setContacts(contactData);
+      setAnalytics(analyticsData);
+    } catch (err) {
+      console.error('Live data refresh error:', err);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       loadAllData();
       const cleanupSSE = setupSSE();
       // Vercel serverless functions do not keep an SSE connection. Polling
       // the shared records keeps production CRM and analytics current.
-      const refreshTimer = window.setInterval(loadAllData, 30000);
+      const refreshTimer = window.setInterval(refreshLiveData, 30000);
       return () => {
         window.clearInterval(refreshTimer);
         if (typeof cleanupSSE === 'function') cleanupSSE();
@@ -250,14 +268,14 @@ function MainApp() {
 
   // Why Choose Us Handler
   const handleSaveWhyChooseUs = async (formData) => {
+    setWhyChooseUs(formData);
     await api.updateWhyChooseUs(formData);
-    await loadAllData();
   };
 
   // Contact Us Handler
   const handleSaveContactUs = async (formData) => {
+    setContactUs(formData);
     await api.updateContactUs(formData);
-    await loadAllData();
   };
 
   // Services Handlers

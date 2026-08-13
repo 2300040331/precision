@@ -1237,6 +1237,10 @@ class ApiService {
         const payload = await response.json().catch(() => ({}));
         throw new Error(payload.error || 'Unable to save changes to Vercel Storage.');
       }
+      const published = await response.json().catch(() => null);
+      if (!published?.success || !published?.revision) {
+        throw new Error('The CMS could not confirm that your changes were published.');
+      }
       return this.getStore();
     };
 

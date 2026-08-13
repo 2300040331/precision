@@ -229,7 +229,7 @@
 
     if (expertsHeader && expertsHeader.eyebrow) {
       const eyebrow = showcase.querySelector('.founders-showcase__eyebrow');
-      if (eyebrow && expertsHeader.eyebrow && expertsHeader.eyebrow !== 'THE FOUNDERS') {
+      if (eyebrow) {
         eyebrow.textContent = expertsHeader.eyebrow;
       }
     }
@@ -240,13 +240,7 @@
         const rawTitle = expertsHeader.title.trim();
         const cleanText = rawTitle.replace(/<[^>]*>/g, '').trim();
 
-        const isDefaultTitle = !cleanText || 
-          cleanText === 'Our Experts' || 
-          cleanText === 'Built by People. Driven by Purpose.' || 
-          cleanText === 'Your Vision. Our Financial Expertise' || 
-          cleanText === 'Your Vision. Our Financial Expertise.';
-
-        if (!isDefaultTitle) {
+        if (cleanText) {
           if (cleanText.includes('Our Financial Expertise')) {
             headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
           } else {
@@ -265,8 +259,12 @@
 
     if (expertsHeader) {
       const subtitle = showcase.querySelector('.founders-showcase__words-sub');
-      if (subtitle && expertsHeader.subtitle && expertsHeader.subtitle !== 'Words from the Founders') {
+      if (subtitle && expertsHeader.subtitle) {
         subtitle.textContent = expertsHeader.subtitle;
+      }
+      const groupImage = showcase.querySelector('.founders-showcase__group-img');
+      if (groupImage && expertsHeader.heroImage) {
+        groupImage.src = expertsHeader.heroImage;
       }
     }
 
@@ -301,8 +299,6 @@
       });
       dots.forEach((dot, index) => { dot.style.display = activeExperts[index] ? '' : 'none'; });
       spotlights.forEach((spotlight, index) => { spotlight.style.display = activeExperts[index] ? '' : 'none'; });
-      return;
-
   }
 
   const SERVICE_PUBLIC_SLUGS = {
