@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Precision & Co — Welcome</title>
+    <script>
+        // The video intro is intentionally desktop-only. Redirect before the
+        // video is parsed on mobile so the Home page opens immediately.
+        if (window.matchMedia('(max-width: 768px)').matches) {
+            window.location.replace('home.html');
+        }
+    </script>
     <style>
         body, html { margin: 0; padding: 0; background: #071827; width: 100vw; height: 100vh; overflow: hidden; }
         #intro-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #071827; z-index: 9999; display: flex; align-items: center; justify-content: center; }
@@ -20,20 +27,21 @@
         <button id="skip-intro-btn">Skip Intro &rarr;</button>
     </div>
     <script>
-        const video = document.getElementById('intro-video');
-        const skipBtn = document.getElementById('skip-intro-btn');
-        
-        const goToHome = () => {
-            window.location.href = 'home.html';
-        };
+        if (!window.matchMedia('(max-width: 768px)').matches) {
+            const video = document.getElementById('intro-video');
+            const skipBtn = document.getElementById('skip-intro-btn');
+            const goToHome = () => {
+                window.location.href = 'home.html';
+            };
 
-        video.addEventListener('ended', goToHome);
-        skipBtn.addEventListener('click', goToHome);
-        
-        // Failsafe in case video doesn't play
-        setTimeout(() => {
-            if (video.currentTime === 0) goToHome();
-        }, 3000);
+            video.addEventListener('ended', goToHome);
+            skipBtn.addEventListener('click', goToHome);
+
+            // Failsafe in case the desktop video doesn't play.
+            setTimeout(() => {
+                if (video.currentTime === 0) goToHome();
+            }, 3000);
+        }
     </script>
     <script src="dynamic-content.js"></script>
 </body>

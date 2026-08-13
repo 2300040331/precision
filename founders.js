@@ -10,13 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const quoteDots = showcaseSection.querySelectorAll('.founders-showcase__dot');
         const spotlightCols = showcaseSection.querySelectorAll('.founders-showcase__spotlight-col');
         
-        let currentIndex = 0;
-        let autoRotateTimer = null;
-        let isHovered = false;
-        
         function setActiveFounder(index) {
             if (index < 0 || index >= nameItems.length) return;
-            currentIndex = index;
             
             // 1. Update Names Index Active State
             nameItems.forEach((item, idx) => {
@@ -58,11 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Attach click & hover events to Name items
         nameItems.forEach((item, idx) => {
             item.addEventListener('mouseenter', () => {
-                isHovered = true;
                 setActiveFounder(idx);
-            });
-            item.addEventListener('mouseleave', () => {
-                isHovered = false;
             });
             item.addEventListener('click', () => {
                 setActiveFounder(idx);
@@ -75,32 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 setActiveFounder(idx);
             });
         });
-        
-        // Auto-rotate disabled per design preference (prevents automatic quote/spotlight cycling)
-        function startAutoRotate() {
-            stopAutoRotate();
-        }
-        
-        function stopAutoRotate() {
-            if (autoRotateTimer) {
-                clearInterval(autoRotateTimer);
-                autoRotateTimer = null;
-            }
-        }
-        
-        showcaseSection.addEventListener('mouseenter', () => { isHovered = true; });
-        showcaseSection.addEventListener('mouseleave', () => { isHovered = false; });
-        
-        // IntersectionObserver for entrance reveal animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    showcaseSection.classList.add('is-visible');
-                }
-            });
-        }, { threshold: 0.15 });
-        
-        observer.observe(showcaseSection);
         
         // Initialize first active founder (Azmal)
         setActiveFounder(0);

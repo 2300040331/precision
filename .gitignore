@@ -3,6 +3,7 @@ node_modules
 server/node_modules
 vite-admin/node_modules
 vite-admin/dist
+public
 .DS_Store
 *.DS_Store
 .env.local

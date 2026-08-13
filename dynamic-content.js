@@ -266,12 +266,6 @@
       if (subtitle && expertsHeader.subtitle && expertsHeader.subtitle !== 'Words from the Founders') {
         subtitle.textContent = expertsHeader.subtitle;
       }
-      const groupImage = showcase.querySelector('.founders-showcase__group-img');
-      if (groupImage && expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg' && !expertsHeader.heroImage.includes('precision team.png')) {
-        groupImage.src = expertsHeader.heroImage;
-      } else if (groupImage) {
-        groupImage.src = 'assets/images/founders-group.jpg';
-      }
     }
 
       // The showcase has fixed visual slots, so update those existing elements
@@ -306,119 +300,7 @@
       dots.forEach((dot, index) => { dot.style.display = activeExperts[index] ? '' : 'none'; });
       spotlights.forEach((spotlight, index) => { spotlight.style.display = activeExperts[index] ? '' : 'none'; });
       return;
-    }
 
-    if (expertsHeader) {
-      const h1 = document.querySelector('.founders-title');
-      if (h1 && expertsHeader.title) h1.textContent = expertsHeader.title;
-      const sub = document.querySelector('.founders-subtitle');
-      if (sub && expertsHeader.subtitle) sub.textContent = expertsHeader.subtitle;
-    }
-
-    // The original HTML only contained six placeholder cards. Build the live
-    // grid from the shared CMS list so the admin can publish 10+ experts.
-    const activeExperts = Array.isArray(experts) ? experts.filter(expert => expert && expert.active !== false) : [];
-    const grid = document.querySelector('.founders-grid');
-    if (grid) {
-      grid.innerHTML = activeExperts.map((expert, index) => `
-        <div class="founder-card" data-founder="cms-${index}">
-          <div class="fcard-img-wrapper">
-            <img src="${escapeAttr(expert.image || 'assets/images/about-team.jpg')}" alt="${escapeAttr(expert.name || 'Expert')}">
-            <div class="fcard-glass-reflection"></div>
-          </div>
-          <div class="fcard-info">
-            <h2 class="fcard-name">${escapeHtml(expert.name || 'Expert')}</h2>
-            <h3 class="fcard-role">${escapeHtml(expert.role || '')}</h3>
-            <p class="fcard-qual">${escapeHtml(expert.qualifications || '')}</p>
-          </div>
-        </div>
-      `).join('') || '<p class="founders-subtitle">Our expert profiles will be available soon.</p>';
-
-      document.querySelectorAll('.founder-modal').forEach(modal => modal.remove());
-      activeExperts.forEach((expert, index) => {
-        const modal = document.createElement('div');
-        modal.className = 'founder-modal';
-        modal.id = `modal-cms-${index}`;
-        modal.innerHTML = `
-          <div class="fmodal-backdrop"></div>
-          <div class="fmodal-content">
-            <button class="fmodal-close" aria-label="Close modal">×</button>
-            <div class="fmodal-grid">
-              <div class="fmodal-text-col"><div class="fmodal-header"><span class="fmodal-label">About Our Expert</span><h2 class="fmodal-name">${escapeHtml(expert.name || 'Expert')}</h2><h3 class="fmodal-role">${escapeHtml(expert.role || '')}</h3><p class="fmodal-qual">${escapeHtml(expert.qualifications || '')}</p><div class="fmodal-divider"></div></div>
-                <div class="fmodal-body"><h4>Professional Summary</h4><p>${escapeHtml(expert.summary || '')}</p><h4>Core Expertise</h4><p>${escapeHtml(expert.expertise || '')}</p><h4>Professional Memberships</h4><p>${escapeHtml(expert.memberships || '')}</p><h4>Industries Served</h4><p>${escapeHtml(expert.industries || '')}</p></div>
-                <div class="fmodal-footer"><a href="contact.html" class="btn btn-primary fmodal-cta">Schedule Consultation</a></div>
-              </div><div class="fmodal-img-col"><img src="${escapeAttr(expert.image || 'assets/images/about-team.jpg')}" alt="${escapeAttr(expert.name || 'Expert')}"></div>
-            </div>
-          </div>`;
-        document.body.appendChild(modal);
-      });
-
-      grid.querySelectorAll('.founder-card').forEach(card => card.addEventListener('click', () => {
-        document.getElementById(`modal-${card.dataset.founder}`)?.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
-      }));
-      document.querySelectorAll('.founder-modal').forEach(modal => {
-        const close = () => { modal.classList.remove('is-active'); document.body.style.overflow = ''; };
-        modal.querySelector('.fmodal-close')?.addEventListener('click', close);
-        modal.querySelector('.fmodal-backdrop')?.addEventListener('click', close);
-      });
-      return;
-    }
-
-    const legacyExperts = Array.isArray(experts) ? experts.filter(expert => expert && expert.active !== false) : [];
-
-    const cards = document.querySelectorAll('.founder-card');
-    cards.forEach((card, idx) => {
-      const exp = legacyExperts[idx];
-      const modalId = card.getAttribute('data-founder') || (idx + 1);
-      const modal = document.getElementById(`modal-${modalId}`) || document.querySelectorAll('.founder-modal')[idx];
-      if (!exp) {
-        card.style.display = 'none';
-        if (modal) modal.style.display = 'none';
-        return;
-      }
-      card.style.display = '';
-      if (modal) modal.style.display = '';
-
-      // Update Card Image
-      const cardImg = card.querySelector('.fcard-img-wrapper img');
-      if (cardImg && exp.image) {
-        cardImg.src = exp.image;
-      }
-
-      // Update Card Text
-      const nameEl = card.querySelector('.fcard-name');
-      if (nameEl && exp.name) nameEl.textContent = exp.name;
-
-      const roleEl = card.querySelector('.fcard-role');
-      if (roleEl && exp.role) roleEl.textContent = exp.role;
-
-      const qualEl = card.querySelector('.fcard-qual');
-      if (qualEl && exp.qualifications) qualEl.textContent = exp.qualifications;
-
-      // Update corresponding Modal Image and Text
-      if (modal) {
-        const modalImg = modal.querySelector('.fmodal-img-col img');
-        if (modalImg && exp.image) modalImg.src = exp.image;
-
-        const mName = modal.querySelector('.fmodal-name');
-        if (mName && exp.name) mName.textContent = exp.name;
-
-        const mRole = modal.querySelector('.fmodal-role');
-        if (mRole && exp.role) mRole.textContent = exp.role;
-
-        const mQual = modal.querySelector('.fmodal-qual');
-        if (mQual && exp.qualifications) mQual.textContent = exp.qualifications;
-
-        const mBodyParagraphs = modal.querySelectorAll('.fmodal-body p');
-        if (mBodyParagraphs && mBodyParagraphs.length >= 4) {
-          if (exp.summary) mBodyParagraphs[0].textContent = exp.summary;
-          if (exp.expertise) mBodyParagraphs[1].textContent = exp.expertise;
-          if (exp.memberships) mBodyParagraphs[2].textContent = exp.memberships;
-          if (exp.industries) mBodyParagraphs[3].textContent = exp.industries;
-        }
-      }
-    });
   }
 
   const SERVICE_PUBLIC_SLUGS = {
@@ -1038,7 +920,7 @@
     if (global.primaryColor) css += `  --color-primary: ${global.primaryColor} !important;\n`;
     if (global.secondaryColor) css += `  --color-secondary: ${global.secondaryColor} !important;\n`;
     if (global.accentColor) css += `  --color-accent: ${global.accentColor} !important; --gold-primary: ${global.accentColor} !important;\n`;
-    if (global.backgroundColor) css += `  --color-[#050e17]: ${global.backgroundColor} !important;\n`;
+    if (global.backgroundColor) css += `  --color-background: ${global.backgroundColor} !important;\n`;
     if (global.textColor) css += `  --color-text: ${global.textColor} !important;\n`;
     if (global.headingColor) css += `  --color-heading: ${global.headingColor} !important;\n`;
     if (global.buttonColor) css += `  --color-btn: ${global.buttonColor} !important;\n`;
@@ -1048,6 +930,12 @@
     if (global.footerColor) css += `  --color-footer: ${global.footerColor} !important;\n`;
     if (global.fontFamily) css += `  --font-family-base: '${global.fontFamily}', sans-serif !important;\n`;
     css += '}\n\n';
+
+    if (global.typography) {
+      css += `body { font-family: ${global.typography} !important; color-scheme: ${global.mode || 'normal'}; }\n`;
+    } else if (global.mode) {
+      css += `body { color-scheme: ${global.mode}; }\n`;
+    }
 
     // Apply font family globally if specified
     if (global.fontFamily) {
@@ -1059,6 +947,24 @@
     if (global.textColor) {
       css += `body, p, li { color: ${global.textColor} !important; }\n`;
     }
+    if (global.headingColor) {
+      css += `h1, h2, h3, h4, h5, h6 { color: ${global.headingColor} !important; }\n`;
+    }
+    if (global.buttonColor) {
+      css += `.btn, button:not(.navbar__toggle) { background-color: ${global.buttonColor} !important; border-color: ${global.buttonColor} !important; }\n`;
+    }
+    if (global.buttonHoverColor) {
+      css += `.btn:hover, button:not(.navbar__toggle):hover { background-color: ${global.buttonHoverColor} !important; border-color: ${global.buttonHoverColor} !important; }\n`;
+    }
+    if (global.borderColor) {
+      css += `.navbar, .footer, .card, [class*="card"], [class*="border"] { border-color: ${global.borderColor} !important; }\n`;
+    }
+    if (global.headerColor) {
+      css += `.navbar, header.navbar { background-color: ${global.headerColor} !important; }\n`;
+    }
+    if (global.footerColor) {
+      css += `.footer, footer.footer { background-color: ${global.footerColor} !important; }\n`;
+    }
 
     // Page Scope Override
     if (Object.keys(page).length > 0) {
@@ -1066,7 +972,12 @@
       if (page.backgroundColor) css += `body { background-color: ${page.backgroundColor} !important; }\n`;
       if (page.textColor) css += `body, p, li { color: ${page.textColor} !important; }\n`;
       if (page.headingColor) css += `h1, h2, h3, h4, h5, h6 { color: ${page.headingColor} !important; }\n`;
+      if (page.typography) css += `body { font-family: ${page.typography} !important; }\n`;
       if (page.fontFamily) css += `body, p, h1, h2, h3, h4, h5, h6 { font-family: '${page.fontFamily}', sans-serif !important; }\n`;
+      if (page.mode) css += `body { color-scheme: ${page.mode}; }\n`;
+      if (page.accentColor) css += `a, .gold-text, [class*="accent"] { color: ${page.accentColor} !important; }\n`;
+      if (page.buttonColor) css += `.btn, button:not(.navbar__toggle) { background-color: ${page.buttonColor} !important; border-color: ${page.buttonColor} !important; }\n`;
+      if (page.borderColor) css += `.navbar, .footer, .card, [class*="card"], [class*="border"] { border-color: ${page.borderColor} !important; }\n`;
     }
 
     // Section Scope Override
@@ -1081,8 +992,12 @@
         if (secData.backgroundColor) css += `${selector} { background-color: ${secData.backgroundColor} !important; background: ${secData.backgroundColor} !important; }\n`;
         if (secData.textColor) css += `${selector}, ${selector} p, ${selector} li { color: ${secData.textColor} !important; }\n`;
         if (secData.headingColor) css += `${selector} h1, ${selector} h2, ${selector} h3, ${selector} h4 { color: ${secData.headingColor} !important; }\n`;
+        if (secData.typography) css += `${selector}, ${selector} * { font-family: ${secData.typography} !important; }\n`;
         if (secData.fontFamily) css += `${selector}, ${selector} * { font-family: '${secData.fontFamily}', sans-serif !important; }\n`;
+        if (secData.mode) css += `${selector} { color-scheme: ${secData.mode}; }\n`;
+        if (secData.accentColor) css += `${selector} a, ${selector} .gold-text, ${selector} [class*="accent"] { color: ${secData.accentColor} !important; }\n`;
         if (secData.buttonColor) css += `${selector} .btn, ${selector} button { background-color: ${secData.buttonColor} !important; }\n`;
+        if (secData.borderColor) css += `${selector}, ${selector} [class*="card"], ${selector} [class*="border"] { border-color: ${secData.borderColor} !important; }\n`;
       }
     });
 
@@ -1095,4 +1010,11 @@
     }
     styleTag.textContent = css;
   }
+
+  window.addEventListener('message', event => {
+    if (event.origin !== window.location.origin) return;
+    if (event.data?.type === 'precision-theme-preview') {
+      applyThemeCustomization(event.data.themeData, window.location.pathname.split('/').pop().replace('.html', '') || 'home');
+    }
+  });
 })();

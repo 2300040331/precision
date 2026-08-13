@@ -160,7 +160,7 @@ export default function ExpertsView({ experts: initialExperts, pageHeader: initi
     eyebrow: 'THE FOUNDERS',
     title: 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>',
     subtitle: 'Words from the Founders',
-    heroImage: 'assets/images/founders-group.jpg',
+    heroImage: 'assets/images/founders-real.jpeg',
   };
 
   const [foundersList, setFoundersList] = useState(
@@ -309,7 +309,7 @@ export default function ExpertsView({ experts: initialExperts, pageHeader: initi
 
         <div className="pt-2">
           <ImageDropzone
-            value={pageHeader.heroImage || 'assets/images/founders-group.jpg'}
+            value={pageHeader.heroImage || 'assets/images/founders-real.jpeg'}
             onChange={(newImg) => setPageHeader({ ...pageHeader, heroImage: newImg })}
             label="Central Founders Hero Photograph (HD 4K Group Visual)"
           />
@@ -399,7 +399,7 @@ export default function ExpertsView({ experts: initialExperts, pageHeader: initi
         {/* Hero Image Frame */}
         <div className="relative rounded-2xl overflow-hidden border border-slate-800/80 shadow-2xl max-w-4xl mx-auto">
           <img
-            src={pageHeader.heroImage || 'assets/images/founders-group.jpg'}
+            src={pageHeader.heroImage || 'assets/images/founders-real.jpeg'}
             alt="Founders Hero Preview"
             className="w-full h-auto object-cover max-h-96"
           />

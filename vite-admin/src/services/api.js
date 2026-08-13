@@ -1252,7 +1252,7 @@ class ApiService {
         name: 'AZMAL',
         role: 'Founder / Managing Partner',
         qualifications: 'FCA, CFA',
-        image: 'assets/images/founders-group.jpg',
+        image: 'assets/images/founders-real.jpeg',
         summary: 'Great things are built when vision meets execution with unyielding integrity.',
         expertise: 'Strategic Advisory, Corporate Governance, Financial Modeling.',
         memberships: 'Fellow Member of ICAI.',
@@ -1264,7 +1264,7 @@ class ApiService {
         name: 'NARENDRA',
         role: 'Co-Founder / Tax & Advisory',
         qualifications: 'FCA, CPA',
-        image: 'assets/images/founders-group.jpg',
+        image: 'assets/images/founders-real.jpeg',
         summary: 'Precision is not just our standard — it is the cornerstone of trust with every partner.',
         expertise: 'Direct Taxation, Transfer Pricing, Cross-Border M&A.',
         memberships: 'Member of International Tax Association.',
@@ -1276,7 +1276,7 @@ class ApiService {
         name: 'GANESH',
         role: 'Co-Founder / Corporate Strategy',
         qualifications: 'LLB, FCS',
-        image: 'assets/images/founders-group.jpg',
+        image: 'assets/images/founders-real.jpeg',
         summary: 'Our commitment to excellence ensures every business moves forward with unwavering confidence.',
         expertise: 'Company Law, Corporate Governance, SEBI Compliance.',
         memberships: 'Fellow Member of ICSI.',
@@ -1288,7 +1288,7 @@ class ApiService {
         name: 'PAVAN',
         role: 'Co-Founder / Risk Advisory',
         qualifications: 'CPA, CISA',
-        image: 'assets/images/founders-group.jpg',
+        image: 'assets/images/founders-real.jpeg',
         summary: 'True value is created when innovation in strategy seamlessly aligns with rigorous compliance.',
         expertise: 'Internal Audit, Information Systems Audit, Risk Management.',
         memberships: 'Certified Information Systems Auditor.',
@@ -1300,7 +1300,7 @@ class ApiService {
         name: 'DINESH',
         role: 'Co-Founder / Audit & Assurance',
         qualifications: 'FCA, B.Com',
-        image: 'assets/images/founders-group.jpg',
+        image: 'assets/images/founders-real.jpeg',
         summary: 'Empowering organizations through financial clarity and strategic foresight drives sustainable growth.',
         expertise: 'Statutory Audit, Ind AS Reporting, Financial Advisory.',
         memberships: 'Fellow Member of ICAI.',
@@ -1313,7 +1313,7 @@ class ApiService {
       eyebrow: 'THE FOUNDERS',
       title: 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>',
       subtitle: 'Words from the Founders',
-      heroImage: 'assets/images/precision team.png',
+      heroImage: 'assets/images/founders-real.jpeg',
     };
 
     const hasLegacy = (Array.isArray(store.experts) && store.experts.some(e => e.name && (e.name.includes('Robert') || e.name.includes('Sarah') || e.name.includes('Michael') || e.name.includes('Elena') || e.name.includes('David') || e.name.includes('Anita')))) || (store.expertsHeader && (store.expertsHeader.title === 'Our Experts' || store.expertsHeader.title === 'Built by People. Driven by Purpose.'));
@@ -1376,8 +1376,11 @@ class ApiService {
     const store = this.getStore();
     store.themeCustomization = {
       global: { ...(store.themeCustomization?.global || defaultThemeCustomization.global), ...(data?.global || {}) },
-      pages: { ...(store.themeCustomization?.pages || {}), ...(data?.pages || {}) },
-      sections: { ...(store.themeCustomization?.sections || {}), ...(data?.sections || {}) },
+      // Pages and sections are complete override maps from the customization
+      // editor. Replacing them allows reset actions to genuinely remove only
+      // their selected override while preserving global settings and content.
+      pages: { ...(data?.pages || {}) },
+      sections: { ...(data?.sections || {}) },
     };
     await this.saveStore(store);
     return store.themeCustomization;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Palette,
   Type,
@@ -127,6 +127,38 @@ const THEME_PRESETS = [
   },
 ];
 
+const SERVICE_PAGE_OPTIONS = [
+  ['services-audit', 'Audit & Assurance'], ['services-tax', 'Taxation'], ['services-gst', 'GST & Indirect Tax'],
+  ['services-consulting', 'Business Advisory'], ['services-vcfo', 'Virtual CFO'], ['services-accounting', 'Accounting & Bookkeeping'],
+  ['services-company-law', 'Company Law & ROC'], ['services-startup', 'Startup Advisory'], ['services-regulatory', 'Regulatory Compliance'],
+  ['services-transaction', 'Transaction Advisory'], ['services-risk', 'Risk Advisory'], ['services-valuation', 'Valuation'],
+  ['services-wealth', 'Wealth Advisory'],
+].map(([id, name]) => ({
+  id,
+  name,
+  path: `/${id}.html`,
+  sections: [
+    { id: 'svc-hero', name: 'Service Hero' }, { id: 'svc-intro', name: 'Service Introduction' },
+    { id: 'royal-cta', name: 'Royal Call To Action' }, { id: 'footer', name: 'Global Footer' },
+  ],
+}));
+
+const INDUSTRY_PAGE_OPTIONS = [
+  ['industry-banking-finance', 'Banking & Finance'], ['industry-education', 'Education'], ['industry-energy', 'Energy'],
+  ['industry-government', 'Government & Public Sector'], ['industry-healthcare', 'Healthcare'], ['industry-hospitality', 'Hospitality'],
+  ['industry-import-export', 'Import & Export'], ['industry-infrastructure', 'Infrastructure'], ['industry-logistics', 'Logistics'],
+  ['industry-manufacturing', 'Manufacturing'], ['industry-ngos', 'NGOs'], ['industry-real-estate', 'Real Estate'],
+  ['industry-retail', 'Retail & E-commerce'], ['industry-startups', 'Startups'], ['industry-technology', 'Technology'],
+].map(([id, name]) => ({
+  id,
+  name: `${name} Industry`,
+  path: `/${id}.html`,
+  sections: [
+    { id: 'idetail-hero', name: 'Industry Hero' }, { id: 'idetail-content', name: 'Industry Content' },
+    { id: 'royal-cta', name: 'Royal Call To Action' }, { id: 'footer', name: 'Global Footer' },
+  ],
+}));
+
 const WEBSITE_PAGES = [
   {
     id: 'home',
@@ -137,7 +169,6 @@ const WEBSITE_PAGES = [
       { id: 'sec-services', name: 'Services Overview Section' },
       { id: 'sec-about', name: 'About & Legacy Section' },
       { id: 'sec-why', name: 'Why Choose Us Section' },
-      { id: 'sec-experts', name: 'Founders Showcase' },
       { id: 'royal-cta', name: 'Royal Call To Action' },
       { id: 'footer', name: 'Global Footer' },
     ],
@@ -183,6 +214,8 @@ const WEBSITE_PAGES = [
       { id: 'footer', name: 'Global Footer' },
     ],
   },
+  ...SERVICE_PAGE_OPTIONS,
+  ...INDUSTRY_PAGE_OPTIONS,
 ];
 
 export default function ThemeCustomizationView({ initialData, onSave, onPublish }) {
@@ -193,6 +226,7 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
   const [previewDevice, setPreviewDevice] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
   const [statusMessage, setStatusMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const previewFrameRef = useRef(null);
 
   useEffect(() => {
     if (initialData) {
@@ -317,6 +351,17 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
   const currentPageCustom = themeData.pages?.[selectedPageId] || {};
   const currentSectionKey = `${selectedPageId}:${selectedSectionId}`;
   const currentSectionCustom = themeData.sections?.[currentSectionKey] || {};
+
+  const applyPreviewTheme = useCallback(() => {
+    previewFrameRef.current?.contentWindow?.postMessage(
+      { type: 'precision-theme-preview', themeData },
+      window.location.origin,
+    );
+  }, [themeData]);
+
+  useEffect(() => {
+    applyPreviewTheme();
+  }, [applyPreviewTheme, selectedPageId]);
 
   return (
     <div className="space-y-6">
@@ -512,6 +557,15 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
               </select>
             </div>
 
+            <div className="bg-[#050e17] border border-slate-800 rounded-xl p-4 space-y-3">
+              <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Global Typography</label>
+              <select value={currentGlobal.typography || 'sans-serif'} onChange={e => handleGlobalChange('typography', e.target.value)} className="w-full bg-[#0f1d32] border border-[#c8a45e]/30 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#c8a45e]">
+                <option value="sans-serif">Professional Sans Serif</option>
+                <option value="serif">Editorial Serif</option>
+                <option value="monospace">Technical Monospace</option>
+              </select>
+            </div>
+
             {/* Color Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <ColorInput label="Primary Color" value={currentGlobal.primaryColor} onChange={v => handleGlobalChange('primaryColor', v)} />
@@ -589,6 +643,23 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
                     {f}
                   </option>
                 ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-300">Page Typography</label>
+              <select value={currentPageCustom.typography || ''} onChange={e => handlePageChange('typography', e.target.value)} className="w-full bg-[#050e17] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                <option value="">(Inherit from Global Theme)</option>
+                <option value="sans-serif">Professional Sans Serif</option>
+                <option value="serif">Editorial Serif</option>
+                <option value="monospace">Technical Monospace</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-300">Page-specific Theme</label>
+              <select value={currentPageCustom.mode || ''} onChange={e => handlePageChange('mode', e.target.value)} className="w-full bg-[#050e17] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                <option value="">(Inherit from Global Theme)</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
               </select>
             </div>
           </div>
@@ -677,6 +748,23 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
                 ))}
               </select>
             </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-300">Section Typography</label>
+              <select value={currentSectionCustom.typography || ''} onChange={e => handleSectionChange('typography', e.target.value)} className="w-full bg-[#050e17] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                <option value="">(Inherit from Page / Global)</option>
+                <option value="sans-serif">Professional Sans Serif</option>
+                <option value="serif">Editorial Serif</option>
+                <option value="monospace">Technical Monospace</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-300">Section-specific Theme</label>
+              <select value={currentSectionCustom.mode || ''} onChange={e => handleSectionChange('mode', e.target.value)} className="w-full bg-[#050e17] border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                <option value="">(Inherit from Page / Global)</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
           </div>
         </div>
       )}
@@ -737,10 +825,11 @@ export default function ThemeCustomizationView({ initialData, onSave, onPublish 
               }`}
             >
               <iframe
-                key={`${currentPage.path}-${JSON.stringify(themeData)}`}
+                ref={previewFrameRef}
                 src={currentPage.path}
                 title="Live Website Customization Preview"
                 className="w-full h-full border-none"
+                onLoad={applyPreviewTheme}
               />
             </div>
           </div>

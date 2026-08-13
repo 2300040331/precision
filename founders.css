@@ -882,22 +882,6 @@
     border-radius: 6px;
 }
 
-/* Scroll / Load Animations */
-.founders-showcase .reveal-item {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.founders-showcase.is-visible .reveal-item {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.founders-showcase.is-visible .reveal-item:nth-child(1) { transition-delay: 0.1s; }
-.founders-showcase.is-visible .reveal-item:nth-child(2) { transition-delay: 0.25s; }
-.founders-showcase.is-visible .reveal-item:nth-child(3) { transition-delay: 0.4s; }
-
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
     .founders-showcase {
@@ -954,6 +938,5 @@
         font-size: 0.7rem;
     }
 }
-
 
 
