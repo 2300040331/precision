@@ -193,6 +193,8 @@
     // 4. Why Choose Us Page Live Sync (why-choose-us.html or /why-choose-us)
     const isWhyPage = window.location.pathname.includes('why-choose-us');
     if (isWhyPage) {
+      const wcuInd = document.querySelector('.wcu-industries');
+      if (wcuInd) wcuInd.remove();
       const whyData = data.whyChooseUs || data;
       const heroTitle = document.querySelector('.wcu-hero__title, .hero-title, h1');
       if (heroTitle && whyData.heroTitle) heroTitle.innerHTML = whyData.heroTitle;
