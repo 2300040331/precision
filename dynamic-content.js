@@ -220,46 +220,55 @@
 
   function updateExpertsPage(experts, expertsHeader) {
     const showcase = document.querySelector('.founders-showcase');
-    if (showcase) {
+    if (!showcase) return;
+
+    if (expertsHeader && expertsHeader.eyebrow) {
       const eyebrow = showcase.querySelector('.founders-showcase__eyebrow');
-      if (eyebrow && expertsHeader && expertsHeader.eyebrow) {
+      if (eyebrow && expertsHeader.eyebrow && expertsHeader.eyebrow !== 'THE FOUNDERS') {
         eyebrow.textContent = expertsHeader.eyebrow;
       }
+    }
       
+    if (expertsHeader && expertsHeader.title) {
       const headline = showcase.querySelector('.founders-showcase__headline');
       if (headline) {
-        let rawTitle = (expertsHeader && expertsHeader.title) ? expertsHeader.title : 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
-        if (rawTitle === 'Our Experts' || rawTitle === 'Built by People. Driven by Purpose.') {
-          rawTitle = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
-        }
-        
-        // Strip HTML tags to get raw clean text for robust replacement
+        const rawTitle = expertsHeader.title.trim();
         const cleanText = rawTitle.replace(/<[^>]*>/g, '').trim();
 
-        if (!cleanText || cleanText.includes('Your Vision. Our Financial Expertise')) {
-          headline.innerHTML = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
-        } else if (cleanText.includes('Our Financial Expertise')) {
-          headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
-        } else {
-          const parts = cleanText.split('.');
-          if (parts.length > 1 && parts[1].trim()) {
-            const firstPart = parts[0].trim();
-            const remaining = parts.slice(1).join('.').trim();
-            headline.innerHTML = `${firstPart}. <span class="gold-text">${remaining}</span>`;
+        // Do not mutate DOM headline if title is standard default (prevents any 1-second flash/change)
+        const isDefaultTitle = !cleanText || 
+          cleanText === 'Our Experts' || 
+          cleanText === 'Built by People. Driven by Purpose.' || 
+          cleanText === 'Your Vision. Our Financial Expertise' || 
+          cleanText === 'Your Vision. Our Financial Expertise.';
+
+        if (!isDefaultTitle) {
+          if (cleanText.includes('Our Financial Expertise')) {
+            headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
           } else {
-            headline.innerHTML = `<span class="gold-text">${cleanText}</span>`;
+            const parts = cleanText.split('.');
+            if (parts.length > 1 && parts[1].trim()) {
+              const firstPart = parts[0].trim();
+              const remaining = parts.slice(1).join('.').trim();
+              headline.innerHTML = `${firstPart}. <span class="gold-text">${remaining}</span>`;
+            } else {
+              headline.innerHTML = `<span class="gold-text">${cleanText}</span>`;
+            }
           }
         }
       }
+    }
 
-      if (expertsHeader) {
-        const subtitle = showcase.querySelector('.founders-showcase__words-sub');
-        if (subtitle && expertsHeader.subtitle) subtitle.textContent = expertsHeader.subtitle;
-        const groupImage = showcase.querySelector('.founders-showcase__group-img');
-        if (groupImage && expertsHeader.heroImage) {
-          groupImage.src = expertsHeader.heroImage;
-        }
+    if (expertsHeader) {
+      const subtitle = showcase.querySelector('.founders-showcase__words-sub');
+      if (subtitle && expertsHeader.subtitle && expertsHeader.subtitle !== 'Words from the Founders') {
+        subtitle.textContent = expertsHeader.subtitle;
       }
+      const groupImage = showcase.querySelector('.founders-showcase__group-img');
+      if (groupImage && expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg') {
+        groupImage.src = expertsHeader.heroImage;
+      }
+    }
 
       // The showcase has fixed visual slots, so update those existing elements
       // rather than rebuilding them. This preserves the page's hover, click,
