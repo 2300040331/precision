@@ -1,39 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users,
-  Plus,
-  Search,
-  Edit2,
-  Trash2,
-  CheckCircle2,
-  ArrowLeft,
   Globe,
   Upload,
-  Image as ImageIcon,
   Check,
-  Award,
-  Palette,
-  Eye,
-  EyeOff,
-  ChevronDown,
+  CheckCircle2,
   RotateCcw,
-  RotateCw,
-  X,
-  Briefcase,
-  GraduationCap,
+  Sparkles,
+  Quote,
 } from 'lucide-react';
+import { uploadImageToBlob } from '../services/blobUpload';
 
-const ImageDropzone = ({ value, onChange, label = 'Profile Picture' }) => {
+const ImageDropzone = ({ value, onChange, label = 'Group Photograph Visual' }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
-    if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select an image file.');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError('');
+    try {
+      onChange(await uploadImageToBlob(file));
+    } catch (error) {
+      setUploadError(error.message || 'Photo upload failed.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -41,11 +38,22 @@ const ImageDropzone = ({ value, onChange, label = 'Profile Picture' }) => {
     <div className="space-y-2">
       <label className="text-slate-300 font-semibold flex items-center justify-between text-xs">
         <span>{label}</span>
-        {value && <span className="text-[10px] text-emerald-400 font-bold flex items-center"><Check className="w-3 h-3 mr-1" /> Image Loaded</span>}
+        {isUploading ? (
+          <span className="text-[10px] text-amber-400 font-bold">Uploading to Vercel…</span>
+        ) : (
+          value && (
+            <span className="text-[10px] text-emerald-400 font-bold flex items-center">
+              <Check className="w-3 h-3 mr-1" /> Image Loaded
+            </span>
+          )
+        )}
       </label>
-      
+
       <div
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={(e) => {
           e.preventDefault();
@@ -55,24 +63,28 @@ const ImageDropzone = ({ value, onChange, label = 'Profile Picture' }) => {
           }
         }}
         className={`relative border-2 border-dashed rounded-2xl p-4 transition-all text-center flex flex-col items-center justify-center ${
-          isDragging ? 'border-amber-400 bg-amber-500/10' : 'border-slate-800 bg-slate-950/80 hover:border-slate-700'
+          isDragging
+            ? 'border-amber-400 bg-amber-500/10'
+            : 'border-slate-800 bg-slate-950/80 hover:border-slate-700'
         }`}
       >
         {value ? (
           <div className="relative w-full group">
-            <img src={value} alt="Profile preview" className="h-48 w-full object-cover rounded-xl border border-slate-800 shadow-md" />
+            <img
+              src={value}
+              alt="Founders Group preview"
+              className="h-56 w-full object-cover rounded-xl border border-slate-800 shadow-md"
+            />
             <div className="absolute inset-0 bg-slate-950/80 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center space-x-3">
               <label className="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold cursor-pointer shadow-lg">
-                Change Picture
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+                Change Photograph
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+                />
               </label>
-              <button
-                type="button"
-                onClick={() => onChange('')}
-                className="px-3.5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold shadow-lg"
-              >
-                Remove Picture
-              </button>
             </div>
           </div>
         ) : (
@@ -81,154 +93,126 @@ const ImageDropzone = ({ value, onChange, label = 'Profile Picture' }) => {
               <Upload className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs font-bold text-white">Drag & drop profile photo here</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">or <span className="text-amber-400 font-semibold underline">click to select file</span></p>
+              <p className="text-xs font-bold text-white">Drag & drop 5-person group photo here</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                or <span className="text-amber-400 font-semibold underline">click to select file</span>
+              </p>
             </div>
-            <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+            />
           </label>
         )}
       </div>
+      {uploadError && <p className="text-[11px] text-red-400">{uploadError}</p>}
     </div>
   );
 };
 
 export default function ExpertsView({ experts: initialExperts, pageHeader: initialPageHeader, onSave }) {
-  const defaultExperts = [
+  const defaultFounders = [
     {
       id: 1,
-      name: 'Robert Jenkins',
-      role: 'Managing Partner',
-      qualifications: 'FCA, CFA',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Robert Jenkins brings 25+ Years Experience of extensive experience in strategic advisory. A visionary approach has helped steer top-tier multinational corporations through rigorous landscapes while optimizing strategies.',
-      expertise: 'Strategic Advisory, Corporate Governance, Financial Modeling.',
-      memberships: 'Fellow of Professional Institutes.',
-      industries: 'Financial Services, Technology, Manufacturing.',
+      name: 'AZMAL',
+      role: 'Founder / [Managing Partner]',
+      summary: 'Great things are built when vision meets execution with unyielding integrity.',
+      position: 'Far Left (1)',
       active: true,
     },
     {
       id: 2,
-      name: 'Sarah Mitchell',
-      role: 'Partner, Tax Advisory',
-      qualifications: 'FCA, CPA',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Sarah Mitchell specializes in direct and international tax advisory, transfer pricing, and cross-border M&A tax structuring for Fortune 500 corporations.',
-      expertise: 'Direct Taxation, Transfer Pricing, Cross-Border M&A.',
-      memberships: 'Member of International Tax Association.',
-      industries: 'Healthcare, Real Estate, E-Commerce.',
+      name: 'NARENDRA',
+      role: 'Co-Founder / [Tax & Advisory]',
+      summary: 'Precision is not just our standard — it is the cornerstone of trust with every partner.',
+      position: 'Second Left (2)',
       active: true,
     },
     {
       id: 3,
-      name: 'Michael Chang',
-      role: 'Director, Risk Advisory',
-      qualifications: 'CPA, CISA',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Michael Chang leads our internal audit and cybersecurity risk practice, ensuring enterprise resilience and stringent internal controls.',
-      expertise: 'Internal Audit, Information Systems Audit, SOC Compliance.',
-      memberships: 'ISACA Certified Information Systems Auditor.',
-      industries: 'Banking & Finance, IT & Fintech.',
+      name: 'GANESH',
+      role: 'Co-Founder / [Corporate Strategy]',
+      summary: 'Our commitment to excellence ensures every business moves forward with unwavering confidence.',
+      position: 'Center (3)',
       active: true,
     },
     {
       id: 4,
-      name: 'Elena Rodriguez',
-      role: 'Director, Wealth Advisory',
-      qualifications: 'CFP, MBA',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Elena Rodriguez manages family office wealth advisory, estate planning, and multi-asset capital allocation for high-net-worth individuals.',
-      expertise: 'Wealth Management, Estate Planning, Family Office Structuring.',
-      memberships: 'Certified Financial Planner Board Member.',
-      industries: 'Private Equity, Real Estate, Family Offices.',
+      name: 'PAVAN',
+      role: 'Co-Founder / [Risk Advisory]',
+      summary: 'True value is created when innovation in strategy seamlessly aligns with rigorous compliance.',
+      position: 'Second Right (4)',
       active: true,
     },
     {
       id: 5,
-      name: 'David O\'Connor',
-      role: 'Partner, Audit',
-      qualifications: 'FCA, B.Com',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200&auto=format&fit=crop',
-      summary: 'David O\'Connor oversees statutory audits, GAAP conversions, and regulatory reporting for listed corporations and public sector enterprises.',
-      expertise: 'Statutory Audit, GAAP/Ind AS Reporting, Forensic Auditing.',
-      memberships: 'Fellow Member of ICAI.',
-      industries: 'Manufacturing, Energy, Infrastructure.',
-      active: true,
-    },
-    {
-      id: 6,
-      name: 'Anita Desai',
-      role: 'Head of Corporate Law',
-      qualifications: 'LLB, FCS',
-      image: 'https://images.unsplash.com/photo-1598550874175-4d0ef43cb852?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Anita Desai leads company law compliance, ROC filings, board secretarial advisory, and corporate governance for emerging and established enterprises.',
-      expertise: 'Company Law, ROC Governance, SEBI & NCLT Compliance.',
-      memberships: 'Fellow Member of ICSI.',
-      industries: 'Startups, Corporate Law, Governance.',
+      name: 'DINESH',
+      role: 'Co-Founder / [Audit & Assurance]',
+      summary: 'Empowering organizations through financial clarity and strategic foresight drives sustainable growth.',
+      position: 'Far Right (5)',
       active: true,
     },
   ];
 
-  const [expertsList, setExpertsList] = useState(
-    Array.isArray(initialExperts) && initialExperts.length > 0 ? initialExperts : defaultExperts
+  const defaultHeader = {
+    eyebrow: 'THE FOUNDERS',
+    title: 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>',
+    subtitle: 'Words from the Founders',
+    heroImage: 'assets/images/founders-group.jpg',
+  };
+
+  const [foundersList, setFoundersList] = useState(
+    Array.isArray(initialExperts) && initialExperts.length === 5 ? initialExperts : defaultFounders
   );
 
   const [pageHeader, setPageHeader] = useState(
-    initialPageHeader && initialPageHeader.title ? initialPageHeader : {
-      title: 'Our Experts',
-      subtitle: 'The best industry experts will share their experience and talk about their projects.',
-    }
+    initialPageHeader && initialPageHeader.title ? initialPageHeader : defaultHeader
   );
 
-  const [search, setSearch] = useState('');
-  const [selectedExpert, setSelectedExpert] = useState(null);
-  const [showPreview, setShowPreview] = useState(false);
+  const [activePreviewIndex, setActivePreviewIndex] = useState(0);
   const [saved, setSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
-  const filtered = expertsList.filter(exp =>
-    exp.name.toLowerCase().includes(search.toLowerCase()) ||
-    exp.role.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const triggerSave = (updatedList = expertsList, updatedHeader = pageHeader) => {
-    if (onSave) {
-      onSave(updatedList, updatedHeader);
+  useEffect(() => {
+    if (Array.isArray(initialExperts) && initialExperts.length > 0) {
+      setFoundersList(initialExperts);
     }
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  }, [initialExperts]);
+
+  useEffect(() => {
+    if (initialPageHeader) setPageHeader(initialPageHeader);
+  }, [initialPageHeader]);
+
+  const triggerSave = async (updatedList = foundersList, updatedHeader = pageHeader) => {
+    setIsSaving(true);
+    setSaveError('');
+    try {
+      if (onSave) await onSave(updatedList, updatedHeader);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (error) {
+      setSaveError(error.message || 'Unable to save changes.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleUpdate = (updatedItem) => {
-    const next = expertsList.map(e => e.id === updatedItem.id ? updatedItem : e);
-    setExpertsList(next);
-    triggerSave(next, pageHeader);
+  const handleFounderChange = (index, field, value) => {
+    const updated = [...foundersList];
+    updated[index] = { ...updated[index], [field]: value };
+    setFoundersList(updated);
   };
 
-  const handleAdd = () => {
-    const newId = Date.now();
-    const newExpert = {
-      id: newId,
-      name: 'New Industry Expert',
-      role: 'Partner, Financial Advisory',
-      qualifications: 'FCA',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop',
-      summary: 'Experienced partner providing strategic leadership and financial clarity.',
-      expertise: 'Audit, Tax Advisory, Strategic Consulting.',
-      memberships: 'Institute Member.',
-      industries: 'Corporate & Technology.',
-      active: true,
-    };
-    const next = [newExpert, ...expertsList];
-    setExpertsList(next);
-    setSelectedExpert(newExpert);
-    triggerSave(next, pageHeader);
+  const handleResetToWebsiteDefaults = () => {
+    setFoundersList(defaultFounders);
+    setPageHeader(defaultHeader);
+    triggerSave(defaultFounders, defaultHeader);
   };
 
-  const handleDelete = (id) => {
-    const next = expertsList.filter(e => e.id !== id);
-    setExpertsList(next);
-    if (selectedExpert?.id === id) setSelectedExpert(null);
-    triggerSave(next, pageHeader);
-  };
+  const currentFounder = foundersList[activePreviewIndex] || foundersList[0];
 
   return (
     <div className="space-y-6 animate-fade-in text-slate-100 font-sans">
@@ -239,8 +223,10 @@ export default function ExpertsView({ experts: initialExperts, pageHeader: initi
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Our Experts Page Manager</h1>
-            <p className="text-slate-400 text-xs">Manage leadership team profiles, pictures, roles, and expertise details matching <code className="text-amber-400">experts.html</code>.</p>
+            <h1 className="text-xl font-bold text-white tracking-tight">Founders Showcase Manager</h1>
+            <p className="text-slate-400 text-xs">
+              Manage the central hero group photograph, headline, founder designations, and quotes matching <code className="text-amber-400">experts.html</code>.
+            </p>
           </div>
         </div>
 
@@ -249,268 +235,208 @@ export default function ExpertsView({ experts: initialExperts, pageHeader: initi
             href="https://precision-henna.vercel.app/experts.html"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700"
+            className="flex items-center px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700 transition-all"
           >
-            <Globe className="w-3.5 h-3.5 mr-1.5 text-amber-400" /> View Live Web Page
+            <Globe className="w-3.5 h-3.5 mr-1.5 text-amber-400" /> View Live Website
           </a>
 
           <button
-            onClick={handleAdd}
-            className="flex items-center px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-bold shadow transition-all"
+            onClick={handleResetToWebsiteDefaults}
+            className="flex items-center px-3.5 py-2 bg-slate-800 hover:bg-amber-950 text-amber-300 border border-amber-500/30 rounded-xl text-xs font-bold shadow transition-all"
+            title="Reset to website defaults"
           >
-            <Plus className="w-4 h-4 mr-1.5" /> Add New Expert
+            <RotateCcw className="w-3.5 h-3.5 mr-1.5 text-amber-400" /> Reset Defaults
           </button>
 
           <button
             onClick={() => triggerSave()}
+            disabled={isSaving}
             className="flex items-center px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold rounded-xl text-xs shadow-lg shadow-amber-500/20 transition-all border border-amber-400/40"
           >
             <CheckCircle2 className="w-4 h-4 mr-1.5" />
-            {saved ? 'Changes Saved Live!' : 'Save Experts Page'}
+            {saved ? 'Changes Saved Live!' : isSaving ? 'Saving to Vercel…' : 'Save Showcase'}
           </button>
         </div>
       </div>
 
       {saved && (
         <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between animate-fade-in">
-          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> All edits saved! Directly reflected on the main website (experts.html).</span>
+          <span className="flex items-center">
+            <Check className="w-4 h-4 mr-2 text-emerald-400" /> Edits saved cleanly! Live on <code className="mx-1 text-white">experts.html</code> & <code className="mx-1 text-white">home.html</code>.
+          </span>
           <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded-full">Live Synced</span>
         </div>
       )}
+      {saveError && <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-300 text-xs font-semibold">{saveError}</div>}
 
-      {/* Page Header Editor */}
-      <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Page Header Settings</h2>
-          <button
-            onClick={() => triggerSave()}
-            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-extrabold shadow"
-          >
-            Save Header Text
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+      {/* 1. Header Settings & Hero Group Photo */}
+      <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+        <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center">
+          <Sparkles className="w-4 h-4 mr-1.5" /> Section Header & Central Group Visual
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">Page Heading</label>
+            <label className="text-slate-300 font-semibold">Eyebrow Label</label>
             <input
               type="text"
-              value={pageHeader.title}
-              onChange={(e) => {
-                const nextHeader = { ...pageHeader, title: e.target.value };
-                setPageHeader(nextHeader);
-              }}
+              value={pageHeader.eyebrow || 'THE FOUNDERS'}
+              onChange={(e) => setPageHeader({ ...pageHeader, eyebrow: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-amber-400 font-mono text-xs font-bold"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">Main Headline</label>
+            <input
+              type="text"
+              value={pageHeader.title || 'Your Vision. Our Financial Expertise.'}
+              onChange={(e) => setPageHeader({ ...pageHeader, title: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
             />
           </div>
+
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">Page Subtitle</label>
+            <label className="text-slate-300 font-semibold">Quotes Area Subtitle</label>
             <input
               type="text"
-              value={pageHeader.subtitle}
-              onChange={(e) => {
-                const nextHeader = { ...pageHeader, subtitle: e.target.value };
-                setPageHeader(nextHeader);
-              }}
+              value={pageHeader.subtitle || 'Words from the Founders'}
+              onChange={(e) => setPageHeader({ ...pageHeader, subtitle: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
             />
           </div>
         </div>
-      </div>
 
-      {/* Search & Grid */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search experts by name or role..."
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+        <div className="pt-2">
+          <ImageDropzone
+            value={pageHeader.heroImage || 'assets/images/founders-group.jpg'}
+            onChange={(newImg) => setPageHeader({ ...pageHeader, heroImage: newImg })}
+            label="Central Founders Hero Photograph (HD 4K Group Visual)"
           />
         </div>
-        <span className="text-xs font-mono text-slate-400">{filtered.length} Experts Listed</span>
       </div>
 
-      {/* Experts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map(expert => (
-          <div key={expert.id} className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-xl space-y-4 p-4 flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="relative group">
-                <img src={expert.image} alt={expert.name} className="h-56 w-full object-cover rounded-xl border border-slate-800" />
-                <div className="absolute top-2 right-2 flex items-center space-x-2">
-                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${expert.active ? 'bg-emerald-500/80 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                    {expert.active ? 'Active' : 'Draft'}
-                  </span>
-                </div>
-              </div>
+      {/* 2. The 5 Founders Index & Quotes Editor */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+            The 5 Founders Index & Quotes (Left to Right Order)
+          </h2>
+          <span className="text-[11px] font-mono text-slate-400">5 Founder Slots</span>
+        </div>
 
-              <div>
-                <h3 className="text-base font-bold text-white">{expert.name}</h3>
-                <p className="text-xs text-amber-400 font-semibold">{expert.role}</p>
-                <p className="text-[11px] text-slate-400 font-mono mt-0.5">{expert.qualifications}</p>
-              </div>
-
-              <p className="text-slate-300 text-xs line-clamp-3 leading-relaxed">{expert.summary}</p>
-            </div>
-
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800/80">
-              <button
-                onClick={() => setSelectedExpert(expert)}
-                className="flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow transition-all"
-              >
-                <Edit2 className="w-3.5 h-3.5 mr-1" /> Edit Profile & Photo
-              </button>
-              <button
-                onClick={() => handleDelete(expert.id)}
-                className="p-2 bg-slate-800 hover:bg-red-950 text-slate-400 hover:text-red-400 rounded-xl transition-all"
-                title="Delete Expert"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Single Expert Drawer Editor */}
-      {selectedExpert && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-fade-in overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-8">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950">
-              <h2 className="text-sm font-bold text-white flex items-center">
-                <Users className="w-4 h-4 mr-2 text-amber-400" /> Edit Expert Profile — {selectedExpert.name}
-              </h2>
-              <button onClick={() => setSelectedExpert(null)} className="p-1 text-slate-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-5 text-xs max-h-[80vh] overflow-y-auto">
-              <ImageDropzone
-                value={selectedExpert.image}
-                onChange={(newImg) => {
-                  const updated = { ...selectedExpert, image: newImg };
-                  setSelectedExpert(updated);
-                  handleUpdate(updated);
-                }}
-                label="Expert Profile Photo (Uploaded directly to site)"
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-semibold">Full Name *</label>
-                  <input
-                    type="text"
-                    value={selectedExpert.name}
-                    onChange={(e) => {
-                      const updated = { ...selectedExpert, name: e.target.value };
-                      setSelectedExpert(updated);
-                      handleUpdate(updated);
-                    }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-semibold">Role / Designation *</label>
-                  <input
-                    type="text"
-                    value={selectedExpert.role}
-                    onChange={(e) => {
-                      const updated = { ...selectedExpert, role: e.target.value };
-                      setSelectedExpert(updated);
-                      handleUpdate(updated);
-                    }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-amber-400 font-semibold"
-                  />
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          {foundersList.map((founder, index) => (
+            <div
+              key={founder.id || index}
+              className={`bg-slate-900 p-4 rounded-2xl border transition-all space-y-3 ${
+                activePreviewIndex === index ? 'border-amber-500/80 bg-amber-500/5 shadow-lg' : 'border-slate-800 hover:border-slate-700'
+              }`}
+              onClick={() => setActivePreviewIndex(index)}
+            >
+              <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                <span className="text-[10px] font-mono font-bold text-amber-400">
+                  SLOT {index + 1}
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  {index === 0 ? 'Far Left' : index === 1 ? 'Second Left' : index === 2 ? 'Center' : index === 3 ? 'Second Right' : 'Far Right'}
+                </span>
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-300 font-semibold">Qualifications & Degrees</label>
+                <label className="text-[11px] text-slate-400 font-semibold">Founder Name</label>
                 <input
                   type="text"
-                  value={selectedExpert.qualifications}
-                  onChange={(e) => {
-                    const updated = { ...selectedExpert, qualifications: e.target.value };
-                    setSelectedExpert(updated);
-                    handleUpdate(updated);
-                  }}
-                  placeholder="e.g. FCA, CFA, CPA"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-mono"
+                  value={founder.name}
+                  onChange={(e) => handleFounderChange(index, 'name', e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white font-extrabold uppercase tracking-wider"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-slate-300 font-semibold">Professional Summary</label>
-                <textarea
-                  rows={3}
-                  value={selectedExpert.summary}
-                  onChange={(e) => {
-                    const updated = { ...selectedExpert, summary: e.target.value };
-                    setSelectedExpert(updated);
-                    handleUpdate(updated);
-                  }}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 leading-relaxed"
+                <label className="text-[11px] text-slate-400 font-semibold">Designation / Role</label>
+                <input
+                  type="text"
+                  value={founder.role}
+                  onChange={(e) => handleFounderChange(index, 'role', e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-300 font-mono"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-semibold">Core Expertise</label>
-                  <input
-                    type="text"
-                    value={selectedExpert.expertise}
-                    onChange={(e) => {
-                      const updated = { ...selectedExpert, expertise: e.target.value };
-                      setSelectedExpert(updated);
-                      handleUpdate(updated);
-                    }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-semibold">Industries Served</label>
-                  <input
-                    type="text"
-                    value={selectedExpert.industries}
-                    onChange={(e) => {
-                      const updated = { ...selectedExpert, industries: e.target.value };
-                      setSelectedExpert(updated);
-                      handleUpdate(updated);
-                    }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-                <label className="flex items-center space-x-2 text-slate-300 font-semibold cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedExpert.active}
-                    onChange={(e) => {
-                      const updated = { ...selectedExpert, active: e.target.checked };
-                      setSelectedExpert(updated);
-                      handleUpdate(updated);
-                    }}
-                    className="rounded bg-slate-950 border-slate-800 text-amber-500 focus:ring-amber-500"
-                  />
-                  <span>Publish Profile Live</span>
-                </label>
-
-                <button
-                  onClick={() => setSelectedExpert(null)}
-                  className="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold shadow"
-                >
-                  Done Editing
-                </button>
+              <div className="space-y-1">
+                <label className="text-[11px] text-slate-400 font-semibold">Founder Quote</label>
+                <textarea
+                  rows={4}
+                  value={founder.summary || ''}
+                  onChange={(e) => handleFounderChange(index, 'summary', e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 leading-relaxed italic"
+                  placeholder="Quote from founder..."
+                />
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
+
+      {/* 3. Interactive Admin Live Preview Component */}
+      <div className="bg-[#050e17] p-6 sm:p-8 rounded-3xl border border-amber-500/20 space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <span className="text-xs font-mono font-bold text-amber-400 flex items-center uppercase tracking-widest">
+            <Sparkles className="w-3.5 h-3.5 mr-1.5" /> Interactive Admin Live Preview
+          </span>
+          <span className="text-[11px] text-slate-400">Click any founder name to test quote transition</span>
+        </div>
+
+        <div className="text-center space-y-2">
+          <span className="text-[11px] font-mono font-extrabold text-amber-400 tracking-widest uppercase">
+            {pageHeader.eyebrow || 'THE FOUNDERS'}
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-serif text-white tracking-tight">
+            {pageHeader.title || 'Your Vision. Our Financial Expertise.'}
+          </h2>
+        </div>
+
+        {/* Hero Image Frame */}
+        <div className="relative rounded-2xl overflow-hidden border border-slate-800/80 shadow-2xl max-w-4xl mx-auto">
+          <img
+            src={pageHeader.heroImage || 'assets/images/founders-group.jpg'}
+            alt="Founders Hero Preview"
+            className="w-full h-auto object-cover max-h-96"
+          />
+        </div>
+
+        {/* Names Nav Row */}
+        <div className="grid grid-cols-5 gap-2 max-w-4xl mx-auto pt-2">
+          {foundersList.map((f, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActivePreviewIndex(i)}
+              className={`p-3 rounded-xl border text-center transition-all ${
+                activePreviewIndex === i
+                  ? 'bg-amber-500/10 border-amber-500/60 shadow-lg'
+                  : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
+              }`}
+            >
+              <h4 className={`text-xs font-extrabold tracking-wider ${activePreviewIndex === i ? 'text-amber-400' : 'text-white'}`}>
+                {f.name}
+              </h4>
+              <p className="text-[10px] text-slate-400 font-mono truncate mt-0.5">{f.role}</p>
+            </button>
+          ))}
+        </div>
+
+        {/* Quote Card Box */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 text-center max-w-3xl mx-auto space-y-3 relative">
+          <Quote className="w-8 h-8 text-amber-500/20 mx-auto" />
+          <p className="text-slate-200 text-sm sm:text-base font-serif italic leading-relaxed">
+            “{currentFounder.summary}”
+          </p>
+          <p className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
+            — {currentFounder.name}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

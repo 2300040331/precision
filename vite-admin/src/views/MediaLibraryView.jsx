@@ -52,24 +52,38 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            const dataUrl = event.target.result;
-            const mediaObj = {
-              filename: file.name,
-              originalName: file.name,
-              url: dataUrl,
-              mimeType: file.type || 'image/jpeg',
-              size: file.size,
-              folder: targetFolder,
-              altText: file.name.replace(/\.[^/.]+$/, ''),
-            };
-            await onUpload(mediaObj);
-            resolve();
+        let uploadedUrl = null;
+
+        // Try posting directly to Vercel Blob storage API handler
+        try {
+          const res = await fetch(`/api/uploadImage?filename=${encodeURIComponent(file.name)}`, {
+            method: 'POST',
+            body: file,
+          });
+          if (res.ok) {
+            const blobData = await res.json();
+            if (blobData && blobData.url) {
+              uploadedUrl = blobData.url;
+            }
+          }
+        } catch (blobErr) {
+          console.warn('Vercel Blob direct upload fallback:', blobErr);
+        }
+
+        if (uploadedUrl) {
+          const mediaObj = {
+            filename: file.name,
+            originalName: file.name,
+            url: uploadedUrl,
+            mimeType: file.type || 'image/jpeg',
+            size: file.size,
+            folder: targetFolder,
+            altText: file.name.replace(/\.[^/.]+$/, ''),
           };
-          reader.readAsDataURL(file);
-        });
+          await onUpload(mediaObj);
+        } else {
+          throw new Error(`Vercel Blob could not upload ${file.name}. No browser-only fallback is used.`);
+        }
       }
     } catch (err) {
       alert('Upload failed: ' + err.message);

@@ -4,10 +4,10 @@
 (function () {
   const getApiBase = () => {
     if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-      if (window.location.hostname.includes('vercel.app')) {
-        return '/api';
+      const host = window.location.hostname;
+      if ((host === 'localhost' || host === '127.0.0.1') && window.location.port === '5000') {
+        return `http://${host}:5000/api`;
       }
-      return `http://${window.location.hostname}:5001/api`;
     }
     return '/api';
   };
@@ -23,77 +23,38 @@
       // 1. Send Visitor Telemetry
       trackVisitor();
 
-      // 2. First apply instant local storage cache (for instantaneous reflection)
-      refreshFromCache(pageKey);
-
-      // Listen for real-time storage changes (cross-tab / cross-window CMS updates)
-      window.addEventListener('storage', (e) => {
-        if (!e.key || e.key === 'precision_cms_content' || e.key === 'precision_cms_full_store') {
-          refreshFromCache(pageKey);
-        }
-      });
-
-      // 3. Fetch Latest Dynamic Content from CMS API for current page
+      // 2. Fetch the current shared CMS document. Browser storage is never used
+      // as content may have been changed by another admin or device.
       try {
-        const res = await fetch(`${API_BASE}/getContent?page=${encodeURIComponent(pageKey)}`);
+        const res = await fetch(`${API_BASE}/getContent?page=${encodeURIComponent(pageKey)}&t=${Date.now()}`, {
+          cache: 'no-store',
+        });
         if (res.ok) {
           const pageData = await res.json();
           if (pageData && typeof pageData === 'object' && Object.keys(pageData).length > 0) {
             const flatData = extractPageFlatContent(pageData, pageKey);
             if (Object.keys(flatData).length > 0) {
               currentPageData = flatData;
-              const currentCache = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
-              const mergedPage = { ...(currentCache[pageKey] || {}), ...flatData };
-              applyContentBindings(mergedPage);
-              localStorage.setItem('precision_cms_content', JSON.stringify({
-                ...currentCache,
-                [pageKey]: mergedPage,
-              }));
+              applyContentBindings(flatData);
             }
           }
         }
       } catch (err) {}
 
-      // 4. Fetch the complete CMS store for shared navigation, footer, services, and industries.
+      // 3. Fetch the complete CMS store for shared navigation, footer, services, and industries.
       try {
         const fullStore = await fetchFullStore();
         if (fullStore) {
-          localStorage.setItem('precision_cms_full_store', JSON.stringify(fullStore));
           applyFullStore(fullStore, pageKey, currentPageData);
         }
       } catch (err) {}
 
-      // 5. Attach Consultation & Contact Form Listeners
+      // 4. Attach Consultation & Contact Form Listeners
       setupFormListeners();
     } catch (err) {
       console.warn('CMS dynamic sync warning (using cached/default content):', err);
     }
   });
-
-  function refreshFromCache(pageKey) {
-    const fullStoreStr = localStorage.getItem('precision_cms_full_store');
-    if (fullStoreStr) {
-      try {
-        const fullStore = JSON.parse(fullStoreStr);
-        const flatData = extractPageFlatContent(fullStore, pageKey);
-        if (flatData && Object.keys(flatData).length > 0) {
-          applyContentBindings(flatData);
-        }
-        applyFullStore(fullStore, pageKey, flatData);
-        return;
-      } catch (e) {}
-    }
-
-    const cached = localStorage.getItem('precision_cms_content');
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (parsed[pageKey] && typeof parsed[pageKey] === 'object') {
-          applyContentBindings(parsed[pageKey]);
-        }
-      } catch (e) {}
-    }
-  }
 
   // Extract content strictly belonging to the requested page or sections
   function extractPageFlatContent(raw, pageKey) {
@@ -171,7 +132,9 @@
   }
 
   async function fetchFullStore() {
-    const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
+    const res = await fetch(`${API_BASE}/getContent?page=fullStore&t=${Date.now()}`, {
+      cache: 'no-store',
+    });
     if (!res.ok) return null;
     const data = await res.json();
     if (!data || typeof data !== 'object') return null;
@@ -218,53 +181,29 @@
       }
     });
 
-    // 3. Experts Page Live Sync (experts.html or /experts)
-    const isExpertsPage = window.location.pathname.includes('experts');
-    if (isExpertsPage) {
-      try {
-        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
-        if (fullStoreStr) {
-          const store = JSON.parse(fullStoreStr);
-          updateExpertsPage(store.experts, store.expertsHeader);
-        } else if (data.experts || data.expertsHeader) {
-          updateExpertsPage(data.experts, data.expertsHeader);
-        }
-      } catch (e) {}
+    // 3. Experts Page & Showcase Live Sync (experts.html or pages with founders showcase)
+    const showcaseEl = document.querySelector('.founders-showcase');
+    if (showcaseEl || window.location.pathname.includes('experts')) {
+      if (data.experts || data.expertsHeader) updateExpertsPage(data.experts, data.expertsHeader);
     }
 
     // 4. Why Choose Us Page Live Sync (why-choose-us.html or /why-choose-us)
     const isWhyPage = window.location.pathname.includes('why-choose-us');
     if (isWhyPage) {
-      try {
-        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
-        if (fullStoreStr) {
-          const store = JSON.parse(fullStoreStr);
-          const whyData = store.whyChooseUs;
-          if (whyData) {
-            const heroTitle = document.querySelector('.wcu-hero__title, .hero-title, h1');
-            if (heroTitle && whyData.heroTitle) heroTitle.innerHTML = whyData.heroTitle;
-            const heroDesc = document.querySelector('.wcu-hero__subtitle, .hero-desc, p.lead');
-            if (heroDesc && whyData.heroDesc) heroDesc.innerHTML = whyData.heroDesc;
-            const philBody = document.querySelector('.wcu-philosophy__text, .philosophy-body');
-            if (philBody && whyData.philosophyBody) philBody.innerHTML = whyData.philosophyBody;
-          }
-        }
-      } catch (e) {}
+      const whyData = data.whyChooseUs || data;
+      const heroTitle = document.querySelector('.wcu-hero__title, .hero-title, h1');
+      if (heroTitle && whyData.heroTitle) heroTitle.innerHTML = whyData.heroTitle;
+      const heroDesc = document.querySelector('.wcu-hero__subtitle, .hero-desc, p.lead');
+      if (heroDesc && whyData.heroDesc) heroDesc.innerHTML = whyData.heroDesc;
+      const philBody = document.querySelector('.wcu-philosophy__text, .philosophy-body');
+      if (philBody && whyData.philosophyBody) philBody.innerHTML = whyData.philosophyBody;
     }
 
     // 5. Contact Us Page Live Sync (contact.html or /contact)
     const isContactPage = window.location.pathname.includes('contact');
     if (isContactPage) {
-      try {
-        const fullStoreStr = localStorage.getItem('precision_cms_full_store');
-        let cData = null;
-        if (fullStoreStr) {
-          const store = JSON.parse(fullStoreStr);
-          cData = store.contactUs || store.contact;
-        }
-        if (!cData) cData = data;
-
-        if (cData) {
+      const cData = data.contactUs || data.contact || data;
+      if (cData) {
           const phoneEl = document.querySelector('[data-content="primaryPhone"]');
           if (phoneEl && cData.primaryPhone) phoneEl.textContent = cData.primaryPhone;
           const secPhoneEl = document.querySelector('[data-content="secondaryPhone"]');
@@ -275,12 +214,78 @@
           if (taxEmailEl && cData.taxEmail) taxEmailEl.textContent = cData.taxEmail;
           const hqEl = document.querySelector('[data-content="headquarters"]');
           if (hqEl && cData.headquarters) hqEl.textContent = cData.headquarters;
-        }
-      } catch (e) {}
+      }
     }
   }
 
   function updateExpertsPage(experts, expertsHeader) {
+    const showcase = document.querySelector('.founders-showcase');
+    if (showcase) {
+      if (expertsHeader) {
+        const eyebrow = showcase.querySelector('.founders-showcase__eyebrow');
+        if (eyebrow && expertsHeader.eyebrow) eyebrow.textContent = expertsHeader.eyebrow;
+        const headline = showcase.querySelector('.founders-showcase__headline');
+        if (headline) {
+          let titleText = (expertsHeader && expertsHeader.title) ? expertsHeader.title : 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
+          if (titleText === 'Our Experts' || titleText === 'Built by People. Driven by Purpose.') {
+            titleText = 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>';
+          }
+          
+          if (titleText.includes('<span')) {
+            headline.innerHTML = titleText;
+          } else if (titleText.includes('Our Financial Expertise')) {
+            headline.innerHTML = titleText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
+          } else {
+            const parts = titleText.split('. ');
+            if (parts.length > 1) {
+              headline.innerHTML = `${parts[0]}. <span class="gold-text">${parts.slice(1).join('. ')}</span>`;
+            } else {
+              headline.innerHTML = `<span class="gold-text">${titleText}</span>`;
+            }
+          }
+        }
+        const subtitle = showcase.querySelector('.founders-showcase__words-sub');
+        if (subtitle && expertsHeader.subtitle) subtitle.textContent = expertsHeader.subtitle;
+        const groupImage = showcase.querySelector('.founders-showcase__group-img');
+        if (groupImage && expertsHeader.heroImage) {
+          groupImage.src = expertsHeader.heroImage;
+        }
+      }
+
+      // The showcase has fixed visual slots, so update those existing elements
+      // rather than rebuilding them. This preserves the page's hover, click,
+      // and auto-rotate interactions while applying every saved founder edit.
+      const activeExperts = Array.isArray(experts)
+        ? experts.filter(expert => expert && expert.active !== false)
+        : [];
+      const nameItems = showcase.querySelectorAll('.founders-showcase__name-item');
+      const quoteItems = showcase.querySelectorAll('.founders-showcase__quote-item');
+      const dots = showcase.querySelectorAll('.founders-showcase__dot');
+      const spotlights = showcase.querySelectorAll('.founders-showcase__spotlight-col');
+
+      nameItems.forEach((item, index) => {
+        const expert = activeExperts[index];
+        item.style.display = expert ? '' : 'none';
+        if (!expert) return;
+        const name = item.querySelector('.founders-showcase__name');
+        const role = item.querySelector('.founders-showcase__role');
+        if (name) name.textContent = expert.name || 'Founder';
+        if (role) role.textContent = expert.role || '';
+      });
+      quoteItems.forEach((item, index) => {
+        const expert = activeExperts[index];
+        item.style.display = expert ? '' : 'none';
+        if (!expert) return;
+        const quote = item.querySelector('.founders-showcase__quote-text');
+        const author = item.querySelector('.founders-showcase__quote-author');
+        if (quote) quote.textContent = expert.summary || '';
+        if (author) author.textContent = `— ${expert.name || 'Founder'}`;
+      });
+      dots.forEach((dot, index) => { dot.style.display = activeExperts[index] ? '' : 'none'; });
+      spotlights.forEach((spotlight, index) => { spotlight.style.display = activeExperts[index] ? '' : 'none'; });
+      return;
+    }
+
     if (expertsHeader) {
       const h1 = document.querySelector('.founders-title');
       if (h1 && expertsHeader.title) h1.textContent = expertsHeader.title;
@@ -288,12 +293,70 @@
       if (sub && expertsHeader.subtitle) sub.textContent = expertsHeader.subtitle;
     }
 
-    if (!Array.isArray(experts) || experts.length === 0) return;
+    // The original HTML only contained six placeholder cards. Build the live
+    // grid from the shared CMS list so the admin can publish 10+ experts.
+    const activeExperts = Array.isArray(experts) ? experts.filter(expert => expert && expert.active !== false) : [];
+    const grid = document.querySelector('.founders-grid');
+    if (grid) {
+      grid.innerHTML = activeExperts.map((expert, index) => `
+        <div class="founder-card" data-founder="cms-${index}">
+          <div class="fcard-img-wrapper">
+            <img src="${escapeAttr(expert.image || 'assets/images/about-team.jpg')}" alt="${escapeAttr(expert.name || 'Expert')}">
+            <div class="fcard-glass-reflection"></div>
+          </div>
+          <div class="fcard-info">
+            <h2 class="fcard-name">${escapeHtml(expert.name || 'Expert')}</h2>
+            <h3 class="fcard-role">${escapeHtml(expert.role || '')}</h3>
+            <p class="fcard-qual">${escapeHtml(expert.qualifications || '')}</p>
+          </div>
+        </div>
+      `).join('') || '<p class="founders-subtitle">Our expert profiles will be available soon.</p>';
+
+      document.querySelectorAll('.founder-modal').forEach(modal => modal.remove());
+      activeExperts.forEach((expert, index) => {
+        const modal = document.createElement('div');
+        modal.className = 'founder-modal';
+        modal.id = `modal-cms-${index}`;
+        modal.innerHTML = `
+          <div class="fmodal-backdrop"></div>
+          <div class="fmodal-content">
+            <button class="fmodal-close" aria-label="Close modal">×</button>
+            <div class="fmodal-grid">
+              <div class="fmodal-text-col"><div class="fmodal-header"><span class="fmodal-label">About Our Expert</span><h2 class="fmodal-name">${escapeHtml(expert.name || 'Expert')}</h2><h3 class="fmodal-role">${escapeHtml(expert.role || '')}</h3><p class="fmodal-qual">${escapeHtml(expert.qualifications || '')}</p><div class="fmodal-divider"></div></div>
+                <div class="fmodal-body"><h4>Professional Summary</h4><p>${escapeHtml(expert.summary || '')}</p><h4>Core Expertise</h4><p>${escapeHtml(expert.expertise || '')}</p><h4>Professional Memberships</h4><p>${escapeHtml(expert.memberships || '')}</p><h4>Industries Served</h4><p>${escapeHtml(expert.industries || '')}</p></div>
+                <div class="fmodal-footer"><a href="contact.html" class="btn btn-primary fmodal-cta">Schedule Consultation</a></div>
+              </div><div class="fmodal-img-col"><img src="${escapeAttr(expert.image || 'assets/images/about-team.jpg')}" alt="${escapeAttr(expert.name || 'Expert')}"></div>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+      });
+
+      grid.querySelectorAll('.founder-card').forEach(card => card.addEventListener('click', () => {
+        document.getElementById(`modal-${card.dataset.founder}`)?.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+      }));
+      document.querySelectorAll('.founder-modal').forEach(modal => {
+        const close = () => { modal.classList.remove('is-active'); document.body.style.overflow = ''; };
+        modal.querySelector('.fmodal-close')?.addEventListener('click', close);
+        modal.querySelector('.fmodal-backdrop')?.addEventListener('click', close);
+      });
+      return;
+    }
+
+    const legacyExperts = Array.isArray(experts) ? experts.filter(expert => expert && expert.active !== false) : [];
 
     const cards = document.querySelectorAll('.founder-card');
     cards.forEach((card, idx) => {
-      const exp = experts[idx];
-      if (!exp) return;
+      const exp = legacyExperts[idx];
+      const modalId = card.getAttribute('data-founder') || (idx + 1);
+      const modal = document.getElementById(`modal-${modalId}`) || document.querySelectorAll('.founder-modal')[idx];
+      if (!exp) {
+        card.style.display = 'none';
+        if (modal) modal.style.display = 'none';
+        return;
+      }
+      card.style.display = '';
+      if (modal) modal.style.display = '';
 
       // Update Card Image
       const cardImg = card.querySelector('.fcard-img-wrapper img');
@@ -312,8 +375,6 @@
       if (qualEl && exp.qualifications) qualEl.textContent = exp.qualifications;
 
       // Update corresponding Modal Image and Text
-      const modalId = card.getAttribute('data-founder') || (idx + 1);
-      const modal = document.getElementById(`modal-${modalId}`) || document.querySelectorAll('.founder-modal')[idx];
       if (modal) {
         const modalImg = modal.querySelector('.fmodal-img-col img');
         if (modalImg && exp.image) modalImg.src = exp.image;

@@ -147,12 +147,6 @@ export default function LiveVisualEditor({ pages, onSaveSection }) {
         content: fieldData,
       });
 
-      // Update local storage so live page iframe and external tabs refresh immediately
-      const currentFlat = JSON.parse(localStorage.getItem('precision_cms_content') || '{}');
-      const updatedFlat = { ...currentFlat, ...fieldData };
-      localStorage.setItem('precision_cms_content', JSON.stringify(updatedFlat));
-      window.dispatchEvent(new Event('storage'));
-
       setSavedSuccess(true);
       setIframeKey(prev => prev + 1);
       setTimeout(() => setSavedSuccess(false), 2500);

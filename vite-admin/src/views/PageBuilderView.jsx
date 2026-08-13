@@ -18,6 +18,7 @@ import {
   Globe,
 } from 'lucide-react';
 import LiveDeviceFrame from '../components/LiveDeviceFrame';
+import { uploadImageToBlob } from '../services/blobUpload';
 
 export default function PageBuilderView({ pages, onSaveSection, onAddSection, onDeleteSection, onReorderSections, onPublishPage }) {
   const [selectedPageId, setSelectedPageId] = useState('home');
@@ -388,14 +389,14 @@ export default function PageBuilderView({ pages, onSaveSection, onAddSection, on
                                   type="file"
                                   accept="image/*"
                                   className="hidden"
-                                  onChange={(e) => {
+                                  onChange={async (e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
-                                      const reader = new FileReader();
-                                      reader.onload = (evt) => {
-                                        if (evt.target?.result) handleFieldChange(key, evt.target.result);
-                                      };
-                                      reader.readAsDataURL(file);
+                                      try {
+                                        handleFieldChange(key, await uploadImageToBlob(file));
+                                      } catch (error) {
+                                        alert(error.message || 'Photo upload failed.');
+                                      }
                                     }
                                   }}
                                 />

@@ -3,10 +3,10 @@
 
 const getApiBase = () => {
   if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    if (window.location.hostname.includes('vercel.app')) {
-      return '/api';
+    const host = window.location.hostname;
+    if ((host === 'localhost' || host === '127.0.0.1') && window.location.port === '5000') {
+      return `http://${host}:5000/api`;
     }
-    return `http://${window.location.hostname}:5001/api`;
   }
   return '/api';
 };
@@ -1076,15 +1076,14 @@ export const fullWebsiteStore = {
 
 class ApiService {
   constructor() {
-    this.token = localStorage.getItem('precision_admin_token') || '';
+    this.token = '';
+    this.store = null;
+    this.saveQueue = Promise.resolve();
   }
 
   getStore() {
-    try {
-      const stored = typeof window !== 'undefined' ? localStorage.getItem('precision_cms_full_store') : null;
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed && typeof parsed === 'object') {
+    const parsed = this.store ? structuredClone(this.store) : structuredClone(fullWebsiteStore);
+    if (parsed && typeof parsed === 'object') {
           if (!Array.isArray(parsed.pages)) parsed.pages = JSON.parse(JSON.stringify(fullWebsiteStore.pages || []));
           if (!Array.isArray(parsed.services)) parsed.services = JSON.parse(JSON.stringify(fullWebsiteStore.services || []));
           if (!Array.isArray(parsed.industries)) parsed.industries = JSON.parse(JSON.stringify(fullWebsiteStore.industries || []));
@@ -1139,38 +1138,39 @@ class ApiService {
             }
           });
 
-          return parsed;
-        }
-      }
-    } catch (e) {}
-    return fullWebsiteStore;
+      return parsed;
+    }
+    return structuredClone(fullWebsiteStore);
   }
 
   async syncRemoteStore() {
     try {
-      const local = localStorage.getItem('precision_cms_full_store');
-      if (!local) {
-        const res = await fetch(`${API_BASE}/getContent?page=fullStore`);
-        if (res.ok) {
-          const remote = await res.json();
-          if (remote && remote.pages) {
-            localStorage.setItem('precision_cms_full_store', JSON.stringify(remote));
-            return remote;
-          }
+      const res = await fetch(`${API_BASE}/getContent?page=fullStore&t=${Date.now()}`, {
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        const remote = await res.json();
+        if (remote && (remote.pages || remote.fullStore)) {
+          const storeToSave = remote.fullStore || remote;
+          this.store = storeToSave;
+          return this.getStore();
         }
       }
     } catch (e) {}
     return null;
   }
 
-  saveStore(store) {
-    try {
-      localStorage.setItem('precision_cms_full_store', JSON.stringify(store));
+  async saveStore(store) {
+    // Keep the current admin session responsive while writes are serialized. This
+    // is in-memory only; a reload always starts from Vercel Storage.
+    this.store = structuredClone(store);
+    const storeSnapshot = structuredClone(store);
+    const save = async () => {
 
       // Flatten and extract section content per page for dynamic-content.js
       let flat = {};
-      if (Array.isArray(store.pages)) {
-        store.pages.forEach(p => {
+      if (Array.isArray(storeSnapshot.pages)) {
+        storeSnapshot.pages.forEach(p => {
           let pageFlat = {};
           if (Array.isArray(p.sections)) {
             p.sections.forEach(sec => {
@@ -1182,48 +1182,130 @@ class ApiService {
               }
             });
           }
-          if (p.isEdited || (store.customEdits && store.customEdits[p.id])) {
+          if (p.isEdited || (storeSnapshot.customEdits && storeSnapshot.customEdits[p.id])) {
             pageFlat._edited = true;
           }
           flat[p.id] = pageFlat;
           flat[p.slug] = pageFlat;
         });
       }
-      if (store.customEdits) {
-        flat._customEdits = store.customEdits;
+      if (storeSnapshot.customEdits) {
+        flat._customEdits = storeSnapshot.customEdits;
       }
-      if (store.experts) {
-        flat.experts = store.experts;
-        flat.expertsHeader = store.expertsHeader;
+      if (storeSnapshot.experts) {
+        flat.experts = storeSnapshot.experts;
+        flat.expertsHeader = storeSnapshot.expertsHeader;
       }
-      if (store.whyChooseUs) {
-        flat['why-choose-us'] = store.whyChooseUs;
+      if (storeSnapshot.whyChooseUs) {
+        flat['why-choose-us'] = storeSnapshot.whyChooseUs;
       }
-      if (store.contactUs) {
-        flat.contact = store.contactUs;
+      if (storeSnapshot.contactUs) {
+        flat.contact = storeSnapshot.contactUs;
       }
-      localStorage.setItem('precision_cms_content', JSON.stringify(flat));
-
-      // Dispatch storage event to notify other open tabs/windows instantly
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('storage'));
-      }
-
-      // Asynchronously push fullStore and flat to Vercel API backend
-      fetch(`${API_BASE}/updateContent`, {
+      // Persist to Vercel before updating the in-memory admin view. The browser
+      // never becomes a source of truth for public content.
+      const response = await fetch(`${API_BASE}/updateContent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullStore: store, flat }),
-      }).catch(() => {});
-    } catch (e) {}
+        body: JSON.stringify({ fullStore: storeSnapshot, flat }),
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || 'Unable to save changes to Vercel Storage.');
+      }
+      return this.getStore();
+    };
+
+    this.saveQueue = this.saveQueue.then(save, save);
+    return this.saveQueue;
   }
 
   // Experts Endpoints
   async getExperts() {
     const store = this.getStore();
+    const defaultFoundersList = [
+      {
+        id: 1,
+        name: 'AZMAL',
+        role: 'Founder / Managing Partner',
+        qualifications: 'FCA, CFA',
+        image: 'assets/images/founders-group.jpg',
+        summary: 'Great things are built when vision meets execution with unyielding integrity.',
+        expertise: 'Strategic Advisory, Corporate Governance, Financial Modeling.',
+        memberships: 'Fellow Member of ICAI.',
+        industries: 'Financial Services, Technology, Manufacturing.',
+        active: true,
+      },
+      {
+        id: 2,
+        name: 'NARENDRA',
+        role: 'Co-Founder / Tax & Advisory',
+        qualifications: 'FCA, CPA',
+        image: 'assets/images/founders-group.jpg',
+        summary: 'Precision is not just our standard — it is the cornerstone of trust with every partner.',
+        expertise: 'Direct Taxation, Transfer Pricing, Cross-Border M&A.',
+        memberships: 'Member of International Tax Association.',
+        industries: 'Healthcare, Real Estate, E-Commerce.',
+        active: true,
+      },
+      {
+        id: 3,
+        name: 'GANESH',
+        role: 'Co-Founder / Corporate Strategy',
+        qualifications: 'LLB, FCS',
+        image: 'assets/images/founders-group.jpg',
+        summary: 'Our commitment to excellence ensures every business moves forward with unwavering confidence.',
+        expertise: 'Company Law, Corporate Governance, SEBI Compliance.',
+        memberships: 'Fellow Member of ICSI.',
+        industries: 'Startups, Corporate Law, Governance.',
+        active: true,
+      },
+      {
+        id: 4,
+        name: 'PAVAN',
+        role: 'Co-Founder / Risk Advisory',
+        qualifications: 'CPA, CISA',
+        image: 'assets/images/founders-group.jpg',
+        summary: 'True value is created when innovation in strategy seamlessly aligns with rigorous compliance.',
+        expertise: 'Internal Audit, Information Systems Audit, Risk Management.',
+        memberships: 'Certified Information Systems Auditor.',
+        industries: 'Banking & Finance, IT & Fintech.',
+        active: true,
+      },
+      {
+        id: 5,
+        name: 'DINESH',
+        role: 'Co-Founder / Audit & Assurance',
+        qualifications: 'FCA, B.Com',
+        image: 'assets/images/founders-group.jpg',
+        summary: 'Empowering organizations through financial clarity and strategic foresight drives sustainable growth.',
+        expertise: 'Statutory Audit, Ind AS Reporting, Financial Advisory.',
+        memberships: 'Fellow Member of ICAI.',
+        industries: 'Manufacturing, Energy, Infrastructure.',
+        active: true,
+      },
+    ];
+
+    const defaultHeader = {
+      eyebrow: 'THE FOUNDERS',
+      title: 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>',
+      subtitle: 'Words from the Founders',
+      heroImage: 'assets/images/founders-group.jpg',
+    };
+
+    const hasLegacy = (Array.isArray(store.experts) && store.experts.some(e => e.name && (e.name.includes('Robert') || e.name.includes('Sarah') || e.name.includes('Michael') || e.name.includes('Elena') || e.name.includes('David') || e.name.includes('Anita')))) || (store.expertsHeader && (store.expertsHeader.title === 'Our Experts' || store.expertsHeader.title === 'Built by People. Driven by Purpose.'));
+    const list = (!store.experts || store.experts.length === 0 || hasLegacy) ? defaultFoundersList : store.experts;
+    const header = (!store.expertsHeader || store.expertsHeader.title === 'Our Experts' || store.expertsHeader.title === 'Built by People. Driven by Purpose.' || hasLegacy) ? defaultHeader : store.expertsHeader;
+
+    if (hasLegacy || !store.expertsHeader || store.expertsHeader.title === 'Built by People. Driven by Purpose.') {
+      store.experts = list;
+      store.expertsHeader = header;
+      await this.saveStore(store);
+    }
+
     return {
-      list: store.experts || fullWebsiteStore.experts || [],
-      header: store.expertsHeader || fullWebsiteStore.expertsHeader || { title: 'Our Experts', subtitle: 'The best industry experts will share their experience and talk about their projects.' },
+      list,
+      header,
     };
   }
 
@@ -1231,7 +1313,7 @@ class ApiService {
     const store = this.getStore();
     store.experts = expertsList;
     if (pageHeader) store.expertsHeader = pageHeader;
-    this.saveStore(store);
+    await this.saveStore(store);
     return { list: expertsList, header: pageHeader };
   }
 
@@ -1244,7 +1326,7 @@ class ApiService {
   async updateWhyChooseUs(data) {
     const store = this.getStore();
     store.whyChooseUs = { ...(store.whyChooseUs || {}), ...data };
-    this.saveStore(store);
+    await this.saveStore(store);
     return store.whyChooseUs;
   }
 
@@ -1257,40 +1339,8 @@ class ApiService {
   async updateContactUs(data) {
     const store = this.getStore();
     store.contactUs = { ...(store.contactUs || {}), ...data };
-    this.saveStore(store);
+    await this.saveStore(store);
     return store.contactUs;
-  }
-
-  async updateSection(id, sectionData) {
-    const store = this.getStore();
-    const parsedContent = typeof sectionData.content === 'object' ? sectionData.content : JSON.parse(sectionData.content || '{}');
-    const contentString = typeof sectionData.content === 'object' ? JSON.stringify(sectionData.content) : sectionData.content;
-
-    let targetPageId = 'home';
-    store.pages = (store.pages || []).map(p => {
-      const hasSec = (p.sections || []).some(s => s.id === id);
-      if (hasSec) targetPageId = p.id;
-      return {
-        ...p,
-        isEdited: hasSec ? true : p.isEdited,
-        sections: (p.sections || []).map(sec => {
-          if (sec.id === id) {
-            return {
-              ...sec,
-              ...sectionData,
-              content: contentString,
-            };
-          }
-          return sec;
-        }),
-      };
-    });
-
-    store.customEdits = store.customEdits || {};
-    store.customEdits[targetPageId] = { ...(store.customEdits[targetPageId] || {}), ...parsedContent, _edited: true };
-
-    this.saveStore(store);
-    return { id, ...sectionData, content: contentString };
   }
 
   async resetPageSections(pageId) {
@@ -1303,18 +1353,13 @@ class ApiService {
         }
         return p;
       });
-      this.saveStore(store);
+      await this.saveStore(store);
     }
     return store;
   }
 
   setToken(token) {
     this.token = token;
-    if (token) {
-      localStorage.setItem('precision_admin_token', token);
-    } else {
-      localStorage.removeItem('precision_admin_token');
-    }
   }
 
   getHeaders(isJson = true) {
@@ -1398,21 +1443,21 @@ class ApiService {
     const store = this.getStore();
     const newUser = { id: Date.now(), ...userData };
     store.users = [...(store.users || []), newUser];
-    this.saveStore(store);
+    await this.saveStore(store);
     return newUser;
   }
 
   async updateUser(id, userData) {
     const store = this.getStore();
     store.users = (store.users || []).map(u => u.id === id ? { ...u, ...userData } : u);
-    this.saveStore(store);
+    await this.saveStore(store);
     return userData;
   }
 
   async deleteUser(id) {
     const store = this.getStore();
     store.users = (store.users || []).filter(u => u.id !== id);
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1430,14 +1475,14 @@ class ApiService {
   async updatePageMeta(id, data) {
     const store = this.getStore();
     store.pages = (store.pages || []).map(p => p.id === id ? { ...p, ...data } : p);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
   async publishPage(pageId) {
     const store = this.getStore();
     store.pages = (store.pages || []).map(p => p.id === pageId ? { ...p, isPublished: true, isEdited: true } : p);
-    this.saveStore(store);
+    await this.saveStore(store);
     return store;
   }
 
@@ -1450,7 +1495,7 @@ class ApiService {
       }
       return p;
     });
-    this.saveStore(store);
+    await this.saveStore(store);
     return newSec;
   }
 
@@ -1459,9 +1504,14 @@ class ApiService {
     const parsedContent = typeof sectionData.content === 'object' ? sectionData.content : JSON.parse(sectionData.content || '{}');
     const contentString = typeof sectionData.content === 'object' ? JSON.stringify(sectionData.content) : sectionData.content;
 
-    store.pages = (store.pages || []).map(p => ({
-      ...p,
-      sections: (p.sections || []).map(sec => {
+    let targetPageId = 'home';
+    store.pages = (store.pages || []).map(p => {
+      const hasSection = (p.sections || []).some(sec => sec.id === id);
+      if (hasSection) targetPageId = p.id;
+      return {
+        ...p,
+        isEdited: hasSection ? true : p.isEdited,
+        sections: (p.sections || []).map(sec => {
         if (sec.id === id) {
           return {
             ...sec,
@@ -1470,10 +1520,17 @@ class ApiService {
           };
         }
         return sec;
-      }),
-    }));
+        }),
+      };
+    });
 
-    this.saveStore(store);
+    store.customEdits = store.customEdits || {};
+    store.customEdits[targetPageId] = {
+      ...(store.customEdits[targetPageId] || {}),
+      ...parsedContent,
+      _edited: true,
+    };
+    await this.saveStore(store);
     return { id, ...sectionData, content: contentString };
   }
 
@@ -1483,7 +1540,7 @@ class ApiService {
       ...p,
       sections: (p.sections || []).filter(sec => String(sec.id) !== String(id)),
     }));
-    this.saveStore(store);
+    await this.saveStore(store);
     try {
       await fetch(`${API_BASE}/content/sections/${id}`, { method: 'DELETE' });
     } catch (e) {}
@@ -1499,7 +1556,7 @@ class ApiService {
       }
       return p;
     });
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1528,14 +1585,14 @@ class ApiService {
     const store = this.getStore();
     const newService = { id: Date.now(), ...data };
     store.services = [...(store.services || []), newService];
-    this.saveStore(store);
+    await this.saveStore(store);
     return newService;
   }
 
   async updateService(id, data) {
     const store = this.getStore();
     store.services = (store.services || []).map(s => String(s.id) === String(id) ? { ...s, ...data } : s);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
@@ -1545,7 +1602,7 @@ class ApiService {
     if (target) {
       const dup = { ...target, id: Date.now(), title: `${target.title} (Copy)` };
       store.services = [...(store.services || []), dup];
-      this.saveStore(store);
+      await this.saveStore(store);
       return dup;
     }
   }
@@ -1553,7 +1610,7 @@ class ApiService {
   async deleteService(id) {
     const store = this.getStore();
     store.services = (store.services || []).filter(s => String(s.id) !== String(id));
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1579,21 +1636,21 @@ class ApiService {
     const store = this.getStore();
     const newInd = { id: Date.now(), ...data };
     store.industries = [...(store.industries || []), newInd];
-    this.saveStore(store);
+    await this.saveStore(store);
     return newInd;
   }
 
   async updateIndustry(id, data) {
     const store = this.getStore();
     store.industries = (store.industries || []).map(i => i.id === id ? { ...i, ...data } : i);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
   async deleteIndustry(id) {
     const store = this.getStore();
     store.industries = (store.industries || []).filter(i => i.id !== id);
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1617,21 +1674,21 @@ class ApiService {
       usageCount: 1,
     };
     store.media = [...(store.media || []), newMedia];
-    this.saveStore(store);
+    await this.saveStore(store);
     return newMedia;
   }
 
   async updateMedia(id, data) {
     const store = this.getStore();
     store.media = (store.media || []).map(m => m.id === id ? { ...m, ...data } : m);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
   async deleteMedia(id) {
     const store = this.getStore();
     store.media = (store.media || []).filter(m => m.id !== id);
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1645,7 +1702,7 @@ class ApiService {
     const store = this.getStore();
     const current = Array.isArray(store.consultations) ? store.consultations : [];
     store.consultations = current.map(c => c.id === id ? { ...c, ...data } : c);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
@@ -1653,7 +1710,7 @@ class ApiService {
     const store = this.getStore();
     const current = Array.isArray(store.consultations) ? store.consultations : [];
     store.consultations = current.filter(c => c.id !== id);
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1665,14 +1722,14 @@ class ApiService {
   async updateContact(id, data) {
     const store = this.getStore();
     store.contacts = (store.contacts || []).map(c => c.id === id ? { ...c, ...data } : c);
-    this.saveStore(store);
+    await this.saveStore(store);
     return data;
   }
 
   async deleteContact(id) {
     const store = this.getStore();
     store.contacts = (store.contacts || []).filter(c => c.id !== id);
-    this.saveStore(store);
+    await this.saveStore(store);
     return { success: true };
   }
 
@@ -1702,7 +1759,7 @@ class ApiService {
   async updateSettings(data) {
     const store = this.getStore();
     store.settings = { ...(store.settings || fullWebsiteStore.settings), ...data };
-    this.saveStore(store);
+    await this.saveStore(store);
     return store.settings;
   }
 

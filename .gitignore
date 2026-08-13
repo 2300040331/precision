@@ -6,3 +6,4 @@ vite-admin/dist
 .DS_Store
 *.DS_Store
 .env.local
+.env*

@@ -4,6 +4,9 @@ export default async function handler(request, response) {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.setHeader('Cache-Control', 'no-store');
+  response.setHeader('CDN-Cache-Control', 'no-store');
+  response.setHeader('Vercel-CDN-Cache-Control', 'no-store');
 
   if (request.method === 'OPTIONS') {
     return response.status(200).end();
@@ -16,18 +19,19 @@ export default async function handler(request, response) {
   try {
     const data = typeof request.body === 'string' ? JSON.parse(request.body) : request.body;
     
-    // Save to shared in-memory global store across serverless requests
-    global.__PRECISION_CMS_STORE__ = data;
-
-    try {
-      const blob = await put('content.json', JSON.stringify(data), {
-        access: 'public',
-        addRandomSuffix: false,
-      });
-      return response.status(200).json({ success: true, url: blob.url, data });
-    } catch (e) {
-      return response.status(200).json({ success: true, warning: 'Saved to memory cache', data });
-    }
+    // A CMS save is successful only after it reaches the shared Vercel store.
+    // Serverless memory is intentionally not used because instances do not share it.
+    const blob = await put('content.json', JSON.stringify(data), {
+      access: 'public',
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      cacheControlMaxAge: 0,
+    });
+    return response.status(200).json({
+      success: true,
+      url: blob.url,
+      publishedAt: new Date().toISOString(),
+    });
   } catch (error) {
     return response.status(500).json({ error: error.message });
   }

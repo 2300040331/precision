@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Search, Bell, Globe, ShieldCheck, Command } from 'lucide-react';
 
 const getPublicSiteUrl = (path = '/home.html') => {
-  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    if (window.location.hostname.includes('vercel.app')) {
-      return `https://precision-henna.vercel.app${path}`;
-    }
-    return `http://${window.location.hostname}:5001${path}`;
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.origin}${path}`;
   }
-  return `https://precision-henna.vercel.app${path}`;
+  return path;
 };
 
 export default function Header({ collapsed, onOpenSearch, notifications = [], onClearNotifications, user, onOpenConsultationModal }) {

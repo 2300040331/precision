@@ -11,18 +11,15 @@ import {
   Clock,
   Send,
 } from 'lucide-react';
+import { uploadImageToBlob } from '../services/blobUpload';
 
 const ImageDropzone = ({ value, onChange, label = 'Contact Hero Banner Picture' }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
     if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      onChange(await uploadImageToBlob(file));
     }
   };
 
@@ -105,16 +102,23 @@ export default function ContactUsView({ initialData, onSave }) {
 
   const [form, setForm] = useState(initialData && Object.keys(initialData).length > 0 ? { ...defaultValues, ...initialData } : defaultValues);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
-  const handleSaveForm = () => {
-    if (onSave) onSave(form);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  const handleSaveForm = async () => {
+    setSaveError('');
+    try {
+      if (onSave) await onSave(form);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (error) {
+      setSaveError(error.message || 'Unable to publish contact settings. Please try again.');
+    }
   };
 
   return (
     <div className="space-y-6 animate-fade-in text-slate-100 font-sans pb-16">
       {/* Header Bar */}
+      {saveError && <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-300">{saveError}</div>}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-400">

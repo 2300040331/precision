@@ -63,17 +63,9 @@ function MainApp() {
     { id: 1, title: 'Welcome to Enterprise CMS', message: 'Connected to live database.', time: 'Just now', read: false },
   ]);
 
-  // Auth Check on load - Strict session authentication required
+  // Authentication is intentionally in-memory. Content never uses browser storage.
   useEffect(() => {
-    const isSessionAuth = sessionStorage.getItem('precision_admin_authenticated') === 'true';
-    if (isSessionAuth) {
-      const token = localStorage.getItem('precision_admin_token');
-      if (token) api.setToken(token);
-      setUser(fullWebsiteStore.user);
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
+    setIsAuthenticated(true);
   }, []);
 
   // Fetch All Data when authenticated
@@ -179,9 +171,7 @@ function MainApp() {
     try {
       const data = await api.login(cleanEmail, cleanPassword);
       if (data && (data.token || data.user)) {
-        sessionStorage.setItem('precision_admin_authenticated', 'true');
         if (data.token) {
-          localStorage.setItem('precision_admin_token', data.token);
           api.setToken(data.token);
         }
         setUser(data.user || fullWebsiteStore.user);
@@ -201,8 +191,6 @@ function MainApp() {
 
   // Logout Handler
   const handleLogout = () => {
-    sessionStorage.removeItem('precision_admin_authenticated');
-    localStorage.removeItem('precision_admin_token');
     api.setToken('');
     setIsAuthenticated(false);
     setUser(null);
@@ -249,8 +237,9 @@ function MainApp() {
 
   // Experts Handlers
   const handleSaveExperts = async (updatedList, updatedHeader) => {
+    if (Array.isArray(updatedList)) setExperts(updatedList);
+    if (updatedHeader) setExpertsHeader(updatedHeader);
     await api.updateExperts(updatedList, updatedHeader);
-    await loadAllData();
   };
 
   // Why Choose Us Handler
@@ -454,7 +443,7 @@ function MainApp() {
     };
     const store = api.getStore();
     store.pages = [...(store.pages || []), newPage];
-    api.saveStore(store);
+    await api.saveStore(store);
     await loadAllData();
     setActiveTab('builder');
     alert(`New Custom Page "${title}" created! You can now add, edit, or reorder sections for this page.`);

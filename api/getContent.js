@@ -84,6 +84,12 @@ export default async function handler(request, response) {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  // Public pages must always receive the document just published by an admin.
+  // These headers prevent Vercel's CDN or a browser from serving an older CMS
+  // response after a serverless write has completed.
+  response.setHeader('CDN-Cache-Control', 'no-store');
+  response.setHeader('Vercel-CDN-Cache-Control', 'no-store');
 
   if (request.method === 'OPTIONS') {
     return response.status(200).end();
@@ -91,43 +97,34 @@ export default async function handler(request, response) {
 
   const { page } = request.query || {};
 
-  // 1. Check shared in-memory global store
-  if (global.__PRECISION_CMS_STORE__) {
-    const data = global.__PRECISION_CMS_STORE__;
-    if (page === 'fullStore') {
-      return response.status(200).json(data.fullStore || data);
-    }
-    if (page) {
-      const pageData = extractPageContent(data, page);
-      if (pageData) return response.status(200).json(pageData);
-      if (defaultContentStore[page]) return response.status(200).json(defaultContentStore[page]);
-    }
-    return response.status(200).json(data.fullStore || data);
-  }
-
-  // 2. Fetch from Vercel Blob storage
+  // 1. Fetch from Vercel Blob storage first (ensures global sync across serverless instances)
   try {
-    const { blobs } = await list({ prefix: 'content.json' });
+      const { blobs } = await list({ prefix: 'content.json' });
 
     if (blobs && blobs.length > 0) {
       const latestBlob = blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))[0];
-      const res = await fetch(latestBlob.url);
-      const data = await res.json();
-
-      if (page === 'fullStore') {
+      const res = await fetch(`${latestBlob.url}?t=${Date.now()}`, {
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (page === 'fullStore') {
+          return response.status(200).json(data.fullStore || data);
+        }
+        if (page) {
+          const pageData = extractPageContent(data, page);
+          if (pageData) return response.status(200).json(pageData);
+          if (defaultContentStore[page]) return response.status(200).json(defaultContentStore[page]);
+        }
         return response.status(200).json(data.fullStore || data);
       }
-      if (page) {
-        const pageData = extractPageContent(data, page);
-        if (pageData) return response.status(200).json(pageData);
-        if (defaultContentStore[page]) return response.status(200).json(defaultContentStore[page]);
-      }
-      return response.status(200).json(data.fullStore || data);
     }
   } catch (error) {
-    // If Blob fails, return defaultContentStore
+    console.error('Unable to read CMS content from Vercel Blob:', error.message);
+    return response.status(503).json({ error: 'The shared CMS store is temporarily unavailable.' });
   }
 
+  // No document has been published yet. Static markup remains the initial content only.
   if (page && defaultContentStore[page]) {
     return response.status(200).json(defaultContentStore[page]);
   }

@@ -29,15 +29,13 @@ import {
   X,
   FileText,
 } from 'lucide-react';
+import { uploadImageToBlob } from '../services/blobUpload';
 
 const getPublicSiteUrl = (path = '/services.html') => {
-  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    if (window.location.hostname.includes('vercel.app')) {
-      return `https://precision-henna.vercel.app${path}`;
-    }
-    return `http://${window.location.hostname}:5001${path}`;
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.origin}${path}`;
   }
-  return `https://precision-henna.vercel.app${path}`;
+  return path;
 };
 
 // Section Styling & Typography Control Toolbar Component
@@ -207,14 +205,10 @@ const SectionStyleToolbar = ({ styles = {}, onChangeStyles, onDuplicate, onToggl
 const ImageDropzone = ({ value, onChange, label = 'Picture / Banner Image' }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
     if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      onChange(await uploadImageToBlob(file));
     }
   };
 
@@ -356,9 +350,14 @@ export default function ServicesView({ services, selectedServiceId, onCreate, on
 
     if (viewMode === 'editor' && editingId) {
       setSaveStatus('saving');
-      const timer = setTimeout(() => {
-        onUpdate(editingId, form);
-        setSaveStatus('saved');
+      const timer = setTimeout(async () => {
+        try {
+          await onUpdate(editingId, form);
+          setSaveStatus('saved');
+        } catch (error) {
+          console.error('Unable to publish service update:', error);
+          setSaveStatus('error');
+        }
       }, 400);
       return () => clearTimeout(timer);
     }
@@ -378,7 +377,7 @@ export default function ServicesView({ services, selectedServiceId, onCreate, on
     s.heroSubtitle?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleOpenCreate = () => {
+  const handleOpenCreate = async () => {
     const newId = Date.now();
     const newForm = {
       id: newId,
@@ -420,7 +419,7 @@ export default function ServicesView({ services, selectedServiceId, onCreate, on
       ctaText: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
       active: true,
     };
-    onCreate(newForm);
+    await onCreate(newForm);
     setEditingId(newId);
     setForm(newForm);
     setViewMode('editor');
@@ -577,9 +576,9 @@ export default function ServicesView({ services, selectedServiceId, onCreate, on
             </button>
 
             {/* Live Auto-Save Draft Indicator */}
-            <div className="flex items-center space-x-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>{saveStatus === 'saving' ? 'Saving live draft...' : '✓ Auto-Saved Live Draft'}</span>
+            <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-xl text-xs font-bold ${saveStatus === 'error' ? 'bg-red-500/10 border border-red-500/30 text-red-300' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'}`}>
+              <CheckCircle2 className={`w-4 h-4 ${saveStatus === 'error' ? 'text-red-300' : 'text-emerald-400'}`} />
+              <span>{saveStatus === 'saving' ? 'Saving live draft...' : saveStatus === 'error' ? 'Publish failed — check Vercel Storage' : '✓ Auto-Saved Live Draft'}</span>
             </div>
 
             {form.slug && (

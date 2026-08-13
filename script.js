@@ -219,7 +219,7 @@
     function updateCarousel(animate) {
       const slideWidth = getSlideWidth();
       const translateX = -currentSlide * slideWidth;
-      
+
       if (animate !== false) {
         track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
       } else {
@@ -603,30 +603,21 @@
   const skipIntroBtn = document.getElementById('skip-intro-btn');
 
   if (introOverlay && introVideo && skipIntroBtn) {
-    if (sessionStorage.getItem('introPlayed')) {
-      // Intro already played in this session, hide it immediately
-      introOverlay.style.display = 'none';
-      if(introOverlay.parentNode) {
-          introOverlay.parentNode.removeChild(introOverlay);
-      }
-    } else {
-      sessionStorage.setItem('introPlayed', 'true');
-      
-      // Disable scrolling while intro plays
-      document.body.style.overflow = 'hidden';
+    // Disable scrolling while intro plays. No browser persistence is used.
+    document.body.style.overflow = 'hidden';
 
-      const hideIntro = () => {
-        introOverlay.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore scrolling
-        introVideo.pause(); // Stop video if skipping
-        
-        // Remove element after transition finishes
-        setTimeout(() => {
-          if(introOverlay.parentNode) {
-              introOverlay.parentNode.removeChild(introOverlay);
-          }
-        }, 800);
-      };
+    const hideIntro = () => {
+      introOverlay.classList.add('hidden');
+      document.body.style.overflow = ''; // Restore scrolling
+      introVideo.pause(); // Stop video if skipping
+
+      // Remove element after transition finishes
+      setTimeout(() => {
+        if(introOverlay.parentNode) {
+            introOverlay.parentNode.removeChild(introOverlay);
+        }
+      }, 800);
+    };
 
       // Auto-play the video
       introVideo.play().catch(e => {
@@ -638,7 +629,6 @@
       
       // Hide when user clicks skip
       skipIntroBtn.addEventListener('click', hideIntro);
-    }
   }
 
   // ═══════════════════════════════════════════════════════════

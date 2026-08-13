@@ -16,29 +16,23 @@ import {
   Image as ImageIcon,
   Check,
 } from 'lucide-react';
+import { uploadImageToBlob } from '../services/blobUpload';
 
 const getPublicSiteUrl = (path = '/industries.html') => {
-  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    if (window.location.hostname.includes('vercel.app')) {
-      return `https://precision-henna.vercel.app${path}`;
-    }
-    return `http://${window.location.hostname}:5001${path}`;
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.origin}${path}`;
   }
-  return `https://precision-henna.vercel.app${path}`;
+  return path;
 };
 
 // Easy Drag & Drop Picture Component for non-technical users
 const ImageDropzone = ({ value, onChange, label = 'Picture / Banner Image' }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (!file) return;
     if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      onChange(await uploadImageToBlob(file));
     }
   };
 
@@ -137,9 +131,14 @@ export default function IndustriesView({ industries, selectedIndustryId, onCreat
 
     if (viewMode === 'editor' && editingId) {
       setSaveStatus('saving');
-      const timer = setTimeout(() => {
-        onUpdate(editingId, form);
-        setSaveStatus('saved');
+      const timer = setTimeout(async () => {
+        try {
+          await onUpdate(editingId, form);
+          setSaveStatus('saved');
+        } catch (error) {
+          console.error('Unable to publish industry update:', error);
+          setSaveStatus('error');
+        }
       }, 400);
       return () => clearTimeout(timer);
     }
@@ -159,7 +158,7 @@ export default function IndustriesView({ industries, selectedIndustryId, onCreat
     i.category?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleOpenCreate = () => {
+  const handleOpenCreate = async () => {
     const newId = Date.now();
     const newForm = {
       id: newId,
@@ -184,7 +183,7 @@ export default function IndustriesView({ industries, selectedIndustryId, onCreat
       featured: false,
       active: true,
     };
-    onCreate(newForm);
+    await onCreate(newForm);
     setEditingId(newId);
     setForm(newForm);
     setViewMode('editor');
@@ -269,9 +268,9 @@ export default function IndustriesView({ industries, selectedIndustryId, onCreat
 
           <div className="flex items-center space-x-3 shrink-0">
             {/* Live Auto-Save Indicator */}
-            <div className="flex items-center space-x-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>{saveStatus === 'saving' ? 'Saving live...' : '✓ Auto-Saved Live'}</span>
+            <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-xl text-xs font-bold ${saveStatus === 'error' ? 'bg-red-500/10 border border-red-500/30 text-red-300' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'}`}>
+              <CheckCircle2 className={`w-4 h-4 ${saveStatus === 'error' ? 'text-red-300' : 'text-emerald-400'}`} />
+              <span>{saveStatus === 'saving' ? 'Saving live...' : saveStatus === 'error' ? 'Publish failed — check Vercel Storage' : '✓ Auto-Saved Live'}</span>
             </div>
 
             {form.slug && (

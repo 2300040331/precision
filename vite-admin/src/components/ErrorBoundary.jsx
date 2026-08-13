@@ -16,9 +16,6 @@ export class ErrorBoundary extends React.Component {
 
   handleReset = () => {
     try {
-      localStorage.removeItem('precision_cms_full_store');
-      localStorage.removeItem('precision_cms_content');
-      sessionStorage.clear();
     } catch (e) {}
     window.location.reload();
   };
