@@ -244,18 +244,18 @@
           cleanText === 'Your Vision. Our Financial Expertise' || 
           cleanText === 'Your Vision. Our Financial Expertise.';
 
-        if (isDefaultTitle) {
-          headline.innerHTML = 'Your Vision. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise.</span>';
-        } else if (cleanText.includes('Our Financial Expertise')) {
-          headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
-        } else {
-          const parts = cleanText.split('.');
-          if (parts.length > 1 && parts[1].trim()) {
-            const firstPart = parts[0].trim();
-            const remaining = parts.slice(1).join('.').trim();
-            headline.innerHTML = `${firstPart}. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${remaining}</span>`;
+        if (!isDefaultTitle) {
+          if (cleanText.includes('Our Financial Expertise')) {
+            headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
           } else {
-            headline.innerHTML = `<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${cleanText}</span>`;
+            const parts = cleanText.split('.');
+            if (parts.length > 1 && parts[1].trim()) {
+              const firstPart = parts[0].trim();
+              const remaining = parts.slice(1).join('.').trim();
+              headline.innerHTML = `${firstPart}. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${remaining}</span>`;
+            } else {
+              headline.innerHTML = `<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${cleanText}</span>`;
+            }
           }
         }
       }
@@ -267,12 +267,10 @@
         subtitle.textContent = expertsHeader.subtitle;
       }
       const groupImage = showcase.querySelector('.founders-showcase__group-img');
-      if (groupImage) {
-        if (expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg') {
-          groupImage.src = expertsHeader.heroImage;
-        } else {
-          groupImage.src = 'assets/images/precision team.png';
-        }
+      if (groupImage && expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg' && !expertsHeader.heroImage.includes('precision team.png')) {
+        groupImage.src = expertsHeader.heroImage;
+      } else if (groupImage) {
+        groupImage.src = 'assets/images/founders-group.jpg';
       }
     }
 
