@@ -13,6 +13,11 @@
   };
 
   const API_BASE = getApiBase();
+  // CMS content is published independently from presentation. The public
+  // website keeps its tested, page-specific CSS; an admin edit can update text,
+  // images and structured sections, but never inject a global theme that can
+  // recolor or hide content on another page.
+  const PUBLIC_CMS_RENDERING_ENABLED = true;
 
   document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -23,34 +28,37 @@
       // 1. Send Visitor Telemetry
       trackVisitor();
 
-      // 2. Fetch the current shared CMS document. Browser storage is never used
-      // as content may have been changed by another admin or device.
-      try {
-        const res = await fetch(`${API_BASE}/getContent?page=${encodeURIComponent(pageKey)}&t=${Date.now()}`, {
-          cache: 'no-store',
-        });
-        if (res.ok) {
-          const pageData = await res.json();
-          if (pageData && typeof pageData === 'object' && Object.keys(pageData).length > 0) {
-            const flatData = extractPageFlatContent(pageData, pageKey);
-            if (Object.keys(flatData).length > 0) {
-              currentPageData = flatData;
-              applyContentBindings(flatData);
+      if (PUBLIC_CMS_RENDERING_ENABLED) {
+        // Fetch the current shared CMS document only when its publication layer
+        // is enabled. Static markup remains the visual source of truth until then.
+        try {
+          const res = await fetch(`${API_BASE}/getContent?page=${encodeURIComponent(pageKey)}&t=${Date.now()}`, {
+            cache: 'no-store',
+          });
+          if (res.ok) {
+            const pageData = await res.json();
+            if (pageData && typeof pageData === 'object' && Object.keys(pageData).length > 0) {
+              const flatData = extractPageFlatContent(pageData, pageKey);
+              if (Object.keys(flatData).length > 0) {
+                currentPageData = flatData;
+                applyContentBindings(flatData);
+              }
             }
           }
-        }
-      } catch (err) {}
+        } catch (err) {}
 
-      // 3. Fetch the complete CMS store for shared navigation, footer, services, industries, and theme customization.
-      try {
-        const fullStore = await fetchFullStore();
-        if (fullStore) {
-          applyFullStore(fullStore, pageKey, currentPageData);
-          if (fullStore.themeCustomization) {
-            applyThemeCustomization(fullStore.themeCustomization, pageKey);
+        // Fetch the complete CMS store for shared navigation, footer, services,
+        // industries, and theme customization only after CMS rendering is enabled.
+        try {
+          const fullStore = await fetchFullStore();
+          if (fullStore) {
+            applyFullStore(fullStore, pageKey, currentPageData);
+            if (fullStore.themeCustomization) {
+              applyThemeCustomization(fullStore.themeCustomization, pageKey);
+            }
           }
-        }
-      } catch (err) {}
+        } catch (err) {}
+      }
 
       // 4. Attach Consultation & Contact Form Listeners
       setupFormListeners();
