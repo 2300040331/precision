@@ -26,30 +26,20 @@ function extractPageContent(data, targetPage) {
   if (!data) return null;
 
   const store = data.fullStore || data;
+  let pageData = null;
 
   if (targetPage === 'experts') {
     if (store.experts || store.expertsHeader) {
-      return {
+      pageData = {
         experts: store.experts || [],
         expertsHeader: store.expertsHeader || null,
-        themeCustomization: store.themeCustomization || null,
       };
     }
-  }
-
-  if (targetPage === 'why-choose-us') {
-    if (store.whyChooseUs) {
-      return store.whyChooseUs;
-    }
-  }
-
-  if (targetPage === 'contact') {
-    if (store.contactUs) {
-      return store.contactUs;
-    }
-  }
-
-  if (store.pages && Array.isArray(store.pages)) {
+  } else if (targetPage === 'why-choose-us') {
+    if (store.whyChooseUs) pageData = { ...store.whyChooseUs };
+  } else if (targetPage === 'contact') {
+    if (store.contactUs) pageData = { ...store.contactUs };
+  } else if (store.pages && Array.isArray(store.pages)) {
     const pageObj = store.pages.find(p => p.id === targetPage || p.slug === targetPage);
     if (pageObj && Array.isArray(pageObj.sections)) {
       let pageFlat = {};
@@ -66,19 +56,24 @@ function extractPageContent(data, targetPage) {
           } catch (e) {}
         }
       });
-      if (Object.keys(pageFlat).length > 0) return pageFlat;
+      if (Object.keys(pageFlat).length > 0) pageData = pageFlat;
     }
   }
 
-  if (data.flat && data.flat[targetPage] && typeof data.flat[targetPage] === 'object') {
-    return data.flat[targetPage];
+  if (!pageData && data.flat && data.flat[targetPage] && typeof data.flat[targetPage] === 'object') {
+    pageData = { ...data.flat[targetPage] };
   }
 
-  if (data[targetPage] && typeof data[targetPage] === 'object') {
-    return data[targetPage];
+  if (!pageData && data[targetPage] && typeof data[targetPage] === 'object') {
+    pageData = { ...data[targetPage] };
   }
 
-  return null;
+  if (store.themeCustomization) {
+    if (!pageData) pageData = {};
+    pageData.themeCustomization = store.themeCustomization;
+  }
+
+  return pageData;
 }
 
 export default async function handler(request, response) {
