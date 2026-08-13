@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
+import { requireAdmin } from './_auth.js';
 
 export default async function handler(request, response) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   response.setHeader('Cache-Control', 'no-store');
@@ -15,6 +15,7 @@ export default async function handler(request, response) {
   if (request.method !== 'POST' && request.method !== 'PUT') {
     return response.status(405).json({ error: 'Method not allowed' });
   }
+  if (!requireAdmin(request, response)) return;
 
   try {
     const data = typeof request.body === 'string' ? JSON.parse(request.body) : request.body;

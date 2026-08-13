@@ -1,4 +1,5 @@
 import { put } from '@vercel/blob';
+import { requireAdmin } from './_auth.js';
 
 export const config = {
   api: {
@@ -7,7 +8,6 @@ export const config = {
 };
 
 export default async function handler(request, response) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -18,6 +18,7 @@ export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return response.status(405).json({ error: 'Method not allowed' });
   }
+  if (!requireAdmin(request, response)) return;
 
   try {
     const filename = request.query?.filename || `uploaded-image-${Date.now()}.png`;

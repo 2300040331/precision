@@ -744,7 +744,7 @@
 
     const form = document.getElementById('wa-consultation-form');
     if (form) {
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const fullName = document.getElementById('wa-fullname').value.trim();
         const phone = document.getElementById('wa-phone').value.trim();
@@ -760,19 +760,42 @@
 
         const waText = `Hello Precision & Co.,\n\nI would like to book a consultation.\n\n*Full Name:* ${fullName}\n*Phone Number:* ${phone}\n*Email Address:* ${email || 'N/A'}\n*Service of Interest:* ${service}\n*Message:* ${message || 'No details provided.'}`;
 
-        const whatsappUrl = `https://wa.me/919618757596?text=${encodeURIComponent(waText)}`;
-        
+        const submitButton = form.querySelector('button[type="submit"]');
         if (statusMsg) {
           statusMsg.style.display = 'block';
-          statusMsg.textContent = 'Redirecting to WhatsApp...';
+          statusMsg.textContent = 'Sending your consultation request...';
         }
 
-        window.open(whatsappUrl, '_blank');
+        if (submitButton) submitButton.disabled = true;
+        try {
+          const response = await fetch('/api/crm/consultations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fullName,
+              phone,
+              email,
+              serviceSelected: service,
+              message,
+              sourcePage: window.location.pathname,
+            }),
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error || 'Unable to save your request.');
+
+          if (statusMsg) statusMsg.textContent = 'Request received. Opening WhatsApp...';
+          window.open(`https://wa.me/919618757596?text=${encodeURIComponent(waText)}`, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+          if (statusMsg) statusMsg.textContent = error.message || 'Unable to send your request. Please try again.';
+          if (submitButton) submitButton.disabled = false;
+          return;
+        }
 
         setTimeout(function() {
           modalDiv.style.display = 'none';
           if (statusMsg) statusMsg.style.display = 'none';
           form.reset();
+          if (submitButton) submitButton.disabled = false;
         }, 800);
       });
     }

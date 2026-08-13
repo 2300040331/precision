@@ -30,7 +30,7 @@ export default function App() {
 }
 
 function MainApp() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(fullWebsiteStore.user);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -64,11 +64,6 @@ function MainApp() {
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Welcome to Enterprise CMS', message: 'Connected to live database.', time: 'Just now', read: false },
   ]);
-
-  // Authentication is intentionally in-memory. Content never uses browser storage.
-  useEffect(() => {
-    setIsAuthenticated(true);
-  }, []);
 
   // Fetch All Data when authenticated
   const loadAllData = async () => {
@@ -118,7 +113,14 @@ function MainApp() {
   useEffect(() => {
     if (isAuthenticated) {
       loadAllData();
-      setupSSE();
+      const cleanupSSE = setupSSE();
+      // Vercel serverless functions do not keep an SSE connection. Polling
+      // the shared records keeps production CRM and analytics current.
+      const refreshTimer = window.setInterval(loadAllData, 30000);
+      return () => {
+        window.clearInterval(refreshTimer);
+        if (typeof cleanupSSE === 'function') cleanupSSE();
+      };
     }
   }, [isAuthenticated]);
 

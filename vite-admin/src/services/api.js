@@ -1169,6 +1169,7 @@ class ApiService {
   async syncRemoteStore() {
     try {
       const res = await fetch(`${API_BASE}/getContent?page=fullStore&t=${Date.now()}`, {
+        headers: this.getHeaders(false),
         cache: 'no-store',
       });
       if (res.ok) {
@@ -1229,7 +1230,7 @@ class ApiService {
       // never becomes a source of truth for public content.
       const response = await fetch(`${API_BASE}/updateContent`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getHeaders(),
         body: JSON.stringify({ fullStore: storeSnapshot, flat }),
       });
       if (!response.ok) {
@@ -1443,35 +1444,14 @@ class ApiService {
 
   // Auth Endpoints
   async login(email, password) {
-    try {
-      const res = await this.request('/auth/login', { method: 'POST', body: { email, password } });
-      if (res && res.token) return res;
-    } catch (err) {}
-
-    const store = this.getStore();
-    const cleanEmail = (email || '').trim().toLowerCase();
-    const cleanPass = (password || '').trim();
-
-    const matchedUser = (store.users || []).find(u => (u.email || '').trim().toLowerCase() === cleanEmail);
-    if (matchedUser && (cleanPass === 'admin123' || cleanPass === (matchedUser.password || '').trim())) {
-      const token = 'jwt_precision_auth_token_2026';
-      this.setToken(token);
-      return { token, user: matchedUser };
-    }
-
-    if (
-      (cleanEmail === 'admin@precisionandco.com' || cleanEmail === 'admin') &&
-      (cleanPass === 'admin123' || cleanPass === 'admin')
-    ) {
-      const token = 'jwt_precision_auth_token_2026';
-      this.setToken(token);
-      return {
-        token,
-        user: store.user || fullWebsiteStore.user,
-      };
-    }
-
-    throw new Error('Invalid email or password');
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }), cache: 'no-store',
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.token) throw new Error(result.error || 'Invalid email or password.');
+    this.setToken(result.token);
+    return result;
   }
 
   async getMe() {
@@ -1737,60 +1717,72 @@ class ApiService {
 
   // CRM Endpoints
   async getConsultations(status = '', search = '') {
-    const store = this.getStore();
-    return Array.isArray(store.consultations) ? store.consultations : [];
+    const params = new URLSearchParams();
+    if (status) params.set('status', status);
+    if (search) params.set('search', search);
+    try {
+      const response = await fetch(`${API_BASE}/crm/consultations?${params.toString()}`, { headers: this.getHeaders(false), cache: 'no-store' });
+      if (!response.ok) throw new Error('Unable to load consultations.');
+      return await response.json();
+    } catch (error) {
+      console.error('Consultation CRM sync error:', error);
+      return [];
+    }
   }
 
   async updateConsultation(id, data) {
-    const store = this.getStore();
-    const current = Array.isArray(store.consultations) ? store.consultations : [];
-    store.consultations = current.map(c => c.id === id ? { ...c, ...data } : c);
-    await this.saveStore(store);
-    return data;
+    const response = await fetch(`${API_BASE}/crm/consultations`, {
+      method: 'PUT', headers: this.getHeaders(), body: JSON.stringify({ id, ...data }),
+    });
+    if (!response.ok) throw new Error('Unable to update consultation.');
+    return response.json();
   }
 
   async deleteConsultation(id) {
-    const store = this.getStore();
-    const current = Array.isArray(store.consultations) ? store.consultations : [];
-    store.consultations = current.filter(c => c.id !== id);
-    await this.saveStore(store);
-    return { success: true };
+    const response = await fetch(`${API_BASE}/crm/consultations`, {
+      method: 'DELETE', headers: this.getHeaders(), body: JSON.stringify({ id }),
+    });
+    if (!response.ok) throw new Error('Unable to delete consultation.');
+    return response.json();
   }
 
   async getContacts(status = '', search = '') {
-    const store = this.getStore();
-    return Array.isArray(store.contacts) ? store.contacts : [];
+    try {
+      const response = await fetch(`${API_BASE}/crm/contacts`, { headers: this.getHeaders(false), cache: 'no-store' });
+      if (!response.ok) throw new Error('Unable to load contact messages.');
+      return await response.json();
+    } catch (error) {
+      console.error('Contact CRM sync error:', error);
+      return [];
+    }
   }
 
   async updateContact(id, data) {
-    const store = this.getStore();
-    store.contacts = (store.contacts || []).map(c => c.id === id ? { ...c, ...data } : c);
-    await this.saveStore(store);
-    return data;
+    const response = await fetch(`${API_BASE}/crm/contacts`, {
+      method: 'PUT', headers: this.getHeaders(), body: JSON.stringify({ id, ...data }),
+    });
+    if (!response.ok) throw new Error('Unable to update contact message.');
+    return response.json();
   }
 
   async deleteContact(id) {
-    const store = this.getStore();
-    store.contacts = (store.contacts || []).filter(c => c.id !== id);
-    await this.saveStore(store);
-    return { success: true };
+    const response = await fetch(`${API_BASE}/crm/contacts`, {
+      method: 'DELETE', headers: this.getHeaders(), body: JSON.stringify({ id }),
+    });
+    if (!response.ok) throw new Error('Unable to delete contact message.');
+    return response.json();
   }
 
   // Analytics Endpoints
   async getAnalyticsStats() {
-    const store = this.getStore();
-    const defaults = {
-      totalVisitors: 24592,
-      todayVisitors: 1420,
-      monthVisitors: 18450,
-      liveVisitors: 8,
-      bounceRate: '28.4%',
-      devices: { Desktop: 68, Mobile: 26, Tablet: 6 },
-      referrers: { Direct: 42, Google: 38, LinkedIn: 14, Referral: 6 },
-    };
-    return (store.analytics && Object.keys(store.analytics).length > 0)
-      ? { ...defaults, ...store.analytics }
-      : defaults;
+    try {
+      const response = await fetch(`${API_BASE}/analytics/stats`, { headers: this.getHeaders(false), cache: 'no-store' });
+      if (!response.ok) throw new Error('Unable to load analytics.');
+      return await response.json();
+    } catch (error) {
+      console.error('Analytics sync error:', error);
+      return { totalVisitors: 0, todayVisitors: 0, monthVisitors: 0, liveVisitors: 0, devices: {}, browsers: {}, referrers: {}, popularPages: [] };
+    }
   }
 
   // Settings & System Endpoints

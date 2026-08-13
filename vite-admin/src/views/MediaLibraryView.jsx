@@ -13,6 +13,7 @@ import {
   X,
   ExternalLink,
 } from 'lucide-react';
+import { api } from '../services/api';
 
 export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }) {
   const [selectedFolder, setSelectedFolder] = useState('all');
@@ -58,6 +59,7 @@ export default function MediaLibraryView({ media, onUpload, onUpdate, onDelete }
         try {
           const res = await fetch(`/api/uploadImage?filename=${encodeURIComponent(file.name)}`, {
             method: 'POST',
+            headers: api.getHeaders(false),
             body: file,
           });
           if (res.ok) {

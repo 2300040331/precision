@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Precision & Co Website",
   "scripts": {
-    "build": "cd vite-admin && npm install && npm run build && cd .. && mkdir -p public && cp -R assets admin public/ && cp *.html *.css *.js public/",
+    "build": "echo 'Vercel static deploy'",
     "deploy": "npx vercel --prod --yes",
     "watch": "chokidar \"*.html\" \"*.css\" \"*.js\" -c \"npm run deploy\" --initial"
   },

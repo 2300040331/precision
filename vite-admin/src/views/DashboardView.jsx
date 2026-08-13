@@ -15,19 +15,10 @@ import {
 } from 'lucide-react';
 
 export default function DashboardView({ analytics, consultations = [], services = [], systemHealth, onNavigate, onOpenConsultationModal }) {
-  const defaultAnalytics = {
-    totalVisitors: 24592,
-    todayVisitors: 1420,
-    monthVisitors: 18450,
-    liveVisitors: 8,
-    bounceRate: '28.4%',
-    devices: { Desktop: 68, Mobile: 26, Tablet: 6 },
-    referrers: { Direct: 42, Google: 38, LinkedIn: 14, Referral: 6 },
+  const stats = {
+    totalVisitors: 0, todayVisitors: 0, monthVisitors: 0, liveVisitors: 0,
+    devices: {}, referrers: {}, ...(analytics || {}),
   };
-
-  const stats = (analytics && typeof analytics === 'object' && (analytics.totalVisitors || analytics.liveVisitors))
-    ? { ...defaultAnalytics, ...analytics }
-    : defaultAnalytics;
 
   const safeConsultations = Array.isArray(consultations) ? consultations : [];
   const safeServices = Array.isArray(services) ? services : [];
@@ -83,11 +74,7 @@ export default function DashboardView({ analytics, consultations = [], services 
             </div>
           </div>
           <div className="text-3xl font-extrabold text-white tracking-tight">{stats.totalVisitors.toLocaleString()}</div>
-          <div className="flex items-center text-xs text-emerald-400 mt-2 font-semibold">
-            <ArrowUpRight className="w-4 h-4 mr-1" />
-            <span>+14.2%</span>
-            <span className="text-slate-400 text-[11px] font-normal ml-1.5">vs last month</span>
-          </div>
+          <div className="text-xs text-slate-400 mt-2">Recorded public page visits</div>
         </div>
 
         <div className="bg-[#0f1d32]/90 p-6 rounded-3xl border border-[#c8a45e]/20 shadow-xl relative overflow-hidden group hover:border-[#c8a45e]/60 transition-all">

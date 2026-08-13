@@ -5,6 +5,7 @@ export async function uploadImageToBlob(file) {
 
   const response = await fetch(`/api/uploadImage?filename=${encodeURIComponent(file.name)}`, {
     method: 'POST',
+    headers: api.getHeaders(false),
     body: file,
   });
   const data = await response.json().catch(() => ({}));
@@ -13,3 +14,4 @@ export async function uploadImageToBlob(file) {
   }
   return data.url;
 }
+import { api } from './api';

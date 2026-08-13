@@ -2,21 +2,9 @@ import React from 'react';
 import { BarChart3, Users, Globe, Smartphone, Monitor, Clock, ArrowUpRight } from 'lucide-react';
 
 export default function AnalyticsView({ analytics }) {
-  const stats = analytics || {
-    totalVisitors: 24592,
-    todayVisitors: 1420,
-    monthVisitors: 18450,
-    liveVisitors: 6,
-    bounceRate: '28.4%',
-    avgSessionDuration: '3m 14s',
-    devices: { Desktop: 68, Mobile: 26, Tablet: 6 },
-    referrers: { Direct: 42, Google: 38, LinkedIn: 14, Referral: 6 },
-    popularPages: [
-      { path: '/home.html', count: 12450 },
-      { path: '/services.html', count: 5210 },
-      { path: '/contact.html', count: 3120 },
-      { path: '/services-audit.html', count: 1840 },
-    ],
+  const stats = {
+    totalVisitors: 0, todayVisitors: 0, monthVisitors: 0, liveVisitors: 0,
+    devices: {}, referrers: {}, popularPages: [], ...(analytics || {}),
   };
 
   return (
@@ -39,7 +27,7 @@ export default function AnalyticsView({ analytics }) {
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-2">
           <span className="text-xs font-semibold text-slate-400">Visitors Today</span>
           <div className="text-2xl font-bold text-white">{(stats.todayVisitors || 0).toLocaleString()}</div>
-          <span className="text-xs text-emerald-400 font-medium">↑ +12.4% vs yesterday</span>
+          <span className="text-xs text-slate-400 font-medium">Recorded public visits</span>
         </div>
 
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-2">
@@ -49,18 +37,18 @@ export default function AnalyticsView({ analytics }) {
         </div>
 
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-2">
-          <span className="text-xs font-semibold text-slate-400">Avg Session Duration</span>
-          <div className="text-2xl font-bold text-emerald-400">{stats.avgSessionDuration || '3m 14s'}</div>
-          <span className="text-xs text-slate-400">Low Bounce Rate ({stats.bounceRate || '28.4%'})</span>
+          <span className="text-xs font-semibold text-slate-400">Total Visitors</span>
+          <div className="text-2xl font-bold text-emerald-400">{(stats.totalVisitors || 0).toLocaleString()}</div>
+          <span className="text-xs text-slate-400">All recorded public visits</span>
         </div>
 
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 shadow-xl space-y-2">
           <span className="text-xs font-semibold text-slate-400">Live Active Session</span>
           <div className="text-2xl font-bold text-emerald-400 flex items-center">
             <span className="w-3 h-3 rounded-full bg-emerald-400 mr-2 animate-ping"></span>
-            {stats.liveVisitors || 1} Online
+            {stats.liveVisitors || 0} Online
           </div>
-          <span className="text-xs text-slate-400">Updated via SSE</span>
+          <span className="text-xs text-slate-400">Unique visitors active in the last 5 minutes</span>
         </div>
       </div>
 
