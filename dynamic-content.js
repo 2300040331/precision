@@ -41,11 +41,14 @@
         }
       } catch (err) {}
 
-      // 3. Fetch the complete CMS store for shared navigation, footer, services, and industries.
+      // 3. Fetch the complete CMS store for shared navigation, footer, services, industries, and theme customization.
       try {
         const fullStore = await fetchFullStore();
         if (fullStore) {
           applyFullStore(fullStore, pageKey, currentPageData);
+          if (fullStore.themeCustomization) {
+            applyThemeCustomization(fullStore.themeCustomization, pageKey);
+          }
         }
       } catch (err) {}
 
@@ -988,5 +991,103 @@
         }
       });
     });
+  }
+
+  // Dynamic Visual Theme Customization Engine
+  function applyThemeCustomization(themeData, pageKey) {
+    if (!themeData || typeof themeData !== 'object') return;
+
+    const global = themeData.global || {};
+    const page = (themeData.pages && themeData.pages[pageKey]) || {};
+    const sections = themeData.sections || {};
+
+    // 1. Dynamic Google Web Fonts Loader
+    const selectedFonts = new Set();
+    if (global.fontFamily) selectedFonts.add(global.fontFamily);
+    if (page.fontFamily) selectedFonts.add(page.fontFamily);
+    Object.values(sections).forEach(sec => {
+      if (sec && sec.fontFamily) selectedFonts.add(sec.fontFamily);
+    });
+
+    if (selectedFonts.size > 0) {
+      const fontsParam = Array.from(selectedFonts)
+        .map(font => `family=${encodeURIComponent(font)}:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700`)
+        .join('&');
+      const googleFontUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
+      
+      let fontLink = document.getElementById('cms-google-fonts');
+      if (!fontLink) {
+        fontLink = document.createElement('link');
+        fontLink.id = 'cms-google-fonts';
+        fontLink.rel = 'stylesheet';
+        document.head.appendChild(fontLink);
+      }
+      fontLink.href = googleFontUrl;
+    }
+
+    // 2. Generate CSS Custom Variables Stylesheet
+    let css = '';
+
+    // Global Scope (:root)
+    css += ':root {\n';
+    if (global.primaryColor) css += `  --color-primary: ${global.primaryColor} !important;\n`;
+    if (global.secondaryColor) css += `  --color-secondary: ${global.secondaryColor} !important;\n`;
+    if (global.accentColor) css += `  --color-accent: ${global.accentColor} !important; --gold-primary: ${global.accentColor} !important;\n`;
+    if (global.backgroundColor) css += `  --color-[#050e17]: ${global.backgroundColor} !important;\n`;
+    if (global.textColor) css += `  --color-text: ${global.textColor} !important;\n`;
+    if (global.headingColor) css += `  --color-heading: ${global.headingColor} !important;\n`;
+    if (global.buttonColor) css += `  --color-btn: ${global.buttonColor} !important;\n`;
+    if (global.buttonHoverColor) css += `  --color-btn-hover: ${global.buttonHoverColor} !important;\n`;
+    if (global.borderColor) css += `  --color-border: ${global.borderColor} !important;\n`;
+    if (global.headerColor) css += `  --color-header: ${global.headerColor} !important;\n`;
+    if (global.footerColor) css += `  --color-footer: ${global.footerColor} !important;\n`;
+    if (global.fontFamily) css += `  --font-family-base: '${global.fontFamily}', sans-serif !important;\n`;
+    css += '}\n\n';
+
+    // Apply font family globally if specified
+    if (global.fontFamily) {
+      css += `body, p, span, a, input, button { font-family: '${global.fontFamily}', sans-serif !important; }\n`;
+    }
+    if (global.backgroundColor) {
+      css += `body { background-color: ${global.backgroundColor} !important; }\n`;
+    }
+    if (global.textColor) {
+      css += `body, p, li { color: ${global.textColor} !important; }\n`;
+    }
+
+    // Page Scope Override
+    if (Object.keys(page).length > 0) {
+      css += `/* Page Customization: ${pageKey} */\n`;
+      if (page.backgroundColor) css += `body { background-color: ${page.backgroundColor} !important; }\n`;
+      if (page.textColor) css += `body, p, li { color: ${page.textColor} !important; }\n`;
+      if (page.headingColor) css += `h1, h2, h3, h4, h5, h6 { color: ${page.headingColor} !important; }\n`;
+      if (page.fontFamily) css += `body, p, h1, h2, h3, h4, h5, h6 { font-family: '${page.fontFamily}', sans-serif !important; }\n`;
+    }
+
+    // Section Scope Override
+    Object.keys(sections).forEach(key => {
+      const parts = key.split(':');
+      const secPage = parts[0];
+      const secId = parts[1];
+      if (secPage === pageKey && secId) {
+        const secData = sections[key];
+        const selector = `#${secId}, .${secId}`;
+        css += `/* Section Customization: ${secId} */\n`;
+        if (secData.backgroundColor) css += `${selector} { background-color: ${secData.backgroundColor} !important; background: ${secData.backgroundColor} !important; }\n`;
+        if (secData.textColor) css += `${selector}, ${selector} p, ${selector} li { color: ${secData.textColor} !important; }\n`;
+        if (secData.headingColor) css += `${selector} h1, ${selector} h2, ${selector} h3, ${selector} h4 { color: ${secData.headingColor} !important; }\n`;
+        if (secData.fontFamily) css += `${selector}, ${selector} * { font-family: '${secData.fontFamily}', sans-serif !important; }\n`;
+        if (secData.buttonColor) css += `${selector} .btn, ${selector} button { background-color: ${secData.buttonColor} !important; }\n`;
+      }
+    });
+
+    // Inject or update style tag
+    let styleTag = document.getElementById('cms-theme-customization');
+    if (!styleTag) {
+      styleTag = document.createElement('style');
+      styleTag.id = 'cms-theme-customization';
+      document.head.appendChild(styleTag);
+    }
+    styleTag.textContent = css;
   }
 })();

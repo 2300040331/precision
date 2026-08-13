@@ -13,8 +13,31 @@ const getApiBase = () => {
 
 const API_BASE = getApiBase();
 
+export const defaultThemeCustomization = {
+  global: {
+    primaryColor: '#c8a45e',
+    secondaryColor: '#071322',
+    accentColor: '#e0c580',
+    backgroundColor: '#050e17',
+    textColor: '#94a3b8',
+    headingColor: '#ffffff',
+    buttonColor: '#c8a45e',
+    buttonHoverColor: '#b38f4a',
+    borderColor: 'rgba(200, 164, 94, 0.2)',
+    headerColor: '#071322',
+    footerColor: '#030910',
+    theme: 'royal-navy',
+    mode: 'dark',
+    fontFamily: 'DM Sans',
+    typography: 'sans-serif',
+  },
+  pages: {},
+  sections: {},
+};
+
 // Comprehensive Main Website Data Store
 export const fullWebsiteStore = {
+  themeCustomization: defaultThemeCustomization,
   user: {
     id: 1,
     name: 'Super Admin',
@@ -1341,6 +1364,23 @@ class ApiService {
     store.contactUs = { ...(store.contactUs || {}), ...data };
     await this.saveStore(store);
     return store.contactUs;
+  }
+
+  // Theme Customization & Website Visual System
+  async getThemeCustomization() {
+    const store = this.getStore();
+    return store.themeCustomization || fullWebsiteStore.themeCustomization;
+  }
+
+  async updateThemeCustomization(data) {
+    const store = this.getStore();
+    store.themeCustomization = {
+      global: { ...(store.themeCustomization?.global || defaultThemeCustomization.global), ...(data?.global || {}) },
+      pages: { ...(store.themeCustomization?.pages || {}), ...(data?.pages || {}) },
+      sections: { ...(store.themeCustomization?.sections || {}), ...(data?.sections || {}) },
+    };
+    await this.saveStore(store);
+    return store.themeCustomization;
   }
 
   async resetPageSections(pageId) {

@@ -37,6 +37,7 @@ import {
   Award,
   Mail,
   Plus,
+  Palette,
 } from 'lucide-react';
 
 const getPublicSiteUrl = (path = '/home.html') => {
@@ -226,6 +227,29 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
           >
             <ImageIcon className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'media' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
             {!collapsed && <span className="flex-1 text-left truncate">Media Library</span>}
+          </button>
+        </div>
+
+        {/* THEME & DESIGN */}
+        <div className="space-y-1">
+          {!collapsed && (
+            <p className="px-3 text-[10px] font-bold text-[#c8a45e] uppercase tracking-widest mb-2 opacity-90">THEME & DESIGN</p>
+          )}
+          <button
+            onClick={() => setActiveTab('theme-customization')}
+            className={`w-full flex items-center px-3 py-2.5 rounded-xl font-medium text-xs transition-all ${
+              activeTab === 'theme-customization'
+                ? 'bg-gradient-to-r from-[#c8a45e] to-[#a8863e] text-[#071322] font-bold shadow-lg shadow-[#c8a45e]/20 border border-[#e0c580]/40'
+                : 'text-slate-300 hover:text-white hover:bg-[#0f1d32]'
+            }`}
+          >
+            <Palette className={`w-4 h-4 shrink-0 ${collapsed ? 'mx-auto' : 'mr-3'} ${activeTab === 'theme-customization' ? 'text-[#071322]' : 'text-[#c8a45e]'}`} />
+            {!collapsed && (
+              <>
+                <span className="flex-1 text-left truncate">Website Customization</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase bg-[#c8a45e]/20 text-[#e0c580] border border-[#c8a45e]/30">New</span>
+              </>
+            )}
           </button>
 
           {!collapsed && (

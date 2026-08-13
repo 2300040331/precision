@@ -32,6 +32,7 @@ function extractPageContent(data, targetPage) {
       return {
         experts: store.experts || [],
         expertsHeader: store.expertsHeader || null,
+        themeCustomization: store.themeCustomization || null,
       };
     }
   }

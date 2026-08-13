@@ -19,6 +19,7 @@ import ExpertsView from './views/ExpertsView';
 import WhyChooseUsView from './views/WhyChooseUsView';
 import ContactUsView from './views/ContactUsView';
 import SystemView from './views/SystemView';
+import ThemeCustomizationView from './views/ThemeCustomizationView';
 import { api, fullWebsiteStore } from './services/api';
 import { ShieldCheck, ArrowRight } from 'lucide-react';
 
@@ -58,6 +59,7 @@ function MainApp() {
   const [expertsHeader, setExpertsHeader] = useState(fullWebsiteStore.expertsHeader || { title: 'Our Experts', subtitle: 'The best industry experts will share their experience and talk about their projects.' });
   const [whyChooseUs, setWhyChooseUs] = useState(fullWebsiteStore.whyChooseUs || {});
   const [contactUs, setContactUs] = useState(fullWebsiteStore.contactUs || {});
+  const [themeCustomization, setThemeCustomization] = useState(fullWebsiteStore.themeCustomization || {});
 
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Welcome to Enterprise CMS', message: 'Connected to live database.', time: 'Just now', read: false },
@@ -72,7 +74,7 @@ function MainApp() {
   const loadAllData = async () => {
     try {
       await api.syncRemoteStore();
-      const [pData, sData, iData, mData, cData, ctData, aData, settData, uData, sysData, logData, expData, whyData, cuData] = await Promise.all([
+      const [pData, sData, iData, mData, cData, ctData, aData, settData, uData, sysData, logData, expData, whyData, cuData, themeData] = await Promise.all([
         api.getPages(),
         api.getServices(),
         api.getIndustries(),
@@ -87,6 +89,7 @@ function MainApp() {
         api.getExperts(),
         api.getWhyChooseUs(),
         api.getContactUs(),
+        api.getThemeCustomization(),
       ]);
 
       setPages(pData);
@@ -106,6 +109,7 @@ function MainApp() {
       }
       if (whyData) setWhyChooseUs(whyData);
       if (cuData) setContactUs(cuData);
+      if (themeData) setThemeCustomization(themeData);
     } catch (err) {
       console.error('Data load error:', err);
     }
@@ -449,6 +453,11 @@ function MainApp() {
     alert(`New Custom Page "${title}" created! You can now add, edit, or reorder sections for this page.`);
   };
 
+  const handleSaveThemeCustomization = async (data) => {
+    const updated = await api.updateThemeCustomization(data);
+    setThemeCustomization(updated);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex">
       {/* Sidebar */}
@@ -586,6 +595,14 @@ function MainApp() {
 
           {activeTab === 'system' && (
             <SystemView systemHealth={systemHealth} auditLogs={auditLogs} />
+          )}
+
+          {activeTab === 'theme-customization' && (
+            <ThemeCustomizationView
+              initialData={themeCustomization}
+              onSave={handleSaveThemeCustomization}
+              onPublish={handleSaveThemeCustomization}
+            />
           )}
         </main>
       </div>
