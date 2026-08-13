@@ -244,15 +244,15 @@
 
         if (!isDefaultTitle) {
           if (cleanText.includes('Our Financial Expertise')) {
-            headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text">Our Financial Expertise</span>');
+            headline.innerHTML = cleanText.replace('Our Financial Expertise', '<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">Our Financial Expertise</span>');
           } else {
             const parts = cleanText.split('.');
             if (parts.length > 1 && parts[1].trim()) {
               const firstPart = parts[0].trim();
               const remaining = parts.slice(1).join('.').trim();
-              headline.innerHTML = `${firstPart}. <span class="gold-text">${remaining}</span>`;
+              headline.innerHTML = `${firstPart}. <span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${remaining}</span>`;
             } else {
-              headline.innerHTML = `<span class="gold-text">${cleanText}</span>`;
+              headline.innerHTML = `<span class="gold-text" style="color: #c8a45e !important; -webkit-text-fill-color: #c8a45e !important; font-style: italic;">${cleanText}</span>`;
             }
           }
         }
