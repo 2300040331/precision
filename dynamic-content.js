@@ -266,7 +266,14 @@
       if (subtitle && expertsHeader.subtitle && expertsHeader.subtitle !== 'Words from the Founders') {
         subtitle.textContent = expertsHeader.subtitle;
       }
-      // Group image is permanently locked to assets/images/founders-group.jpg per design
+      const groupImage = showcase.querySelector('.founders-showcase__group-img');
+      if (groupImage) {
+        if (expertsHeader.heroImage && expertsHeader.heroImage !== 'assets/images/founders-group.jpg') {
+          groupImage.src = expertsHeader.heroImage;
+        } else {
+          groupImage.src = 'assets/images/precision team.png';
+        }
+      }
     }
 
       // The showcase has fixed visual slots, so update those existing elements

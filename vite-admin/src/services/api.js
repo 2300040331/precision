@@ -1313,7 +1313,7 @@ class ApiService {
       eyebrow: 'THE FOUNDERS',
       title: 'Your Vision. <span class="gold-text">Our Financial Expertise.</span>',
       subtitle: 'Words from the Founders',
-      heroImage: 'assets/images/founders-group.jpg',
+      heroImage: 'assets/images/precision team.png',
     };
 
     const hasLegacy = (Array.isArray(store.experts) && store.experts.some(e => e.name && (e.name.includes('Robert') || e.name.includes('Sarah') || e.name.includes('Michael') || e.name.includes('Elena') || e.name.includes('David') || e.name.includes('Anita')))) || (store.expertsHeader && (store.expertsHeader.title === 'Our Experts' || store.expertsHeader.title === 'Built by People. Driven by Purpose.'));
