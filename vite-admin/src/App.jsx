@@ -134,7 +134,7 @@ function MainApp() {
       const cleanupSSE = setupSSE();
       // Vercel serverless functions do not keep an SSE connection. Polling
       // the shared records keeps production CRM and analytics current.
-      const refreshTimer = window.setInterval(refreshLiveData, 30000);
+      const refreshTimer = window.setInterval(refreshLiveData, 10000);
       return () => {
         window.clearInterval(refreshTimer);
         if (typeof cleanupSSE === 'function') cleanupSSE();
@@ -387,7 +387,7 @@ function MainApp() {
 
         <div className="bg-[#0f1d32]/90 border border-[#c8a45e]/30 w-full max-w-md rounded-3xl p-8 shadow-2xl space-y-6 relative z-10 backdrop-blur-xl">
           <div className="text-center space-y-3">
-            <img src="logo.png" onError={(e) => { e.target.src = '/assets/images/logo.png'; }} alt="Precision & Co Logo" className="h-16 mx-auto object-contain" />
+            <img src="logo.png" onError={(e) => { e.target.src = '/assets/images/logo.png'; }} alt="Precision & Co Logo" className="h-16 mx-auto object-contain" style={{ mixBlendMode: 'screen' }} />
             <h1 className="text-lg font-bold text-white tracking-wider uppercase">ENTERPRISE CMS PORTAL</h1>
             <div className="h-0.5 w-16 bg-[#c8a45e] mx-auto rounded-full"></div>
           </div>

@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   Clock,
   Send,
+  MessageSquare,
+  Sparkles,
 } from 'lucide-react';
 import { uploadImageToBlob } from '../services/blobUpload';
 
@@ -98,19 +100,23 @@ export default function ContactUsView({ initialData, onSave }) {
     heroImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop',
 
     heading: 'Get in Touch',
-    text: 'Reach out to our headquarters for comprehensive financial advisory and auditing services.',
+    text: 'Reach out to our Bengaluru headquarters for comprehensive financial advisory and auditing services.',
     
-    primaryPhone: '+91 98765 43210',
-    secondaryPhone: '+91 40 2300 4033',
+    primaryPhone: '+91 9618757596',
+    secondaryPhone: '+44 7887 186675',
     
-    primaryEmail: 'info@precisionandco.com',
-    secondaryEmail: 'advisory@precisionandco.com',
+    primaryEmail: 'precisionandco26@gmail.com',
+    secondaryEmail: 'precisionandcotech@gmail.com',
     
-    headquarters: 'Precision House, Level 4, Financial District, Gachibowli, Hyderabad, Telangana 500032',
+    headquarters: 'Hyderabad | Guntur',
     workingHours: 'Monday - Saturday: 9:00 AM - 6:30 PM IST',
 
     formHeading: 'Send Us a Message',
     formSubtitle: 'Fill out the form below and an advisory partner will contact you within 2 hours.',
+
+    ctaTitle: 'Ready to Elevate Your Business?',
+    ctaDescription: 'Partner with Precision & Co. for strategic financial guidance, unmatched expertise, and a commitment to your long-term success.',
+    ctaButtonText: 'Book a Consultation',
   };
 
   const [form, setForm] = useState(initialData && Object.keys(initialData).length > 0 ? { ...defaultValues, ...initialData } : defaultValues);
@@ -120,7 +126,17 @@ export default function ContactUsView({ initialData, onSave }) {
   const handleSaveForm = async () => {
     setSaveError('');
     try {
-      if (onSave) await onSave(form);
+      // Ensure aliased keys are populated so both old and new consumers get exact values
+      const payload = {
+        ...form,
+        email: form.primaryEmail,
+        taxEmail: form.secondaryEmail,
+        advisoryEmail: form.secondaryEmail,
+        phone: form.primaryPhone,
+        altPhone: form.secondaryPhone,
+        address: form.headquarters,
+      };
+      if (onSave) await onSave(payload);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (error) {
@@ -139,13 +155,13 @@ export default function ContactUsView({ initialData, onSave }) {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">Contact Us Page Manager</h1>
-            <p className="text-slate-400 text-xs">Manage phone numbers, office addresses, emails, and contact form settings matching <code className="text-blue-400">contact.html</code>.</p>
+            <p className="text-slate-400 text-xs">Manage phone numbers, emails, addresses, subtitles, and contact form settings matching <code className="text-blue-400">contact.html</code>.</p>
           </div>
         </div>
 
         <div className="flex items-center space-x-3">
           <a
-            href="https://precision-henna.vercel.app/contact.html"
+            href="https://precision-five-eta.vercel.app/contact.html"
             target="_blank"
             rel="noreferrer"
             className="flex items-center px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700"
@@ -165,7 +181,7 @@ export default function ContactUsView({ initialData, onSave }) {
 
       {saved && (
         <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold flex items-center justify-between animate-fade-in">
-          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> Contact settings saved! Directly reflected on the main website (contact.html).</span>
+          <span className="flex items-center"><Check className="w-4 h-4 mr-2 text-emerald-400" /> Contact settings saved! Directly reflected on the main website (contact.html and global footers).</span>
           <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded-full">Live Synced</span>
         </div>
       )}
@@ -203,19 +219,34 @@ export default function ContactUsView({ initialData, onSave }) {
       {/* SECTION 2: CONTACT DETAILS & HEADQUARTERS ADDRESS */}
       <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl text-xs">
         <h2 className="text-sm font-bold text-blue-400 uppercase tracking-wider">2. Contact Details & Headquarters Info</h2>
-        <div className="space-y-1">
-          <label className="text-slate-300 font-semibold">Section Heading</label>
-          <input
-            type="text"
-            value={form.heading}
-            onChange={(e) => setForm({ ...form, heading: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">Section Heading</label>
+            <input
+              type="text"
+              value={form.heading}
+              onChange={(e) => setForm({ ...form, heading: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
+              placeholder="Get in Touch"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">Section Subtitle / Description Text</label>
+            <input
+              type="text"
+              value={form.text}
+              onChange={(e) => setForm({ ...form, text: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
+              placeholder="Reach out to our Bengaluru headquarters for comprehensive financial advisory and auditing services."
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">Primary Phone Number</label>
+            <label className="text-slate-300 font-semibold flex items-center">
+              <Phone className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Primary Phone Number
+            </label>
             <input
               type="text"
               value={form.primaryPhone}
@@ -224,7 +255,9 @@ export default function ContactUsView({ initialData, onSave }) {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">Secondary Phone Number</label>
+            <label className="text-slate-300 font-semibold flex items-center">
+              <Phone className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Secondary Phone Number
+            </label>
             <input
               type="text"
               value={form.secondaryPhone}
@@ -236,7 +269,9 @@ export default function ContactUsView({ initialData, onSave }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">General Email Address</label>
+            <label className="text-slate-300 font-semibold flex items-center">
+              <Mail className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> General Email Address
+            </label>
             <input
               type="text"
               value={form.primaryEmail}
@@ -245,7 +280,9 @@ export default function ContactUsView({ initialData, onSave }) {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-slate-300 font-semibold">Advisory Email Address</label>
+            <label className="text-slate-300 font-semibold flex items-center">
+              <Mail className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Advisory Email Address
+            </label>
             <input
               type="text"
               value={form.secondaryEmail}
@@ -255,24 +292,88 @@ export default function ContactUsView({ initialData, onSave }) {
           </div>
         </div>
 
-        <div className="space-y-1">
-          <label className="text-slate-300 font-semibold">Headquarters Address</label>
-          <textarea
-            rows={2}
-            value={form.headquarters}
-            onChange={(e) => setForm({ ...form, headquarters: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300"
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold flex items-center">
+              <MapPin className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Headquarters Address
+            </label>
+            <textarea
+              rows={2}
+              value={form.headquarters}
+              onChange={(e) => setForm({ ...form, headquarters: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300"
+            />
+          </div>
 
-        <div className="space-y-1">
-          <label className="text-slate-300 font-semibold">Working Hours</label>
-          <input
-            type="text"
-            value={form.workingHours}
-            onChange={(e) => setForm({ ...form, workingHours: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
-          />
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold flex items-center">
+              <Clock className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Working Hours
+            </label>
+            <input
+              type="text"
+              value={form.workingHours}
+              onChange={(e) => setForm({ ...form, workingHours: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 3: CONTACT FORM SETTINGS */}
+      <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl text-xs">
+        <h2 className="text-sm font-bold text-blue-400 uppercase tracking-wider flex items-center">
+          <MessageSquare className="w-4 h-4 mr-2" /> 3. Contact Form Settings
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">Form Heading</label>
+            <input
+              type="text"
+              value={form.formHeading}
+              onChange={(e) => setForm({ ...form, formHeading: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
+              placeholder="Send Us a Message"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">Form Subtitle</label>
+            <input
+              type="text"
+              value={form.formSubtitle}
+              onChange={(e) => setForm({ ...form, formSubtitle: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
+              placeholder="Fill out the form below and an advisory partner will contact you."
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 4: CALL TO ACTION */}
+      <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl text-xs">
+        <h2 className="text-sm font-bold text-blue-400 uppercase tracking-wider flex items-center">
+          <Sparkles className="w-4 h-4 mr-2" /> 4. Bottom Call to Action (CTA)
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-1">
+            <label className="text-slate-300 font-semibold">CTA Title</label>
+            <input
+              type="text"
+              value={form.ctaTitle}
+              onChange={(e) => setForm({ ...form, ctaTitle: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold"
+              placeholder="Ready to Elevate Your Business?"
+            />
+          </div>
+          <div className="space-y-1 md:col-span-2">
+            <label className="text-slate-300 font-semibold">CTA Description</label>
+            <input
+              type="text"
+              value={form.ctaDescription}
+              onChange={(e) => setForm({ ...form, ctaDescription: e.target.value })}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-300"
+              placeholder="Partner with Precision & Co. for strategic financial guidance..."
+            />
+          </div>
         </div>
       </div>
     </div>

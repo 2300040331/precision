@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /server/
+Disallow: /scratch/
+Disallow: /vite-admin/
+
+Sitemap: https://precisionandco.com/sitemap.xml

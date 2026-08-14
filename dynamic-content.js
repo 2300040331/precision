@@ -53,9 +53,6 @@
           const fullStore = await fetchFullStore();
           if (fullStore) {
             applyFullStore(fullStore, pageKey, currentPageData);
-            if (fullStore.themeCustomization) {
-              applyThemeCustomization(fullStore.themeCustomization, pageKey);
-            }
           }
         } catch (err) {}
       }
@@ -64,6 +61,10 @@
       setupFormListeners();
     } catch (err) {
       console.warn('CMS dynamic sync warning (using cached/default content):', err);
+    } finally {
+      // The page is shown once, after current CMS data (or its safe fallback)
+      // has been resolved. This removes the old-content flash on reload.
+      document.documentElement.classList.add('cms-ready');
     }
   });
 
@@ -74,7 +75,23 @@
     if (!raw) return flat;
 
     if (pageKey === 'contact' && (raw.contactUs || raw.contact)) {
-      flat = { ...(raw.contactUs || raw.contact), ...flat };
+      const src = raw.contactUs || raw.contact;
+      flat = {
+        ...src,
+        email: src.primaryEmail || src.email,
+        taxEmail: src.secondaryEmail || src.taxEmail || src.advisoryEmail,
+        primaryEmail: src.primaryEmail || src.email,
+        secondaryEmail: src.secondaryEmail || src.taxEmail || src.advisoryEmail,
+        primaryPhone: src.primaryPhone || src.phone,
+        secondaryPhone: src.secondaryPhone || src.altPhone,
+        phone: src.primaryPhone || src.phone,
+        altPhone: src.secondaryPhone || src.altPhone,
+        headquarters: src.headquarters || src.address,
+        address: src.headquarters || src.address,
+        heading: src.heading || src.title,
+        text: src.text || src.description || src.subtitle,
+        ...flat
+      };
     }
     if (pageKey === 'why-choose-us' && (raw.whyChooseUs || raw['why-choose-us'])) {
       flat = { ...(raw.whyChooseUs || raw['why-choose-us']), ...flat };
@@ -217,16 +234,50 @@
     if (isContactPage) {
       const cData = data.contactUs || data.contact || data;
       if (cData) {
-          const phoneEl = document.querySelector('[data-content="primaryPhone"]');
-          if (phoneEl && cData.primaryPhone) phoneEl.textContent = cData.primaryPhone;
-          const secPhoneEl = document.querySelector('[data-content="secondaryPhone"]');
-          if (secPhoneEl && cData.secondaryPhone) secPhoneEl.textContent = cData.secondaryPhone;
-          const emailEl = document.querySelector('[data-content="email"]');
-          if (emailEl && cData.email) emailEl.textContent = cData.email;
-          const taxEmailEl = document.querySelector('[data-content="taxEmail"]');
-          if (taxEmailEl && cData.taxEmail) taxEmailEl.textContent = cData.taxEmail;
-          const hqEl = document.querySelector('[data-content="headquarters"]');
-          if (hqEl && cData.headquarters) hqEl.textContent = cData.headquarters;
+        const phoneEl = document.querySelector('[data-content="primaryPhone"], [data-content="phone"]');
+        const phoneVal = cData.primaryPhone || cData.phone;
+        if (phoneEl && phoneVal) phoneEl.textContent = phoneVal;
+
+        const secPhoneEl = document.querySelector('[data-content="secondaryPhone"], [data-content="altPhone"]');
+        const secPhoneVal = cData.secondaryPhone || cData.altPhone;
+        if (secPhoneEl && secPhoneVal) secPhoneEl.textContent = secPhoneVal;
+
+        const emailEl = document.querySelector('[data-content="email"], [data-content="primaryEmail"]');
+        const emailVal = cData.primaryEmail || cData.email;
+        if (emailEl && emailVal) emailEl.textContent = emailVal;
+
+        const taxEmailEl = document.querySelector('[data-content="taxEmail"], [data-content="secondaryEmail"], [data-content="advisoryEmail"]');
+        const taxEmailVal = cData.secondaryEmail || cData.taxEmail || cData.advisoryEmail;
+        if (taxEmailEl && taxEmailVal) taxEmailEl.textContent = taxEmailVal;
+
+        const hqEl = document.querySelector('[data-content="headquarters"], [data-content="address"]');
+        const hqVal = cData.headquarters || cData.address;
+        if (hqEl && hqVal) hqEl.textContent = hqVal;
+
+        const headingEl = document.querySelector('.contact-heading, [data-content="heading"]');
+        const headingVal = cData.heading || cData.title;
+        if (headingEl && headingVal) headingEl.innerHTML = headingVal;
+
+        const textEl = document.querySelector('.contact-text, [data-content="text"], [data-content="description"]');
+        const textVal = cData.text || cData.description || cData.subtitle;
+        if (textEl && textVal) textEl.innerHTML = textVal;
+
+        const heroTitleEl = document.querySelector('.contact-hero__title, [data-content="heroTitle"]');
+        if (heroTitleEl && cData.heroTitle) heroTitleEl.innerHTML = cData.heroTitle;
+
+        const heroSubtitleEl = document.querySelector('.contact-hero__subtitle, [data-content="heroSubtitle"]');
+        if (heroSubtitleEl && cData.heroSubtitle) heroSubtitleEl.innerHTML = cData.heroSubtitle;
+
+        if (cData.heroImage) {
+          const heroSec = document.querySelector('.contact-hero');
+          if (heroSec) heroSec.style.backgroundImage = `linear-gradient(rgba(7, 24, 39, 0.85), rgba(7, 24, 39, 0.95)), url('${cData.heroImage}')`;
+        }
+
+        const formHeadingEl = document.querySelector('.form-heading, [data-content="formHeading"]');
+        if (formHeadingEl && (cData.formHeading || cData.formTitle)) formHeadingEl.textContent = cData.formHeading || cData.formTitle;
+
+        const formSubEl = document.querySelector('.form-subheading, [data-content="formSubtitle"]');
+        if (formSubEl && (cData.formSubtitle || cData.formDescription)) formSubEl.textContent = cData.formSubtitle || cData.formDescription;
       }
     }
   }
@@ -445,18 +496,24 @@
       const paragraphs = item.querySelectorAll('p');
       if (paragraphs.length === 0) return;
       const iconPath = item.querySelector('svg path, svg rect')?.getAttribute('d') || '';
-      if (iconPath.includes('M20 10') && (footerData.address || contact.headquarters || settings.address)) {
-        const address = footerData.address || contact.headquarters || settings.address;
-        paragraphs[0].textContent = address;
-        paragraphs.forEach((p, index) => {
-          if (index > 0) p.textContent = '';
-        });
-      } else if (iconPath.includes('M22 16.92') && (footerData.phone || contact.primaryPhone || settings.contactPhone)) {
-        paragraphs[0].textContent = footerData.phone || contact.primaryPhone || settings.contactPhone;
-        if (paragraphs[1] && contact.secondaryPhone) paragraphs[1].textContent = contact.secondaryPhone;
-      } else if ((footerData.email || contact.email || settings.contactEmail)) {
-        paragraphs[0].textContent = footerData.email || contact.email || settings.contactEmail;
-        if (paragraphs[1] && contact.taxEmail) paragraphs[1].textContent = contact.taxEmail;
+      if (iconPath.includes('M20 10')) {
+        const address = contact.headquarters || contact.address || footerData.address || settings.address;
+        if (address) {
+          paragraphs[0].textContent = address;
+          paragraphs.forEach((p, index) => {
+            if (index > 0) p.textContent = '';
+          });
+        }
+      } else if (iconPath.includes('M22 16.92')) {
+        const phone1 = contact.primaryPhone || contact.phone || footerData.phone || settings.contactPhone;
+        const phone2 = contact.secondaryPhone || contact.altPhone;
+        if (phone1) paragraphs[0].textContent = phone1;
+        if (paragraphs[1] && phone2) paragraphs[1].textContent = phone2;
+      } else if (iconPath.includes('M22 7') || iconPath.includes('m22 7')) {
+        const email1 = contact.primaryEmail || contact.email || footerData.email || settings.contactEmail;
+        const email2 = contact.secondaryEmail || contact.taxEmail || contact.advisoryEmail;
+        if (email1) paragraphs[0].textContent = email1;
+        if (paragraphs[1] && email2) paragraphs[1].textContent = email2;
       }
     });
   }
@@ -869,8 +926,18 @@
           });
           const result = await res.json();
           if (res.ok) {
-            alert('Thank you for contacting us! We will get back to you shortly.');
-            form.reset();
+            // Save the lead to the Admin CRM before sending the visitor to
+            // WhatsApp, so both destinations always receive the same details.
+            const whatsappMessage = [
+              'New website enquiry',
+              '',
+              `Name: ${payload.name || 'Not provided'}`,
+              `Phone: ${payload.phone || 'Not provided'}`,
+              `Email: ${payload.email || 'Not provided'}`,
+              `Service: ${payload.subject || 'Website Inquiry'}`,
+              `Message: ${payload.message || 'Not provided'}`,
+            ].join('\n');
+            window.location.assign(`https://wa.me/919618757596?text=${encodeURIComponent(whatsappMessage)}`);
           } else {
             alert(result.error || 'Failed to send message.');
           }
@@ -888,6 +955,10 @@
 
   // Dynamic Visual Theme Customization Engine
   function applyThemeCustomization(themeData, pageKey) {
+    // Presentation is owned by each page's static stylesheet. CMS theme data
+    // must never inject global heading/color rules into a public page because
+    // it can make unrelated content invisible on light layouts.
+    return;
     if (!themeData || typeof themeData !== 'object') return;
 
     const global = themeData.global || {};

@@ -97,11 +97,11 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
         <div className="flex items-center space-x-3 overflow-hidden">
           {collapsed ? (
             <div className="w-10 h-10 rounded-xl bg-[#0f1d32] border border-[#c8a45e]/40 p-1 flex items-center justify-center shrink-0 shadow-lg">
-              <img src="/assets/images/logo.png" alt="Precision & Co Logo" className="w-full h-full object-contain" />
+              <img src="/assets/images/logo.png" alt="Precision & Co Logo" className="w-full h-full object-contain" style={{ mixBlendMode: 'screen' }} />
             </div>
           ) : (
             <div className="flex items-center">
-              <img src="/assets/images/logo.png" alt="Precision & Co. Logo" className="h-10 object-contain max-w-[180px]" />
+              <img src="/assets/images/logo.png" alt="Precision & Co. Logo" className="h-10 object-contain max-w-[180px]" style={{ mixBlendMode: 'screen' }} />
             </div>
           )}
         </div>

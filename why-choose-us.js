@@ -87,11 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Counter Animation
     const counters = document.querySelectorAll('.count');
     counters.forEach(counter => {
-        const target = counter.innerText;
+        // textContent is stable even while the CMS paint guard is active.
+        // innerText can be empty for a temporarily hidden element, which
+        // would otherwise turn the original metric into "NaN".
+        const target = counter.textContent.trim();
         const isPercentage = target.includes('%');
         const isBillion = target.includes('B');
         const isPlus = target.includes('+');
         const num = parseFloat(target.replace(/[^0-9.]/g, ''));
+        if (!Number.isFinite(num)) return;
 
         ScrollTrigger.create({
             trigger: counter,

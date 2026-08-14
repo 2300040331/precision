@@ -40,7 +40,19 @@ function extractPageContent(data, targetPage) {
   } else if (targetPage === 'why-choose-us') {
     if (store.whyChooseUs) pageData = { ...store.whyChooseUs };
   } else if (targetPage === 'contact') {
-    if (store.contactUs) pageData = { ...store.contactUs };
+    if (store.contactUs || store.contact) {
+      const c = store.contactUs || store.contact;
+      pageData = {
+        ...c,
+        primaryEmail: c.primaryEmail || c.email,
+        secondaryEmail: c.secondaryEmail || c.taxEmail || c.advisoryEmail,
+        email: c.primaryEmail || c.email,
+        taxEmail: c.secondaryEmail || c.taxEmail || c.advisoryEmail,
+        primaryPhone: c.primaryPhone || c.phone,
+        secondaryPhone: c.secondaryPhone || c.altPhone,
+        headquarters: c.headquarters || c.address,
+      };
+    }
   } else if (store.pages && Array.isArray(store.pages)) {
     const pageObj = store.pages.find(p => p.id === targetPage || p.slug === targetPage);
     if (pageObj && Array.isArray(pageObj.sections)) {

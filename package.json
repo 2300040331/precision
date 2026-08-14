@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Precision & Co Website",
   "scripts": {
-    "build": "mkdir -p public/admin && cp -R admin/* public/admin/ && cp -R *.html *.css *.js assets public/",
+    "build": "mkdir -p public/admin && cp -R admin/* public/admin/ && cp -R *.html *.css *.js assets robots.txt sitemap.xml public/",
     "deploy": "npx vercel --prod --yes",
     "watch": "chokidar \"*.html\" \"*.css\" \"*.js\" -c \"npm run deploy\" --initial"
   },

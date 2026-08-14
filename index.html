@@ -3,45 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precision & Co — Welcome</title>
-    <script>
-        // The video intro is intentionally desktop-only. Redirect before the
-        // video is parsed on mobile so the Home page opens immediately.
-        if (window.matchMedia('(max-width: 768px)').matches) {
-            window.location.replace('home.html');
-        }
-    </script>
+    <meta name="robots" content="noindex, follow">
+    <title>Precision & Co. | Chartered Accountants</title>
     <style>
-        body, html { margin: 0; padding: 0; background: #071827; width: 100vw; height: 100vh; overflow: hidden; }
-        #intro-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #071827; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        #skip-intro-btn { position: absolute; bottom: 85px; right: 25px; background: #071827; color: #C99A3A; border: 1px solid rgba(201, 154, 58, 0.3); padding: 20px 40px; cursor: pointer; border-radius: 4px; font-family: 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; z-index: 10000; }
-        #skip-intro-btn:hover { background: #11263c; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            background: #071827; 
+            width: 100vw; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        #intro-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background-color: #071827; 
+            z-index: 9999; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        #skip-intro-btn { 
+            position: absolute; 
+            bottom: 85px; 
+            right: 25px; 
+            background: #071827; 
+            color: #C99A3A; 
+            border: 1px solid rgba(201, 154, 58, 0.3); 
+            padding: 20px 40px; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            font-family: 'DM Sans', sans-serif; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            transition: all 0.3s; 
+            z-index: 10000; 
+        }
+        #skip-intro-btn:hover { 
+            background: #11263c; 
+        }
+        @media (max-width: 768px) {
+            #skip-intro-btn {
+                bottom: 35px;
+                right: 20px;
+                padding: 12px 24px;
+                font-size: 13px;
+                letter-spacing: 0.05em;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="intro-overlay">
-        <video id="intro-video" muted playsinline autoplay>
-            <source src="assets/precision intro video.mp4" type="video/mp4">
+        <video id="intro-video" muted playsinline webkit-playsinline autoplay preload="auto">
+            <source id="video-source" src="assets/precision intro video.mp4" type="video/mp4">
         </video>
         <button id="skip-intro-btn">Skip Intro &rarr;</button>
     </div>
     <script>
-        if (!window.matchMedia('(max-width: 768px)').matches) {
-            const video = document.getElementById('intro-video');
-            const skipBtn = document.getElementById('skip-intro-btn');
-            const goToHome = () => {
-                window.location.href = 'home.html';
-            };
-
-            video.addEventListener('ended', goToHome);
-            skipBtn.addEventListener('click', goToHome);
-
-            // Failsafe in case the desktop video doesn't play.
-            setTimeout(() => {
-                if (video.currentTime === 0) goToHome();
-            }, 3000);
+        const isMobile = window.matchMedia('(max-width: 768px)').matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const video = document.getElementById('intro-video');
+        const videoSource = document.getElementById('video-source');
+        const skipBtn = document.getElementById('skip-intro-btn');
+        
+        const targetSrc = isMobile ? 'assets/precision_mobile.mp4' : 'assets/precision intro video.mp4';
+        
+        if (videoSource.getAttribute('src') !== targetSrc) {
+            videoSource.src = targetSrc;
+            video.src = targetSrc;
+            video.load();
         }
+
+        const goToHome = () => {
+            window.location.href = 'home.html';
+        };
+
+        video.addEventListener('ended', goToHome);
+        video.addEventListener('error', goToHome);
+        skipBtn.addEventListener('click', goToHome);
+
+        const startPlay = () => {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch((err) => {
+                    console.log('Autoplay deferred:', err);
+                });
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startPlay);
+        } else {
+            startPlay();
+        }
+
+        setTimeout(() => {
+            if (video.currentTime === 0 && video.paused) {
+                goToHome();
+            }
+        }, 6000);
     </script>
     <script src="dynamic-content.js"></script>
 </body>
