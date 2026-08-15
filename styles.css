@@ -3946,6 +3946,16 @@ body:not(.loaded) .hero__visual {
   border-color: rgba(255, 255, 255, 0.6);
 }
 
+@media (max-width: 768px) {
+  #skip-intro-btn {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    right: 20px;
+    padding: 12px 22px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
 
 /* =========================================
    OUR EXPERTS
