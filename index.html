@@ -68,9 +68,9 @@
 <body>
     <div id="intro-overlay">
         <video id="intro-video" muted playsinline webkit-playsinline autoplay preload="auto">
-            <source media="(max-width: 768px)" src="assets/precision_mobile.mp4?v=20260815_3" type="video/mp4">
-            <source media="(min-width: 769px)" src="assets/precision intro video.mp4?v=20260815_3" type="video/mp4">
-            <source src="assets/precision_mobile.mp4?v=20260815_3" type="video/mp4">
+            <source media="(max-width: 768px)" src="assets/precision_mobile_v2.mp4" type="video/mp4">
+            <source media="(min-width: 769px)" src="assets/precision_intro_v2.mp4" type="video/mp4">
+            <source src="assets/precision_mobile_v2.mp4" type="video/mp4">
         </video>
         <button id="skip-intro-btn">Skip Intro &rarr;</button>
     </div>
@@ -79,9 +79,8 @@
         const video = document.getElementById('intro-video');
         const skipBtn = document.getElementById('skip-intro-btn');
         
-        const videoVersion = '20260815_3';
-        const mobileSrc = 'assets/precision_mobile.mp4?v=' + videoVersion;
-        const desktopSrc = 'assets/precision intro video.mp4?v=' + videoVersion;
+        const mobileSrc = 'assets/precision_mobile_v2.mp4';
+        const desktopSrc = 'assets/precision_intro_v2.mp4';
         const targetSrc = isMobile ? mobileSrc : desktopSrc;
         
         video.src = targetSrc;
