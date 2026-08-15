@@ -52,12 +52,15 @@
         }
         @media (max-width: 768px) {
             #skip-intro-btn {
-                bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+                bottom: calc(85px + env(safe-area-inset-bottom, 0px));
                 right: 20px;
-                padding: 12px 22px;
+                padding: 12px 24px;
                 font-size: 13px;
                 font-weight: 600;
                 letter-spacing: 0.05em;
+                background: rgba(7, 24, 39, 0.9);
+                border: 1px solid rgba(201, 154, 58, 0.6);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             }
         }
     </style>
@@ -65,30 +68,34 @@
 <body>
     <div id="intro-overlay">
         <video id="intro-video" muted playsinline webkit-playsinline autoplay preload="auto">
-            <source id="video-source" src="assets/precision intro video.mp4" type="video/mp4">
+            <source media="(max-width: 768px)" src="assets/precision_mobile.mp4?v=20260815_3" type="video/mp4">
+            <source media="(min-width: 769px)" src="assets/precision intro video.mp4?v=20260815_3" type="video/mp4">
+            <source src="assets/precision_mobile.mp4?v=20260815_3" type="video/mp4">
         </video>
         <button id="skip-intro-btn">Skip Intro &rarr;</button>
     </div>
     <script>
         const isMobile = window.matchMedia('(max-width: 768px)').matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const video = document.getElementById('intro-video');
-        const videoSource = document.getElementById('video-source');
         const skipBtn = document.getElementById('skip-intro-btn');
         
-        const targetSrc = isMobile ? 'assets/precision_mobile.mp4' : 'assets/precision intro video.mp4';
+        const videoVersion = '20260815_3';
+        const mobileSrc = 'assets/precision_mobile.mp4?v=' + videoVersion;
+        const desktopSrc = 'assets/precision intro video.mp4?v=' + videoVersion;
+        const targetSrc = isMobile ? mobileSrc : desktopSrc;
         
-        if (videoSource.getAttribute('src') !== targetSrc) {
-            videoSource.src = targetSrc;
-            video.src = targetSrc;
-            video.load();
-        }
+        video.src = targetSrc;
+        video.load();
 
         const goToHome = () => {
             window.location.href = 'home.html';
         };
 
         video.addEventListener('ended', goToHome);
-        video.addEventListener('error', goToHome);
+        video.addEventListener('error', (err) => {
+            console.warn('Video playback error, redirecting to home:', err);
+            goToHome();
+        });
         skipBtn.addEventListener('click', goToHome);
 
         const startPlay = () => {
